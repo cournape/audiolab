@@ -1,4 +1,4 @@
-# Last Change: Wed May 23 08:00 AM 2007 J
+# Last Change: Tue Jul 17 11:00 AM 2007 J
 #
 # This makefile is used to do all the "tricky things" before a release,
 # including updating the doc, installing and testing the package, uploading the
@@ -108,7 +108,7 @@ run_tests: $(TMPPATH)
 # Code related to doc
 #=====================
 doc:
-	cd scikits/pyaudiolab/docs && $(MAKE)
+	cd $(DOCPATH) && $(MAKE)
 ## Commands For doc
 #PY2TEX	= PYTHONPATH=/home/david/local/lib/python2.4/site-packages pygmentize -l \
 #		  python -f tex
@@ -142,4 +142,4 @@ doc:
 #clean_doc: clean_tex
 
 clean: clean_before_run
-	cd docs && $(MAKE) clean
+	cd $(DOCPATH) && $(MAKE) clean
