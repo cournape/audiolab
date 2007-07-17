@@ -1,3 +1,7 @@
+audiolab (0.7dev) Tue, 17 Jul 2007 12:03:41 +0900
+
+	* Rename pyaudiolab to audiolab.
+
 pyaudiolab (0.7dev) Fri, 25 May 2007 16:00:24 +0900
 
 	* Add the possibility to open an audio file from file descriptor
