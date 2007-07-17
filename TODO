@@ -1,0 +1,33 @@
+.. vim:syntax=rest
+
+Things to do before a release
+-----------------------------
+    - better error reporting (support error logging of sndfile ?): the
+      exceptions launched are pretty random...
+    - add inout argument in read method to avoid recreating a buffer.
+    - more tests
+    - the tests are not secure: should use the fd returned by mkstemp instead
+      of using open on the filename. That means supported sndfile opening from
+      fd (partially done for now).
+    - add an audio player for at least linux/windows/mac os x (0.8-0.9) -> This
+      will be done in a different branch
+
+Pending issues
+--------------
+    - There is no check for supported format, the way get_supported_format is
+      implemented now it totally broken. Instead of using values from the
+      header, should use sf_command
+    - removing most warning from pylint
+    - handling in audiolab when first is not 0 (now, we have seek :))
+    - replace ugly void* pointers to private structs by a python object to avoid passing wrong type of pointers.
+
+
+Maybe ?
+-------
+    - change array layout convention to numpy's ones (eg row major, not column
+      major), and add an axis argument. -> this is a bit tricky, actually, as
+      sndfile only supports interleaved data, where F order actually make sense. 
+      Not sure what to do
+    - ogg vorbis support ? libsndfile does not support ogg (yet). Maybe use the
+      reference lib, but this may be a bit complicated to support both library
+      at the same time.

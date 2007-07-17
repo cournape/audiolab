@@ -1,0 +1,8 @@
+[sndfile]
+include_dirs = /usr/media/boulot/src/sigtools/pyaudio/local/include
+library_dirs = /usr/media/boulot/src/sigtools/pyaudio/local/lib
+sndfile_libs = sndfile
+#include_dirs = /home/david/local/include
+#library_dirs = /home/david/local/lib
+#libraries = sndfile
+

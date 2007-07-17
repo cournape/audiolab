@@ -1,0 +1,127 @@
+pyaudiolab (0.7dev) Fri, 25 May 2007 16:00:24 +0900
+
+	* Add the possibility to open an audio file from file descriptor
+
+pyaudiolab (0.7dev) Thu, 24 May 2007 13:34:11 +0900
+
+	* Support for read and write seek
+	* Set correct location of pysndfile.py in setup.py, so that it is
+	correctly removed during setup.
+
+pyaudiolab (0.7dev) Tue, 22 May 2007 10:50:53 +0900
+
+	* Relicense under the LGPL
+	* Add data files with distutils instead of setuptools because of
+	setuptools bug with sdist targets
+
+pyaudiolab (0.7dev) Mon, 21 May 2007 11:09:32 +0900
+
+	* Convert the layout to scikits convention + setuptools
+
+pyaudiolab (0.6.7) Mon, 19 Mar 2007 15:19:10 +0900
+
+	* Add some meta-data for setup.py
+
+pyaudiolab (0.6.7) Mon, 12 Mar 2007 15:48:12 +0900
+
+	* Mainly Bug fixes for win32 and libsndfile without FLAC support.
+	* Add a site.cfg.win32 + instructions in the doc to show how to use with
+	win32.
+	* Replace all remove functions in tests for temp files (Does not work
+	under win32)
+	* If FLAC is not supported, set flacread and flacwrite functions to None
+	and catch exceptions related to unavailable FLAC support to avoid tests
+	failing.
+	* Replace non FLAC tests using FLAC files to WAV files.
+
+pyaudiolab (0.6.6dev) Mon, 05 Feb 2007 20:37:49 +0900
+
+	* Add reader/writer factory to matlab-like API. 
+	* Generate au/wav/aiff/sdif/flac read/write functions
+	with Matlab-like behaviour.
+	* disable seek support for FLAC files by default, because of problems
+	when using sf_seek(offset, SEEK_SET) with some FLAC versions.
+
+pyaudiolab (0.6.6dev) Mon, 05 Feb 2007 12:06:10 +0900
+
+	* Change system to detect sndfile shared library file (based on
+	sys.plaform instead of so_ext which does not seem to work on darwin at
+	least).
+
+pyaudiolab (0.6.5) Fri, 02 Feb 2007 14:53:01 +0900
+
+	* bump to 0.6.5
+	* Add mechanism to automatic release+upload
+	* release 0.6.5
+
+pyaudiolab (0.6.5dev) Fri, 02 Feb 2007 14:53:01 +0900
+
+	* Put a proper LICENSE in COPYING.txt, and note in the README.txt
+	that pyaudiolab depends on LGPL package
+
+pyaudiolab (0.6.5dev) Thu, 01 Feb 2007 15:06:51 +0900
+
+	* Add int and short support for reading/writing
+	* fix write and read such as float arguments for number of frames is
+	possible + test.
+	* Whenever a long long is expected by libsndfile, check that the number
+	given by user is valid.
+	* Give more meaningful error messages when bad parameters are given for
+	opening a file for writing.
+	* Give more meaningful error messages when trying to read a file opened
+	only for writing.
+	* Add examples scripts into doc/examples. Run them in test.sh
+
+pyaudiolab (0.6.1) Wed, 31 Jan 2007 16:03:02 +0900
+
+	* Bump to 0.6.1
+	* Change the name to pyaudiolab to avoid clashes with existing pyaudio 
+	toolboxes.
+
+pyaudio (0.6) Wed, 31 Jan 2007 14:32:41 +0900
+
+	* Bump to 0.6.
+	* Add support for seeking.
+	* Add sync to sndfile to force flushing OS IO buffers to file without need
+	to close.
+	* read takes dtype argument instead of read_*_float, read_*_double.
+	* wavread, wavwrite are working and similar to matlab's ones.
+
+pyaudio (0.5) Tue, 30 Jan 2007 14:40:36 +0900
+
+	* Bump to 0.5
+	* More explicit import error when used with bad ctypes
+	* Add matlab-like functions wavread, wavwrite, aiffread, aiffwrite
+	* Add API to have useful strings from format in sndfile class
+
+pyaudio (0.4) Mon, 06 Nov 2006 12:56:55 +0900
+
+	* Bump to 0.4
+	* replace c_longlong with c_int64; if ctypes does not support 64 bits
+	integer, it will result in an import error instead of having c_longlong
+	silently converted to 32 bits integer, which would result in difficult
+	to trace bugs
+	* add support for raw files (which requires a format, even for reading)
+
+pyaudio (0.3.1) Mon, 06 Nov 2006 12:56:55 +0900
+
+	* Bump to 0.3.1
+	* Check that samplerate and number of channels are int. If not,
+	warn the user about potential unsafe conversion.
+	* Move functions used to parse enum in header files into
+	a other module, for easier sharing with other packages.
+
+pyaudio (0.3) Tue, 31 Oct 2006 21:38:46 +0900
+
+	* Bump to 0.3
+	* Added a class format, which can be used to open
+	file for writing. The class hides all internal representation
+	used by libsndfile, for a much saner API.
+	* Various Bug fixes
+
+pyaudio (0.2) Mon, 30 Oct 2006 17:45:14 +0900
+
+	* Bump to 0.2
+	* Added a sndfile_info in setup.py for an automatic detection
+	of sndfile under the installed system
+	* mode is now a simple string in sndfile class ctor

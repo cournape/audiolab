@@ -1,0 +1,5 @@
+# Check Win32 info for using pyaudiolab on windows
+[sndfile]
+include_dirs = c:\local\include
+library_dirs = c:\local\lib
+sndfile_libs = sndfile-1

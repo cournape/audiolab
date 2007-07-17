@@ -1,0 +1,5 @@
+# vim:syntax=python
+# Last Change: Fri Jun 01 12:00 PM 2007 J
+#
+mainobj = Object('winfdopen.c')
+winfd = Program(mainobj, LIBS = ['sndfile'])
