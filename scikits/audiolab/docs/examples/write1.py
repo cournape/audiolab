@@ -2,8 +2,8 @@ from tempfile import mkstemp
 from os import remove
 
 import numpy as N
-from scikits.pyaudiolab import formatinfo as format
-import scikits.pyaudiolab as pyaudiolab
+from scikits.audiolab import formatinfo as format
+import scikits.audiolab as audiolab
 
 # Create a temp file in the system temporary dir, and always remove
 # it at the end
@@ -13,7 +13,7 @@ try:
     nchannels   = 2
     fs          = 44100
 
-    afile =  pyaudiolab.sndfile(filename, 'write', fmt, nchannels, fs)
+    afile =  audiolab.sndfile(filename, 'write', fmt, nchannels, fs)
 
     # Create a stereo white noise, with Gaussian distribution
     tmp = 0.1 * N.random.randn(1000, nchannels)
@@ -26,7 +26,7 @@ try:
     afile.close()
 
     # Let's check that the written file has the expected meta data
-    afile = pyaudiolab.sndfile(filename, 'read')
+    afile = audiolab.sndfile(filename, 'read')
     assert(afile.get_samplerate() == fs)
     assert(afile.get_channels() == nchannels)
     assert(afile.get_nframes() == 500)

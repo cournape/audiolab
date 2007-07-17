@@ -1,11 +1,11 @@
 ..
     restindex
-        page-title: Pyaudiolab
-        crumb: Pyaudiolab
-        link-title: Pyaudiolab
+        page-title: audiolab
+        crumb: audiolab
+        link-title: audiolab
         encoding: utf-8
         output-encoding: None 
-        file: pyaudiolab1.png
+        file: audiolab1.png
         file: quick1.py
         file: usage1.py
         file: usage2.py
@@ -13,11 +13,11 @@
         file: format2.py
         file: write1.py
         file: matlab1.py
-        file: pyaudiolab.pdf
+        file: audiolab.pdf
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Wed May 23 08:00 AM 2007 J
+.. Last Change: Tue Jul 17 11:00 AM 2007 J
 
 ===============================================================
  Pyaudiolab, a python package to make noise with numpy arrays
@@ -29,16 +29,15 @@ Introduction
 .. _scipy: http://www.scipy.org
 .. _libsndfile: http://www.mega-nerd.com/libsndfile/
 
-For people doing audio processing, it is useful to be able to import 
-data from audio files, and export them back, 
-as well as listening to the results of some processing; matlab have functions
-such as wavread, wavwrite, soundsc, etc... for that purposes.
-The goal of pyaudiolab is to give those capabilities to the
-`scipy`_ environment by wrapping the excellent library 
-`libsndfile`_ from Erik Castro de Lopo. Pyaudio supports
-all format supported by libsndfile, including wav, aiff, ircam files, 
-and flac (an open source lossless compressed format); see 
-`here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete list.
+For people doing audio processing, it is useful to be able to import data from
+audio files, and export them back, as well as listening to the results of some
+processing; matlab have functions such as wavread, wavwrite, soundsc, etc...
+for that purposes.  The goal of audiolab is to give those capabilities to the
+`scipy`_ environment by wrapping the excellent library `libsndfile`_ from Erik
+Castro de Lopo. Pyaudio supports all format supported by libsndfile, including
+wav, aiff, ircam files, and flac (an open source lossless compressed format);
+see `here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete
+list.
 
     **Note**: The library is still in beta stage: reading and writing 
     data is possible, but only in frames, not per item.
@@ -59,24 +58,13 @@ Download and installation
 Download
 --------
 
-The last release is the version 0.6.7, which can be downloaded in `tar.bz2
-<http://www.ar.media.kyoto-u.ac.jp/members/david/archives/pyaudiolab/releases/pyaudiolab-0.6.7.tar.bz2>`_
-in a tar.bz2 format, or in `zip format
-<http://www.ar.media.kyoto-u.ac.jp/members/david/archives/pyaudiolab/releases/pyaudiolab-0.6.7.zip>`_
-in zip format for windows users.
-
-Bzr archives
-------------
-
-If you want to check the most recent version of pyaudio, you can check it out
-using `bzr <http://bazaar-vcs.org/>`_, the dev branch being at:
-
-http://www.ar.media.kyoto-u.ac.jp/members/david/archives/pyaudiolab/pyaudiolab.dev
+audiolab is part of scikits: its source can be downloaded directly from the
+scikits svn repository: svn co http://svn.scipy.org/svn/scikits/trunk/audiolab
 
 Requirements
 ------------
 
-Pyaudialab requires the following softwares:
+audiolab requires the following softwares:
 
  - a python interpreter.
  - libsndfile (including the header sndfile.h, which means linux users should
@@ -97,7 +85,7 @@ plateforms (Mac Os X, solaris, etc...).
 
     **Note**: the ctypes used in python2.5 package in ubuntu (and maybe debian
     as well) *had* a nasty bug which makes it impossible to use 64 bits integers. You
-    should NOT use this package with pyaudiolab (importing pyaudiolab should fail,
+    should NOT use this package with audiolab (importing audiolab should fail,
     but if the version is not correctly detected, you will have file corruption when
     writing data to audio files). Run the test to check everything is working (a
     test case tests this issue).
@@ -122,8 +110,8 @@ distribution in the file README-precompiled-dll.txt. See also site.cfg.win32.
 License
 -------
             
-pyaudiolab is released under the LGPL, which forces you to release back the
-modifications you may make in the version of pyaudiolab you are distributing,
+audiolab is released under the LGPL, which forces you to release back the
+modifications you may make in the version of audiolab you are distributing,
 but you can still use it in closed softwares.
 
 Quick view
@@ -134,7 +122,7 @@ The following code shows you how to open a file for read, reading the first
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/quick1.py}
+    {mycolorize;input/softwares/audiolab/quick1.py}
 
 .. raw:: latex
 
@@ -146,15 +134,15 @@ Usage
 Opening a file and getting its parameters
 -----------------------------------------
 
-Once imported, pyaudiolab gives you access the sndfile class, which is the
-class of pyaudiolab use to open audio files. 
+Once imported, audiolab gives you access the sndfile class, which is the
+class of audiolab use to open audio files. 
 You create a sndfile instance when you want
 to open a file for reading or writing (the file test.flac is included
-in the pyaudiolab package, in the test_data directory):
+in the audiolab package, in the test_data directory):
             
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/usage1.py}
+    {mycolorize;input/softwares/audiolab/usage1.py}
 
 .. raw:: latex
 
@@ -176,7 +164,7 @@ etc...):
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/usage2.py}
+    {mycolorize;input/softwares/audiolab/usage2.py}
 
 .. raw:: latex
 
@@ -188,7 +176,7 @@ file is 2000 samples. Each channel is one column of the numpy array. The read
 functions follow numpy conventions, that is by default, the data are read as
 double, but you can give a dtype argument to the function.
 
-.. image:: pyaudiolab1.png
+.. image:: audiolab1.png
     :width: 500
     :height: 400
 
@@ -202,7 +190,7 @@ a format object with file type wav, and 16 bits pcm encoding:
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/format1.py}
+    {mycolorize;input/softwares/audiolab/format1.py}
 
 .. raw:: latex
 
@@ -216,7 +204,7 @@ supported_* are available:
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/format2.py}
+    {mycolorize;input/softwares/audiolab/format2.py}
 
 .. raw:: latex
 
@@ -237,7 +225,7 @@ class format is used to build a format understable by libsndfile from
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/write1.py}
+    {mycolorize;input/softwares/audiolab/write1.py}
 
 .. raw:: latex
 
@@ -246,12 +234,12 @@ class format is used to build a format understable by libsndfile from
 Matlab-like API
 ---------------
 
-pyaudiolab also have a matlab-like API for audio IO. Its usage is as similar as it
+audiolab also have a matlab-like API for audio IO. Its usage is as similar as it
 can get using python:
 
 .. raw:: html
 
-    {mycolorize;input/softwares/pyaudiolab/matlab1.py}
+    {mycolorize;input/softwares/audiolab/matlab1.py}
 
 .. raw:: latex
 
@@ -268,7 +256,7 @@ Known bugs:
 TODO
 ====
 
-pyaudiolab is still in early stages. Before a release, I would like to implement the
+audiolab is still in early stages. Before a release, I would like to implement the
 follwings:
 
  - support (at least some) meta-data embedded in some audio files format.

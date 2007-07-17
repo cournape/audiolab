@@ -1,6 +1,6 @@
 ABOUT SEEK AND FLAC SUPPORT:
 
-    pyaudiolab supports flac, because libsndfile does. Unfortunately, some FLAC
+    audiolab supports flac, because libsndfile does. Unfortunately, some FLAC
 libraries seem buggy (at least the one with ubuntu Dapper is) with respect to
 their seek implementation. That's why by default, seeking in flac support is
 NOT enabled. If you want to test whether you FLAC library has the problem,
@@ -10,7 +10,7 @@ gcc -W -Wall badflac.c -lsndfile -o badflac
 
 and try running ./badflac ./badflac.flac. If the program looks locked up, this
 means you should NOT enable flac support. If it works OK, then you can enable
-seek support in pyaudiolab by commenting the following lines in
+seek support in audiolab by commenting the following lines in
 pysndfile.py.in (take care to modify the pysndfile.py.in, and not the
 pysndfile.py file), in sndfile.__init__ (around line 500):
 

@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Jun 01 09:00 PM 2007 J
+# Last Change: Tue Jul 17 11:00 AM 2007 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 from os import remove
@@ -11,8 +11,8 @@ from numpy.testing import NumpyTestCase, assert_array_equal, NumpyTest, \
 import numpy as N
 
 set_package_path()
-from pyaudiolab import pysndfile
-from pyaudiolab.pysndfile import sndfile, formatinfo as audio_format
+from audiolab import pysndfile
+from audiolab.pysndfile import sndfile, formatinfo as audio_format
 restore_path()
 
 import sys

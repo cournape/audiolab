@@ -1,4 +1,4 @@
-from scikits.pyaudiolab import formatinfo as format
+from scikits.audiolab import formatinfo as format
 
 f = format('aiff', 'ulaw')
 print f

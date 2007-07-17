@@ -1,4 +1,4 @@
-from scikits.pyaudiolab import supported_format, supported_encoding, \
+from scikits.audiolab import supported_format, supported_encoding, \
             supported_endianness
 
 print supported_format()

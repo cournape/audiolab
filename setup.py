@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri May 25 04:00 PM 2007 J
+# Last Change: Tue Jul 17 11:00 AM 2007 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -21,7 +21,7 @@
 #   - check how to handle cmd line build options with distutils and use
 #   it in the building process
 
-descr   = """ pyaudiolab is a small python package to import data from audio
+descr   = """ audiolab is a small python package to import data from audio
 files to numpy arrays and export data from numpy arrays to audio files. It uses
 libsndfile from Erik Castro de Lopo for the underlying IO, which supports many
 different audio formats: http://www.mega-nerd.com/libsndfile/
@@ -33,19 +33,19 @@ to record and listen to data in numpy arrays.
 
 2006-2007, David Cournapeau
 
-LICENSE: pyaudiolab is licensed under the LGPL, as is libsndfile itself. See
+LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself. See
 COPYING.txt for details.  """
 
 from os.path import join
 import os
 import sys
 
-DISTNAME            = 'scikits.pyaudiolab' 
+DISTNAME            = 'scikits.audiolab' 
 DESCRIPTION         = 'A python module to make noise from numpy arrays'
 LONG_DESCRIPTION    = descr
 MAINTAINER          = 'David Cournapeau',
 MAINTAINER_EMAIL    = 'david@ar.media.kyoto-u.ac.jp',
-URL                 = 'http://www.ar.media.kyoto-u.ac.jp/members/david/softwares/pyaudiolab',
+URL                 = 'http://www.ar.media.kyoto-u.ac.jp/members/david/softwares/audiolab',
 LICENSE             = 'LGPL'
 DOWNLOAD_URL        = URL
 
@@ -121,9 +121,9 @@ class sndfile_info(system_info):
 from header_parser import do_subst_in_file
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
-    if os.path.exists('scikits/pyaudiolab/pysndfile.py'): os.remove('scikits/pyaudiolab/pysndfile.py')
+    if os.path.exists('scikits/audiolab/pysndfile.py'): os.remove('scikits/audiolab/pysndfile.py')
 
-    pkg_prefix_dir = os.path.join('scikits', 'pyaudiolab')
+    pkg_prefix_dir = os.path.join('scikits', 'audiolab')
     # Check that sndfile can be found and get necessary informations
     # (assume only one header and one library file)
     sf_info     = sndfile_info()
@@ -141,11 +141,11 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
             repdict)
 
     # Get the version
-    from scikits.pyaudiolab.info import __version__ as pyaudiolab_version
+    from scikits.audiolab.info import __version__ as audiolab_version
 
     from numpy.distutils.misc_util import Configuration
     config = Configuration(package_name,parent_package,top_path,
-        version     = pyaudiolab_version,
+        version     = audiolab_version,
         maintainer  = MAINTAINER,
         maintainer_email = MAINTAINER_EMAIL,
         description = DESCRIPTION,
@@ -160,23 +160,23 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     # package_data does not work with sdist for setuptools 0.5 (setuptools bug), 
     # so we need to add them here while the bug is not solved...
     config.add_data_files(('docs', \
-            ['scikits/pyaudiolab/docs/' + i for i in DOC_FILES]))
+            ['scikits/audiolab/docs/' + i for i in DOC_FILES]))
 
     config.add_data_files(('test_data', \
-            ['scikits/pyaudiolab/test_data/' + i 
+            ['scikits/audiolab/test_data/' + i 
                 for i in TEST_DATA_FILES]))
 
     config.add_data_files(('misc', \
-            ['scikits/pyaudiolab/misc/' + i 
+            ['scikits/audiolab/misc/' + i 
                 for i in BAD_FLAC_FILES]))
 
-    config.add_data_dir(('examples', 'scikits/pyaudiolab/docs/examples'))
+    config.add_data_dir(('examples', 'scikits/audiolab/docs/examples'))
 
     return config
 
 TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au', 
         'test.sdif']
-DOC_FILES = ['pyaudiolab.pdf', 'index.txt']
+DOC_FILES = ['audiolab.pdf', 'index.txt']
 BAD_FLAC_FILES = ['Makefile', 'badflac.flac', 'badflac.c']
 
 if __name__ == "__main__":
@@ -193,8 +193,8 @@ if __name__ == "__main__":
         namespace_packages=['scikits'],
         packages=setuptools.find_packages(),
         include_package_data = True,
-        #package_data = {'scikits.pyaudiolab': data_files}, 
-        test_suite="scikits.pyaudiolab.tests", # for python setup.py test
+        #package_data = {'scikits.audiolab': data_files}, 
+        test_suite="scikits.audiolab.tests", # for python setup.py test
         zip_safe=True, # the package can run out of an .egg file
         #FIXME url, download_url, ext_modules
         classifiers = 

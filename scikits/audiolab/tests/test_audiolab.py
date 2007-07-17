@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Mon May 21 06:00 PM 2007 J
+# Last Change: Tue Jul 17 11:00 AM 2007 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -8,10 +8,10 @@ from numpy.testing import *
 import numpy as N
 
 set_package_path()
-from pyaudiolab.audiolab import wavread, auread, aiffread, sdifread, flacread
-from pyaudiolab.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
-from pyaudiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
-from pyaudiolab.pysndfile import FlacUnsupported
+from audiolab.audiolab import wavread, auread, aiffread, sdifread, flacread
+from audiolab.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
+from audiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
+from audiolab.pysndfile import FlacUnsupported
 restore_path()
 
 #Optional:
@@ -19,7 +19,7 @@ set_local_path()
 # import modules that are located in the same directory as this file.
 restore_path()
 
-class test_pyaudiolab(NumpyTestCase):
+class test_audiolab(NumpyTestCase):
     def _test_read(self, func, format, filext):
         # Create a tmp wavfile, write some random data into it, 
         # and check it is the expected data
