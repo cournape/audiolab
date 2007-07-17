@@ -8,8 +8,8 @@ from numpy.testing import *
 import numpy as N
 
 set_package_path()
-from audiolab.audiolab import wavread, auread, aiffread, sdifread, flacread
-from audiolab.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
+from audiolab.matapi import wavread, auread, aiffread, sdifread, flacread
+from audiolab.matapi import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
 from audiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
 from audiolab.pysndfile import FlacUnsupported
 restore_path()
