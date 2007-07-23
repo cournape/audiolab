@@ -194,7 +194,7 @@ if __name__ == "__main__":
         packages=setuptools.find_packages(),
         include_package_data = True,
         #package_data = {'scikits.audiolab': data_files}, 
-        test_suite="scikits.audiolab.tests", # for python setup.py test
+        test_suite="tester", # for python setup.py test
         zip_safe=True, # the package can run out of an .egg file
         #FIXME url, download_url, ext_modules
         classifiers = 
