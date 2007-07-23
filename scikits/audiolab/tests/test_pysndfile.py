@@ -244,8 +244,8 @@ class test_pysndfile(NumpyTestCase):
             close_tmp_file(cfilename)
 
     def test_mismatch(self):
-        """ This test open a file for writing, but with bad args 
-        (channels and nframes inverted) """
+        # This test open a file for writing, but with bad args (channels and
+        # nframes inverted) 
         fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
             # Open the file for writing

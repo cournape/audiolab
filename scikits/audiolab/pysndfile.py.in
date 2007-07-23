@@ -38,7 +38,7 @@ import copy
 #================
 import ctypes
 from ctypes import cdll, Structure, c_int, pointer, POINTER, \
-        c_void_p, create_string_buffer, c_char_p, sizeof
+        create_string_buffer, c_char_p, sizeof
 try:
     from ctypes import c_int64
 except ImportError, e:
@@ -182,7 +182,7 @@ def get_libsndfile_version():
 
 MAJOR, MINOR, MICRO, PRERELEASE = get_libsndfile_version()
 if not(MAJOR == 1):
-    raise Exception("pysndfile expects major version %d of libsndfile" % 1)
+    raise Exception("audiolab expects major version %d of libsndfile" % 1)
 if not(MICRO == 17):
     if PRERELEASE == 0: 
         prestr  = "No"
@@ -191,81 +191,6 @@ if not(MICRO == 17):
     print "WARNING libsndfile-%d.%d.%d (prerelease: %s) "\
         "this has only been tested with libsndfile 1.0.17 for now, "\
         "use at your own risk !" % (MAJOR, MINOR, MICRO, prestr)
-
-# functions args
-# TODO: is there a way to ensure that arg1 is the right kind of pointer ?
-arg1    = c_char_p
-arg2    = c_int
-arg3    = c_void_p
-_snd.sf_open.argtypes   = [arg1, arg2, arg3]
-_snd.sf_open.restype    = c_void_p
-
-arg1    = c_int
-arg2    = c_int
-arg3    = c_void_p
-arg4    = c_int
-_snd.sf_open_fd.argtypes   = [arg1, arg2, arg3, arg4]
-_snd.sf_open_fd.restype    = c_void_p
-
-arg1    = c_void_p
-arg2    = ndpointer(dtype=N.float64)
-arg3    = c_int64
-
-# double function
-_snd.sf_readf_double.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_double.restype     = c_int64
-
-_snd.sf_writef_double.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_double.restype     = c_int64
-
-# float function
-arg1    = c_void_p
-arg2    = ndpointer(dtype=N.float32)
-arg3    = c_int64
-_snd.sf_readf_float.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_float.restype     = c_int64
-
-_snd.sf_writef_float.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_float.restype     = c_int64
-
-# int function
-arg1    = c_void_p
-arg2    = ndpointer(dtype=N.int32)
-arg3    = c_int64
-_snd.sf_readf_int.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_int.restype     = c_int64
-
-_snd.sf_writef_int.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_int.restype     = c_int64
-
-# short function
-arg1    = c_void_p
-arg2    = ndpointer(dtype=N.int16)
-arg3    = c_int64
-_snd.sf_readf_short.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_short.restype     = c_int64
-
-_snd.sf_writef_short.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_short.restype     = c_int64
-
-# Error functions
-arg1    = c_void_p
-_snd.sf_strerror.argtypes   = [arg1]
-_snd.sf_strerror.restype    = c_char_p
-
-# Function to sync data to file
-arg1    = c_void_p
-_snd.sf_write_sync.argtypes = [arg1]
-
-# Function to seek
-arg1    = c_void_p
-arg2    = c_int64
-arg3    = c_int
-_snd.sf_seek.argtypes = [arg1, arg2, arg3]
-_snd.sf_seek.restype  = c_int64
-
-# To pass when a C function needs a NULL arg
-_cNULL = POINTER(c_int)()
 
 #================
 # Python wrappers
@@ -316,6 +241,91 @@ class _sf_format_info(Structure):
 
     def __repr__(self):
         print self.__str__()
+
+class _sndfile(Structure):
+    pass
+
+sf_info_p = POINTER(_sf_info)
+sndfile_p = POINTER(_sndfile)
+
+# functions args
+# TODO: is there a way to ensure that arg1 is the right kind of pointer ?
+arg1    = c_char_p
+arg2    = c_int
+arg3    = sf_info_p
+_snd.sf_open.argtypes   = [arg1, arg2, arg3]
+_snd.sf_open.restype    = sndfile_p
+
+arg1    = sndfile_p
+_snd.sf_close.argtypes  = [arg1]
+_snd.sf_close.restype  = c_int
+
+arg1    = c_int
+arg2    = c_int
+arg3    = sf_info_p
+arg4    = c_int
+_snd.sf_open_fd.argtypes   = [arg1, arg2, arg3, arg4]
+_snd.sf_open_fd.restype    = sndfile_p
+
+arg1    = sndfile_p
+arg2    = ndpointer(dtype=N.float64)
+arg3    = c_int64
+
+# double function
+_snd.sf_readf_double.argtypes    = [arg1, arg2, arg3]
+_snd.sf_readf_double.restype     = c_int64
+
+_snd.sf_writef_double.argtypes    = [arg1, arg2, arg3]
+_snd.sf_writef_double.restype     = c_int64
+
+# float function
+arg1    = sndfile_p
+arg2    = ndpointer(dtype=N.float32)
+arg3    = c_int64
+_snd.sf_readf_float.argtypes    = [arg1, arg2, arg3]
+_snd.sf_readf_float.restype     = c_int64
+
+_snd.sf_writef_float.argtypes    = [arg1, arg2, arg3]
+_snd.sf_writef_float.restype     = c_int64
+
+# int function
+arg1    = sndfile_p
+arg2    = ndpointer(dtype=N.int32)
+arg3    = c_int64
+_snd.sf_readf_int.argtypes    = [arg1, arg2, arg3]
+_snd.sf_readf_int.restype     = c_int64
+
+_snd.sf_writef_int.argtypes    = [arg1, arg2, arg3]
+_snd.sf_writef_int.restype     = c_int64
+
+# short function
+arg1    = sndfile_p
+arg2    = ndpointer(dtype=N.int16)
+arg3    = c_int64
+_snd.sf_readf_short.argtypes    = [arg1, arg2, arg3]
+_snd.sf_readf_short.restype     = c_int64
+
+_snd.sf_writef_short.argtypes    = [arg1, arg2, arg3]
+_snd.sf_writef_short.restype     = c_int64
+
+# Error functions
+arg1    = sndfile_p
+_snd.sf_strerror.argtypes   = [arg1]
+_snd.sf_strerror.restype    = c_char_p
+
+# Function to sync data to file
+arg1    = sndfile_p
+_snd.sf_write_sync.argtypes = [arg1]
+
+# Function to seek
+arg1    = sndfile_p
+arg2    = c_int64
+arg3    = c_int
+_snd.sf_seek.argtypes = [arg1, arg2, arg3]
+_snd.sf_seek.restype  = c_int64
+
+# To pass when a C function needs a NULL arg
+_cNULL = POINTER(c_int)()
 
 class _format_from_internal:
     """Class to handle audio format with sndfile. 
