@@ -565,6 +565,7 @@ class sndfile:
             res = _snd.sf_open_fd(filename, self._sfmode, sfinfo_p, SF_BOOL['SF_FALSE'])
             self._byfd = True
             self.fd = filename
+            self.filename = ""
         else:
             res = _snd.sf_open(filename, self._sfmode, sfinfo_p)
             self._byfd = False
@@ -606,10 +607,10 @@ out of luck, because its implementation of POSIX open is broken)"""
     def __del__(self, close_func = _snd.sf_close):
         # Stupid python needs the close_func, otherwise
         # it may clean ctypes before calling here
-        if not(self.hdl == 0):
-            #print "Closing %s, ptr is %d" % (self.filename, self.hdl)
-            close_func(self.hdl)
-            self.hdl    = 0
+        if hasattr(self,'hdl'):
+            if not(self.hdl == 0):
+                close_func(self.hdl)
+                self.hdl    = 0
 
     def close(self):
         """close the file."""
