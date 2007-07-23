@@ -27,6 +27,8 @@
 #   - ability to get log of sndfile ?
 #   - check how to play sound under windows, OS X and other UNIX
 
+"""This module implements the wrappers around libsndfile."""
+
 __docformat__ = 'restructuredtext'
 
 #__all__ = ['sndfile', 'formatinfo']
@@ -56,7 +58,7 @@ if CTYPES_MAJOR < 1 or (CTYPES_MINOR == 0 and CTYPES_MICRO < 1):
             % (ctypes.__version__, '1.0.1'))
 import numpy as N
 
-_snd = cdll.LoadLibrary('%SHARED_LOCATION%')
+_SND = cdll.LoadLibrary('%SHARED_LOCATION%')
 
 #=========================
 # Definition of constants
@@ -158,7 +160,7 @@ SND_TO_PY_ENDIANNESS = \
 def get_libsndfile_version():
     nverbuff = 256
     verbuff = create_string_buffer(nverbuff)
-    n = _snd.sf_command(c_int(0), c_int(SF_COMMAND['SFC_GET_LIB_VERSION']), 
+    n = _SND.sf_command(c_int(0), c_int(SF_COMMAND['SFC_GET_LIB_VERSION']), 
             verbuff, nverbuff)
     if n < 1:
         raise Exception("Error while getting version of libsndfile")
@@ -253,76 +255,76 @@ sndfile_p = POINTER(_sndfile)
 arg1    = c_char_p
 arg2    = c_int
 arg3    = sf_info_p
-_snd.sf_open.argtypes   = [arg1, arg2, arg3]
-_snd.sf_open.restype    = sndfile_p
+_SND.sf_open.argtypes   = [arg1, arg2, arg3]
+_SND.sf_open.restype    = sndfile_p
 
 arg1    = sndfile_p
-_snd.sf_close.argtypes  = [arg1]
-_snd.sf_close.restype  = c_int
+_SND.sf_close.argtypes  = [arg1]
+_SND.sf_close.restype  = c_int
 
 arg1    = c_int
 arg2    = c_int
 arg3    = sf_info_p
 arg4    = c_int
-_snd.sf_open_fd.argtypes   = [arg1, arg2, arg3, arg4]
-_snd.sf_open_fd.restype    = sndfile_p
+_SND.sf_open_fd.argtypes   = [arg1, arg2, arg3, arg4]
+_SND.sf_open_fd.restype    = sndfile_p
 
 arg1    = sndfile_p
 arg2    = ndpointer(dtype=N.float64)
 arg3    = c_int64
 
 # double function
-_snd.sf_readf_double.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_double.restype     = c_int64
+_SND.sf_readf_double.argtypes    = [arg1, arg2, arg3]
+_SND.sf_readf_double.restype     = c_int64
 
-_snd.sf_writef_double.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_double.restype     = c_int64
+_SND.sf_writef_double.argtypes    = [arg1, arg2, arg3]
+_SND.sf_writef_double.restype     = c_int64
 
 # float function
 arg1    = sndfile_p
 arg2    = ndpointer(dtype=N.float32)
 arg3    = c_int64
-_snd.sf_readf_float.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_float.restype     = c_int64
+_SND.sf_readf_float.argtypes    = [arg1, arg2, arg3]
+_SND.sf_readf_float.restype     = c_int64
 
-_snd.sf_writef_float.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_float.restype     = c_int64
+_SND.sf_writef_float.argtypes    = [arg1, arg2, arg3]
+_SND.sf_writef_float.restype     = c_int64
 
 # int function
 arg1    = sndfile_p
 arg2    = ndpointer(dtype=N.int32)
 arg3    = c_int64
-_snd.sf_readf_int.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_int.restype     = c_int64
+_SND.sf_readf_int.argtypes    = [arg1, arg2, arg3]
+_SND.sf_readf_int.restype     = c_int64
 
-_snd.sf_writef_int.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_int.restype     = c_int64
+_SND.sf_writef_int.argtypes    = [arg1, arg2, arg3]
+_SND.sf_writef_int.restype     = c_int64
 
 # short function
 arg1    = sndfile_p
 arg2    = ndpointer(dtype=N.int16)
 arg3    = c_int64
-_snd.sf_readf_short.argtypes    = [arg1, arg2, arg3]
-_snd.sf_readf_short.restype     = c_int64
+_SND.sf_readf_short.argtypes    = [arg1, arg2, arg3]
+_SND.sf_readf_short.restype     = c_int64
 
-_snd.sf_writef_short.argtypes    = [arg1, arg2, arg3]
-_snd.sf_writef_short.restype     = c_int64
+_SND.sf_writef_short.argtypes    = [arg1, arg2, arg3]
+_SND.sf_writef_short.restype     = c_int64
 
 # Error functions
 arg1    = sndfile_p
-_snd.sf_strerror.argtypes   = [arg1]
-_snd.sf_strerror.restype    = c_char_p
+_SND.sf_strerror.argtypes   = [arg1]
+_SND.sf_strerror.restype    = c_char_p
 
 # Function to sync data to file
 arg1    = sndfile_p
-_snd.sf_write_sync.argtypes = [arg1]
+_SND.sf_write_sync.argtypes = [arg1]
 
 # Function to seek
 arg1    = sndfile_p
 arg2    = c_int64
 arg3    = c_int
-_snd.sf_seek.argtypes = [arg1, arg2, arg3]
-_snd.sf_seek.restype  = c_int64
+_SND.sf_seek.argtypes = [arg1, arg2, arg3]
+_SND.sf_seek.restype  = c_int64
 
 # To pass when a C function needs a NULL arg
 _cNULL = POINTER(c_int)()
@@ -364,14 +366,14 @@ class _format_from_internal:
         self._sfinfo.samplerate = 8000
         self._sfinfo.format     = self._format
 
-        ret = _snd.sf_format_check(pointer(self._sfinfo))
+        ret = _SND.sf_format_check(pointer(self._sfinfo))
         if ret is not SF_BOOL['SF_TRUE']:
             raise InvalidFormat()
 
         # Get the sndfile string description of the format type
         blop = _sf_format_info()
         blop.format = self._int_type
-        st = _snd.sf_command(_cNULL, SF_COMMAND['SFC_GET_FORMAT_INFO'], \
+        st = _SND.sf_command(_cNULL, SF_COMMAND['SFC_GET_FORMAT_INFO'], \
                 pointer(blop), sizeof(blop))
         if st is not 0:
             if SND_TO_PY_FILE_FORMAT[self._int_type] == 'flac':
@@ -386,7 +388,7 @@ class _format_from_internal:
 
         # Get the sndfile string description of the format subtype
         blop.format = self._int_encoding
-        st = _snd.sf_command(_cNULL, SF_COMMAND['SFC_GET_FORMAT_INFO'], \
+        st = _SND.sf_command(_cNULL, SF_COMMAND['SFC_GET_FORMAT_INFO'], \
                 pointer(blop), sizeof(blop))
         if st is not 0:
             raise WrappingError()
@@ -472,13 +474,6 @@ class formatinfo(_format_from_internal):
 
         _format_from_internal.__init__(self, format)
 
-def _cominit(mode, format, channels, samplerate):
-    """Common initialization between opening by filename and by fd
-    for sndfile class"""
-    # XXX: there is now way to define functions private to classes in python ?
-
-    return sfmode, sfinfo
-
 class sndfile:
     """Main class to open, read and write audio files"""
     def __init__(self, filename, mode = 'read', format = None, channels = 0, \
@@ -552,7 +547,7 @@ class sndfile:
                         "between 1 and 256" % sfinfo.channels
                 raise RuntimeError(msg)
             sfinfo.format   = format.get_format_raw()
-            if not _snd.sf_format_check(sfinfo_p):
+            if not _SND.sf_format_check(sfinfo_p):
                 msg = "unknown error in format specification ?" +\
                         " Please report this to the author"
                 raise WrappingError()
@@ -562,12 +557,13 @@ class sndfile:
         self.hdl = 0
 
         if type(filename) == int:
-            res = _snd.sf_open_fd(filename, self._sfmode, sfinfo_p, SF_BOOL['SF_FALSE'])
+            res = _SND.sf_open_fd(filename, self._sfmode, sfinfo_p, 
+                                  SF_BOOL['SF_FALSE'])
             self._byfd = True
             self.fd = filename
             self.filename = ""
         else:
-            res = _snd.sf_open(filename, self._sfmode, sfinfo_p)
+            res = _SND.sf_open(filename, self._sfmode, sfinfo_p)
             self._byfd = False
             self.filename = filename
 
@@ -576,7 +572,7 @@ class sndfile:
                 msg = "error while opening file descriptor %d\n\t->" % self.fd
             else:
                 msg = "error while opening file %s\n\t-> " % self.filename
-            msg += _snd.sf_strerror(0)
+            msg += _SND.sf_strerror(0)
             if self._byfd:
                 msg += """
 (Check that the mode argument passed to sndfile is the same than the one used
@@ -604,7 +600,7 @@ out of luck, because its implementation of POSIX open is broken)"""
         else:
             self.seek = self._seek
 
-    def __del__(self, close_func = _snd.sf_close):
+    def __del__(self, close_func = _SND.sf_close):
         # Stupid python needs the close_func, otherwise
         # it may clean ctypes before calling here
         if hasattr(self,'hdl'):
@@ -621,7 +617,7 @@ out of luck, because its implementation of POSIX open is broken)"""
         file cache buffers to disk the file. 
         
         No effect if file is open as read"""
-        _snd.sf_write_sync(self.hdl)
+        _SND.sf_write_sync(self.hdl)
 
     def _seek(self, offset, whence = 0, mode = 'rw'):
         """similar to python seek function, taking only in account audio data.
@@ -643,24 +639,24 @@ out of luck, because its implementation of POSIX open is broken)"""
         -----
         
         - one only takes into accound audio data. 
-        - if an invalid seek is given (beyound or before the file), a
+        - if an invalid seek is given (beyond or before the file), a
           PyaudioIOError is launched."""
         c_offset    = _num2int64(offset)
         if mode == 'rw':
             # Update both read and write pointers
-            st  = _snd.sf_seek(self.hdl, c_offset, whence)
+            st  = _SND.sf_seek(self.hdl, c_offset, whence)
         elif mode == 'r':
             whence = whence | SFM['SFM_READ']
-            st  = _snd.sf_seek(self.hdl, c_offset, whence)
+            st  = _SND.sf_seek(self.hdl, c_offset, whence)
         elif mode == 'w':
             whence = whence | SFM['SFM_WRITE']
-            st  = _snd.sf_seek(self.hdl, c_offset, whence)
+            st  = _SND.sf_seek(self.hdl, c_offset, whence)
         else:
             raise ValueError("mode should be one of 'r', 'w' or 'rw' only")
 
         if st == -1:
             msg = "Error while seeking, libsndfile error is %s" \
-                    % (_snd.sf_strerror(self.hdl))
+                    % (_SND.sf_strerror(self.hdl))
             raise PyaudioIOError(msg)
         return st
 
@@ -732,13 +728,13 @@ out of luck, because its implementation of POSIX open is broken)"""
             y           = N.zeros(nframes, dtype)
 
         if dtype == N.float64:
-            res         = _snd.sf_readf_double(self.hdl, y, c_nframes)
+            res         = _SND.sf_readf_double(self.hdl, y, c_nframes)
         elif dtype == N.float32:
-            res         = _snd.sf_readf_float(self.hdl, y, c_nframes)
+            res         = _SND.sf_readf_float(self.hdl, y, c_nframes)
         elif dtype == N.int32:
-            res         = _snd.sf_readf_int(self.hdl, y, c_nframes)
+            res         = _SND.sf_readf_int(self.hdl, y, c_nframes)
         elif dtype == N.int16:
-            res         = _snd.sf_readf_short(self.hdl, y, c_nframes)
+            res         = _SND.sf_readf_short(self.hdl, y, c_nframes)
         else:
             RuntimeError("Sorry, only float, double, int and short read " + \
                     "supported for now")
@@ -746,7 +742,7 @@ out of luck, because its implementation of POSIX open is broken)"""
         if not(res == nframes):
             msg = "Read %d frames, expected to read %d" % (res, nframes)
             msg += ", libsndfile last msg is \n\t%s" \
-                    % _snd.sf_strerror(self.hdl)
+                    % _SND.sf_strerror(self.hdl)
             raise IOError(msg)
 
         return y
@@ -797,14 +793,14 @@ out of luck, because its implementation of POSIX open is broken)"""
 
         if input.dtype == N.float32:
             self._check_overflow(input)
-            res         = _snd.sf_writef_float(self.hdl, input, c_nframes)
+            res         = _SND.sf_writef_float(self.hdl, input, c_nframes)
         elif input.dtype == N.float64:
             self._check_overflow(input)
-            res         = _snd.sf_writef_double(self.hdl, input, c_nframes)
+            res         = _SND.sf_writef_double(self.hdl, input, c_nframes)
         elif input.dtype == N.int32:
-            res         = _snd.sf_writef_int(self.hdl, input, c_nframes)
+            res         = _SND.sf_writef_int(self.hdl, input, c_nframes)
         elif input.dtype == N.int16:
-            res         = _snd.sf_writef_short(self.hdl, input, c_nframes)
+            res         = _SND.sf_writef_short(self.hdl, input, c_nframes)
         else:
             raise Exception("type of input not understood: input should"
                 " be float64 or float32""")
@@ -858,12 +854,15 @@ out of luck, because its implementation of POSIX open is broken)"""
         return "%02d:%02d:%02d.%3d" % (hrs, mins, secs, ms)
 
 def supported_format():
+    # XXX: broken
     return py_to_snd_file_format_dic.keys()
 
 def supported_endianness():
+    # XXX: broken
     return py_to_snd_endianness_dic.keys()
 
 def supported_encoding():
+    # XXX: broken
     return py_to_snd_encoding_dic.keys()
 
 def _num2int64(value):

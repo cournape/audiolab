@@ -141,7 +141,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
             repdict)
 
     # Get the version
-    from scikits.audiolab.info import __version__ as audiolab_version
+    from scikits.audiolab.info import VERSION as audiolab_version
 
     from numpy.distutils.misc_util import Configuration
     config = Configuration(package_name,parent_package,top_path,
