@@ -30,5 +30,4 @@ from scikits.audiolab.matapi import wavread, wavwrite
 
 from numpy.testing import NumpyTest
 def test():
-    return NumpyTest().test
-
+    return NumpyTest().test()
