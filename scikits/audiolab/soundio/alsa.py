@@ -30,8 +30,9 @@ __all__ = ['asoundlib_version', 'asoundlib_version_numbers', 'card_indexes', \
 # Load alsa lib
 #================
 import ctypes
-from ctypes import cdll, Structure, c_int, pointer, POINTER, \
-        create_string_buffer, c_char_p, sizeof, byref, string_at, c_size_t
+from ctypes import cdll, Structure, c_int, pointer, POINTER, c_uint,\
+        create_string_buffer, c_char_p, sizeof, byref, string_at, c_size_t,\
+        c_void_p, c_ulong, c_uint16, c_long
 try:
     from ctypes import c_int64
 except ImportError, e:
@@ -161,6 +162,52 @@ arg2    = snd_pcm_hw_params_t_p
 _ALSA.snd_pcm_hw_params_any.argtypes = [arg1, arg2]
 _ALSA.snd_pcm_hw_params_any.restype  = c_int
 
+arg1    = snd_pcm_t_p
+arg2    = snd_pcm_hw_params_t_p
+_ALSA.snd_pcm_hw_params.argtypes = [arg1, arg2]
+_ALSA.snd_pcm_hw_params.restype  = c_int
+
+arg1    = snd_pcm_t_p
+arg2    = snd_pcm_hw_params_t_p
+arg3    = c_int
+_ALSA.snd_pcm_hw_params_set_access.argtypes = [arg1, arg2, arg3]
+_ALSA.snd_pcm_hw_params_set_access.restype  = c_int
+
+arg1    = snd_pcm_t_p
+arg2    = snd_pcm_hw_params_t_p
+arg3    = POINTER(c_uint)
+arg4    = c_int
+_ALSA.snd_pcm_hw_params_set_rate_near.argtypes = [arg1, arg2, arg3, arg4]
+_ALSA.snd_pcm_hw_params_set_rate_near.restype  = c_int
+
+arg1    = snd_pcm_t_p
+arg2    = snd_pcm_hw_params_t_p
+arg3    = c_uint
+_ALSA.snd_pcm_hw_params_set_channels.argtypes = [arg1, arg2, arg3]
+_ALSA.snd_pcm_hw_params_set_channels.restype  = c_int
+
+arg1    = snd_pcm_t_p
+arg2    = snd_pcm_hw_params_t_p
+arg3    = c_int
+_ALSA.snd_pcm_hw_params_set_format.argtypes = [arg1, arg2, arg3]
+_ALSA.snd_pcm_hw_params_set_format.restype  = c_int
+
+arg1    = snd_pcm_t_p
+arg2    = c_int
+arg3    = c_int
+arg4    = c_uint
+arg5    = c_uint
+arg6    = c_int
+arg7    = c_uint
+_ALSA.snd_pcm_set_params.argtypes = [arg1, arg2, arg3, arg4, arg5, arg6, arg7]
+_ALSA.snd_pcm_set_params.restype  = c_int
+
+# write
+arg1    = snd_pcm_t_p
+arg2    = c_void_p
+arg3    = c_ulong
+_ALSA.snd_pcm_writei.argtypes = [arg1, arg2, arg3]
+_ALSA.snd_pcm_writei.restype = c_ulong
 #==================
 # General functions
 #==================
@@ -233,6 +280,17 @@ class Pcm:
         if st:
             raise AlsaException("error while opening pcm %s: %d" % (device, st))
 
+        st = _ALSA.snd_pcm_set_params(self._pcmhdl,
+                                  1,
+                                  3,
+                                  1,
+                                  48000,
+                                  1,
+                                  500000) 
+        if st:
+            raise AlsaException("error while setting params: %s" \
+                                % _ALSA.snd_strerror(st))
+
     def __del__(self, close_func = _ALSA.snd_pcm_close):
         if hasattr(self, '_pcmhdl'):
             if not(self._pcmhdl == 0):
@@ -254,27 +312,72 @@ class Pcm:
     def __repr__(self):
         return self.__str__()
 
-class HwParams:
-    def __init__(self, pcm = Pcm()):
-        self._hwparamshdl = snd_pcm_hw_params_t_p()
-        st = _ALSA.snd_pcm_hw_params_malloc(byref(self._hwparamshdl))
-        if st:
-            raise AlsaException("error while allocating memory for hw params")
+    def writei(self):
+        a = N.random.rand(1024 * 16 * 2)
+        a *= 255
+        a = a.astype(N.uint8)
+        bufsz = c_ulong(1024 * 2)
+        for i in range(128):
+            a = N.random.rand(1024 * 16 * 2)
+            a *= 255
+            a = a.astype(N.uint8)
+            st =  _ALSA.snd_pcm_writei(self._pcmhdl, 
+                                 a.ctypes.data_as(POINTER(c_uint16)),  bufsz)
 
-        st = _ALSA.snd_pcm_hw_params_any(pcm._pcmhdl, self._hwparamshdl)
-        if st:
-            raise AlsaException("Broken configuration for playback: "\
-                                "no configurations available: %s" % \
-                                _ALSA.snd_strerror(st))
-
-    def set_samplerate(samplerate):
-        pass
-
-    def __del__(self, close_func = _ALSA.snd_pcm_hw_params_free):
-        if hasattr(self, '_hwparamshdl'):
-            if not(self._hwparamshdl == 0):
-                close_func(self._hwparamshdl)
-                self._hwparamshdl = 0
+#class HwParams:
+#    def __init__(self, pcm = Pcm(), rate = 44100):
+#        self._hwparamshdl = snd_pcm_hw_params_t_p()
+#        self._pcm = pcm
+#
+#        st = _ALSA.snd_pcm_hw_params_malloc(byref(self._hwparamshdl))
+#        if st:
+#            raise AlsaException("error while allocating memory for hw params")
+#
+#        st = _ALSA.snd_pcm_hw_params_any(pcm._pcmhdl, self._hwparamshdl)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: "\
+#                                "no configurations available: %s" % \
+#                                _ALSA.snd_strerror(st))
+#
+#        st = _ALSA.snd_pcm_hw_params_set_access(pcm._pcmhdl, self._hwparamshdl, 0)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: ")
+#
+#        self._set_samplerate(rate)
+#        self._set_channels(2)
+#        self._set_format(3)
+#
+#        st = _ALSA.snd_pcm_hw_params(pcm._pcmhdl, self._hwparamshdl)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: ")
+#
+#    def _set_samplerate(self, samplerate):
+#        # XXX: Check that rrate is near samplerate...
+#        rrate = c_uint(samplerate)
+#        st = _ALSA.snd_pcm_hw_params_set_rate_near(self._pcm._pcmhdl, self._hwparamshdl, 
+#                                               byref(rrate), 0)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: ")
+#
+#    def _set_channels(self, channels):
+#        # XXX: Check that rrate is near samplerate...
+#        ca = c_uint(channels)
+#        st = _ALSA.snd_pcm_hw_params_set_channels(pcm._pcmhdl, self._hwparamshdl, ca)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: ")
+#
+#    def _set_format(self, format):
+#        # XXX: Check that rrate is near samplerate...
+#        ca = c_int(format)
+#        st = _ALSA.snd_pcm_hw_params_set_format(pcm._pcmhdl, self._hwparamshdl, ca)
+#        if st:
+#            raise AlsaException("Broken configuration for playback: ")
+#
+#    def __del__(self, close_func = _ALSA.snd_pcm_hw_params_free):
+#        if hasattr(self, '_hwparamshdl'):
+#            if not(self._hwparamshdl == 0):
+#                close_func(self._hwparamshdl)
+#                self._hwparamshdl = 0
 
 #class AlsaPlayer:
 #    def __init__(self, device = "default"):
@@ -292,5 +395,6 @@ if __name__ == '__main__':
     print asoundlib_version_numbers()
     #a = AlsaPlayer()
     pcm = Pcm("default:0")
+    #hw = HwParams(pcm)
     print pcm
-    hw = HwParams()
+    pcm.writei()
