@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Tue Jul 17 11:00 AM 2007 J
+# Last Change: Thu Aug 16 03:00 PM 2007 J
 """
 audiolab: a small toolbox to read, write and play audio to and from
 numpy arrays.

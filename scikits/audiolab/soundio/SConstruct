@@ -1,0 +1,2 @@
+Program('main', source = ['simple.c'], LIBS = ['asound'])
+Program('main2', source = ['simple2.c'], LIBS = ['asound'])
