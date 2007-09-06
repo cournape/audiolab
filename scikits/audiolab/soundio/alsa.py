@@ -131,6 +131,11 @@ arg2    = POINTER(c_char_p)
 _ALSA.snd_output_buffer_string.argtypes = [arg1, arg2]
 _ALSA.snd_output_buffer_string.restype  = c_size_t
 
+arg1    = snd_pcm_t_p
+arg2    = snd_output_t_p
+_ALSA.snd_pcm_dump.argtypes = [arg1, arg2]
+_ALSA.snd_pcm_dump.restype  = c_int
+
 # pcm related functions
 arg1    = POINTER(POINTER(snd_pcm_t))
 arg2    = c_char_p
@@ -238,9 +243,12 @@ class Pcm:
         buf = c_char_p()
         msg = "Pcm device: "
         if self._pcmhdl > 0:
+            msg += " Opened\n"
+            # XXX error checking
+            st = _ALSA.snd_pcm_dump(self._pcmhdl, OHDL._hdl)
             st = _ALSA.snd_output_buffer_string(OHDL._hdl, byref(buf))
-            print buf.value
-            msg += string_at(buf)
+            if st > 0:
+                msg += string_at(buf)
         return msg
 
     def __repr__(self):
@@ -283,6 +291,6 @@ if __name__ == '__main__':
     print asoundlib_version()
     print asoundlib_version_numbers()
     #a = AlsaPlayer()
-    pcm = Pcm()
+    pcm = Pcm("default:0")
     print pcm
     hw = HwParams()
