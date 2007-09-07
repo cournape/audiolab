@@ -79,12 +79,15 @@ class sndfile_info(system_info):
         # Look for the shared library
         sndfile_libs    = self.get_libs('sndfile_libs', self.libname) 
         lib_dirs        = self.get_lib_dirs()
+        tmp 			= None
         for i in lib_dirs:
             tmp = self.check_libs(i, sndfile_libs)
             if tmp is not None:
                 info    = tmp
                 break
-        
+        if tmp is None:
+		    raise SndfileNotFoundError("sndfile library not found")
+			
         # Look for the header file
         include_dirs    = self.get_include_dirs() 
         inc_dir         = None
@@ -94,6 +97,10 @@ class sndfile_info(system_info):
                 inc_dir     = os.path.dirname(p[0])
                 headername  = os.path.abspath(p[0])
                 break
+        
+        if inc_dir is None:
+		    raise SndfileNotFoundError("header not found")
+			
         if inc_dir is not None and tmp is not None:
             if sys.platform == 'win32':
                 # win32 case
@@ -112,7 +119,7 @@ class sndfile_info(system_info):
                     fullheadloc = headername, 
                     fulllibloc  = fullname) 
         else:
-            return
+            raise RuntimeError("This is a bug")
 
         #print self
         self.set_info(**info)
