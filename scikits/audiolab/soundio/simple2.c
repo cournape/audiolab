@@ -30,7 +30,7 @@ int main()
         }
 
         st = snd_pcm_set_params(pcm, 
-                                SND_PCM_FORMAT_U8, 
+                                SND_PCM_FORMAT_S16, 
                                 SND_PCM_ACCESS_RW_INTERLEAVED, 
                                 nc, 
                                 rrate,
@@ -43,6 +43,8 @@ int main()
         snd_pcm_dump(pcm, output);
 
         fprintf(stderr, "SND_PCM_FORMAT_U8 : %d\n", SND_PCM_FORMAT_U8);
+        fprintf(stderr, "SND_PCM_FORMAT_S16 : %d\n", SND_PCM_FORMAT_S16);
+        fprintf(stderr, "SND_PCM_FORMAT_FLOAT : %d\n", SND_PCM_FORMAT_FLOAT);
         fprintf(stderr, "SND_PCM_ACCESS_RW_INTERLEAVED : %d\n", SND_PCM_ACCESS_RW_INTERLEAVED);
         for (i = 0; i < 16; ++i) {
             for (j = 0; j < 1024 * 16; ++j) {
