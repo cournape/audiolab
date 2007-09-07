@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Tue Jul 17 11:00 AM 2007 J
+# Last Change: Fri Sep 07 06:00 PM 2007 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -71,6 +71,13 @@ class sndfile_info(system_info):
 
     def __init__(self):
         system_info.__init__(self)
+
+    def library_extensions(self):
+        # We rewrite library_extension
+        exts = system_info.library_extensions(self)
+        if sys.platform == 'win32':
+            exts.insert(0, '.dll')
+        return exts
 
     def calc_info(self):
         """ Compute the informations of the library """

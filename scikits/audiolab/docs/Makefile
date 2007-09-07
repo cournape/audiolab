@@ -1,5 +1,5 @@
-py2tex	= PYTHONPATH=/home/david/local/lib/python2.4/site-packages pygmentize -l python -f tex
-rst2tex	= PYTHONPATH=/home/david/local/lib/python2.4/site-packages rst2newlatex.py \
+py2tex	= PYTHONPATH=/home/david/local/lib/python2.5/site-packages pygmentize -l python -f tex
+rst2tex	= PYTHONPATH=/home/david/local/lib/python2.5/site-packages rst2newlatex.py \
 		  --stylesheet-path base.tex --user-stylesheet user.tex 
 
 pytexfiles	= audiolab.tex quick1.tex \
