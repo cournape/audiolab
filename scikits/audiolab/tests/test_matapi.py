@@ -17,13 +17,14 @@ restore_path()
 #Optional:
 set_local_path()
 # import modules that are located in the same directory as this file.
+from testcommon import open_tmp_file, close_tmp_file
 restore_path()
 
 class test_audiolab(NumpyTestCase):
     def _test_read(self, func, format, filext):
         # Create a tmp wavfile, write some random data into it, 
         # and check it is the expected data
-        fd, cfilename   = mkstemp('pysndfiletest.' + filext)
+        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.' + filext)
         try:
             nbuff   = 22050
             noise   = 0.1 * N.random.randn(nbuff)
@@ -42,7 +43,7 @@ class test_audiolab(NumpyTestCase):
 
             assert_array_equal(rnoise, rcnoise)
         finally:
-            remove(cfilename)
+            close_tmp_file(rfd, cfilename)
 
     def test_wavread(self):
         """ Check wavread """
@@ -71,7 +72,7 @@ class test_audiolab(NumpyTestCase):
         """ Check wavread on bad file"""
         # Create a tmp audio file with non wav format, write some random data into it, 
         # and check it can not be opened by wavread
-        fd, cfilename   = mkstemp('pysndfiletest.wav')
+        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
         try:
             nbuff   = 22050
             noise   = 0.1 * N.random.randn(nbuff)
@@ -92,15 +93,16 @@ class test_audiolab(NumpyTestCase):
                 rnoise  = wavread(cfilename)[0]
                 raise Exception("wavread on non wav file succeded, expected to fail")
             except PyaudioException, e:
-                print str(e) + ", as expected"
+                pass
+                #print str(e) + ", as expected"
 
         finally:
-            remove(cfilename)
+            close_tmp_file(rfd, cfilename)
 
     def _test_write(self, func, format, filext):
         """ Check wavwrite """
-        fd, cfilename1  = mkstemp('pysndfiletest.' + filext)
-        fd, cfilename2  = mkstemp('pysndfiletest.' + filext)
+        rfd1, fd1, cfilename1  = open_tmp_file('pysndfiletest.' + filext)
+        rfd2, fd2, cfilename2  = open_tmp_file('pysndfiletest.' + filext)
         try:
             nbuff   = 22050
             fs      = nbuff
@@ -130,8 +132,8 @@ class test_audiolab(NumpyTestCase):
 
             assert m1.hexdigest() == m2.hexdigest()
         finally:
-            remove(cfilename1)
-            remove(cfilename2)
+            close_tmp_file(rfd1, cfilename1)
+            close_tmp_file(rfd2, cfilename2)
 
     def test_wavwrite(self):
         """ Check wavwrite """
