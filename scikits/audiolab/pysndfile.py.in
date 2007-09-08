@@ -40,7 +40,7 @@ import copy
 #================
 import ctypes
 from ctypes import cdll, Structure, c_int, pointer, POINTER, \
-        create_string_buffer, c_char_p, sizeof
+        create_string_buffer, c_char_p, sizeof, string_at
 try:
     from ctypes import c_int64
 except ImportError, e:
@@ -567,12 +567,15 @@ class sndfile:
             self._byfd = False
             self.filename = filename
 
-        if res == 0 or res == None:
+        try:
+            # If res is NULL, this statement will raise a ValueError exception
+            a = res[0]
+        except ValueError:
             if self._byfd:
                 msg = "error while opening file descriptor %d\n\t->" % self.fd
             else:
                 msg = "error while opening file %s\n\t-> " % self.filename
-            msg += _SND.sf_strerror(0)
+            msg += _SND.sf_strerror(res)
             if self._byfd:
                 msg += """
 (Check that the mode argument passed to sndfile is the same than the one used

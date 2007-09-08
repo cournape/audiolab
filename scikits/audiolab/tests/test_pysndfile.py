@@ -277,6 +277,16 @@ class test_pysndfile(NumpyTestCase):
         finally:
             close_tmp_file(rfd, cfilename)
 
+    def test_nofile(self):
+        """ Check the failure when opening a non existing file."""
+        try:
+            f = sndfile("floupi.wav", "read")
+            raise AssertionError("call to non existing file should not succeed")
+        except IOError:
+            pass
+        except Exception, e:
+            raise AssertionError("opening non existing file should raise a IOError exception, got %s instead" % e.__class__)
+
 class test_seek(NumpyTestCase):
     def test_simple(self):
         ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
