@@ -1,2 +1,2 @@
-VERSION = '0.7dev'
+VERSION = '0.8dev'
 ignore  = False

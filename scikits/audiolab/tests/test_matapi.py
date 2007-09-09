@@ -22,20 +22,20 @@ restore_path()
 
 class test_audiolab(NumpyTestCase):
     def _test_read(self, func, format, filext):
-        # Create a tmp wavfile, write some random data into it, 
-        # and check it is the expected data
+	# Create a tmp audio file, write some random data into it, and check it
+	# is the expected data when read from a function from the matapi.
         rfd, fd, cfilename   = open_tmp_file('pysndfiletest.' + filext)
         try:
-            nbuff   = 22050
-            noise   = 0.1 * N.random.randn(nbuff)
+            nbuff = 22050
+            noise = 0.1 * N.random.randn(nbuff)
 
             # Open the copy file for writing
-            b       = sndfile(cfilename, 'write', format, 1, nbuff)
+            b = sndfile(cfilename, 'write', format, 1, nbuff)
             b.write_frames(noise, nbuff)
             b.close()
 
             # Reread the data
-            b   = sndfile(cfilename, 'read')
+            b = sndfile(cfilename, 'read')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -100,7 +100,7 @@ class test_audiolab(NumpyTestCase):
             close_tmp_file(rfd, cfilename)
 
     def _test_write(self, func, format, filext):
-        """ Check wavwrite """
+        """ Check *write functions from matpi """
         rfd1, fd1, cfilename1  = open_tmp_file('pysndfiletest.' + filext)
         rfd2, fd2, cfilename2  = open_tmp_file('pysndfiletest.' + filext)
         try:
@@ -130,6 +130,8 @@ class test_audiolab(NumpyTestCase):
             m1.update(f1.read())
             m2.update(f2.read())
 
+	    f1.close()
+	    f2.close()
             assert m1.hexdigest() == m2.hexdigest()
         finally:
             close_tmp_file(rfd1, cfilename1)

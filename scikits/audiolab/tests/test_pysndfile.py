@@ -50,7 +50,7 @@ class test_pysndfile(NumpyTestCase):
             a.close()
             b.close()
         finally:
-            close_tmp_file(fd, cfilename)
+            close_tmp_file(rfd, cfilename)
 
 
     def test_basic_io_fd(self):
@@ -273,6 +273,7 @@ class test_pysndfile(NumpyTestCase):
             a.seek(0)
             a.sync()
             ctmp    = a.read_frames(1e2, dtype = N.short)
+            a.close()
 
         finally:
             close_tmp_file(rfd, cfilename)
@@ -386,6 +387,7 @@ class test_seek(NumpyTestCase):
                 raise AssertionError(msg) 
 
             assert_array_equal(tbuff3, rbuff3)
+            test.close()
 
         finally:
             close_tmp_file(rfd, cfilename)
