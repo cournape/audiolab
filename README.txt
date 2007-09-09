@@ -1,7 +1,7 @@
-pyaudiolab: a small toolbox to read, write and play audio to and from
+audiolab: a small toolbox to read, write and play audio to and from
 numpy arrays.
 
-pyaudiolab provides two API:
+audiolab provides two API:
     - one similar to matlab: this gives you wavread/wavwrite/auread/auwrite
       functions similar to matlab's ones.
     - a more complete API, which can be used to read, write to many audio files
@@ -14,9 +14,9 @@ See the docs directory for more details
 
 LICENSE:
 
-pyaudiolab itself is licensed under the LGPL license
+audiolab itself is licensed under the LGPL license
 (see COPYING.txt in main source directory)
 
-pyaudiolab depends on libsndfile to work; libsndfile is licensed under LGPL.
+audiolab depends on libsndfile to work; libsndfile is licensed under LGPL.
 
 See http://www.mega-nerd.com/libsndfile/ for details.

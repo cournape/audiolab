@@ -1,0 +1,36 @@
+Suported platforms:
+-------------------
+
+audiolab has been successfully run and tested on the following platforms:
+
+        - windows
+        - mac OS X (intel and ppc) 
+        - linux (intel and ppc). 
+
+This may work on other platforms: in particular, I expect the package to work
+on most recent Unices.
+
+Requirements
+------------
+
+To run correctly, audiolab requires the following softwares:
+
+        - python (> 2.3): http://www.python.org
+        - setuptools:
+          http://peak.telecommunity.com/DevCenter/setuptools#installing-setuptools
+        - ctypes (included in python starting from version 2.5)
+        - numpy: http://www.scipy.org/Numpy
+        - libsndfile: http://www.mega-nerd.com/libsndfile/
+
+On Ubuntu, you can ensure to get the necessary packages by doing apt-get
+install python python-setuptools libsndfile-dev python-numpy
+
+Installing
+----------
+
+Installing is easy: once in the audiolab directory, simply do: python setup.py
+install. If the installation failed because libsndfile was not found, check
+that you have correctly installed libsndfile, including its headers
+(sndfile.h). On windows, as there is no standard for 3rd party libraries and
+header location, you can put them wherever you want, as long as the
+corresponding directories are in site.cfg (see site.cfg.win32 for an example).

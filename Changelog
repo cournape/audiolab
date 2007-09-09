@@ -1,3 +1,11 @@
+audiolab (0.7) Sun, 09 Sep 2007 20:10:27 +0900
+
+	* More robust wrapping of libsndfile: sf_file are objects pointers,
+	the destructor checks that the handle already exists, and NULL
+	pointers are better detected.
+	* Add preliminary alsa version (not enabled yet).
+	* Opening non existing files now throws meaningful exception.
+
 audiolab (0.7dev) Tue, 17 Jul 2007 12:03:41 +0900
 
 	* Rename pyaudiolab to audiolab.
