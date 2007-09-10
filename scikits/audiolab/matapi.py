@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri May 25 02:00 PM 2007 J
+# Last Change: Mon Sep 10 07:00 PM 2007 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -23,6 +23,11 @@ import numpy as N
 
 from pysndfile import formatinfo, sndfile
 from pysndfile import PyaudioException, FlacUnsupported
+
+__all__ = []
+_MATAPI_FORMAT = ['wav', 'aiff', 'au', 'sdif', 'flac']
+for i in _MATAPI_FORMAT:
+    __all__.extend(['%sread' % i, '%swrite' % i])
 
 # writer function factory
 def _writer_factory(name, format, def_fs, descr):
@@ -136,5 +141,8 @@ try:
 except FlacUnsupported,e:
     print e
     print "Matlab API for FLAC is disabled"
-    flacread    = None
-    flacwrite   = None
+    def missing_flacread(*args):
+        raise UnimplementedError("Matlab API for FLAC is disabled on your "\
+                                 "installation")
+    flacread    = missing_flacread
+    flacwrite   = missing_flacread

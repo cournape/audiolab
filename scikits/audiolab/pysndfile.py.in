@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Jun 01 09:00 PM 2007 J
+# Last Change: Mon Sep 10 07:00 PM 2007 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -332,7 +332,8 @@ _cNULL = POINTER(c_int)()
 class _format_from_internal:
     """Class to handle audio format with sndfile. 
     
-    DO NOT USE THIS CLASS OUTSIDE THIS MODULE
+    DO NOT USE THIS CLASS OUTSIDE pysndfile.py MODULE: YOU MAY CRASH YOUR
+    INTERPRETER !
     
     Basically, we have 3 classes of parameters:
         - the main format: (major format), like wav, aiff, etc...
