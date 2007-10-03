@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Mon Sep 10 07:00 PM 2007 J
+# Last Change: Wed Oct 03 05:00 PM 2007 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -34,6 +34,7 @@ __docformat__ = 'restructuredtext'
 #__all__ = ['sndfile', 'formatinfo']
 
 import copy
+import warnings
 
 #================
 # Load libsndfile
@@ -796,10 +797,13 @@ out of luck, because its implementation of POSIX open is broken)"""
         input = N.require(input, requirements = 'C')
 
         if input.dtype == N.float32:
-            self._check_overflow(input)
+            if self._check_overflow(input):
+                warnings.warn("Warning, overflow detected when writing.")
             res         = _SND.sf_writef_float(self.hdl, input, c_nframes)
         elif input.dtype == N.float64:
             self._check_overflow(input)
+            if self._check_overflow(input):
+                warnings.warn("Warning, overflow detected when writing.")
             res         = _SND.sf_writef_double(self.hdl, input, c_nframes)
         elif input.dtype == N.int32:
             res         = _SND.sf_writef_int(self.hdl, input, c_nframes)
@@ -815,7 +819,8 @@ out of luck, because its implementation of POSIX open is broken)"""
 
     def _check_overflow(self, data):
         if N.max(data ** 2) >= 1.:
-            print "Warning, overflow detected"
+            return True
+        return False
 
     # Syntactic sugar
     def __repr__(self):
