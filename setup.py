@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Sep 07 06:00 PM 2007 J
+# Last Change: Tue Jul 29 12:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -7,12 +7,12 @@
 # the terms of the GNU Lesser General Public License as published by the Free
 # Software Foundation; either version 2.1 of the License, or (at your option) any
 # later version.
-# 
+#
 # This library is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public License along
 # with this library; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -25,7 +25,7 @@ descr   = """ audiolab is a small python package to import data from audio
 files to numpy arrays and export data from numpy arrays to audio files. It uses
 libsndfile from Erik Castro de Lopo for the underlying IO, which supports many
 different audio formats: http://www.mega-nerd.com/libsndfile/
-    
+
 For now, the python api for audio IO should be stable; a matlab-like API is
 also available for quick read/write (ala wavread, wavwrite, etc...). For 1.0
 release, I hope to add support for simple read/write to soundcard, to be able
@@ -40,7 +40,7 @@ from os.path import join
 import os
 import sys
 
-DISTNAME            = 'scikits.audiolab' 
+DISTNAME            = 'scikits.audiolab'
 DESCRIPTION         = 'A python module to make noise from numpy arrays'
 LONG_DESCRIPTION    = descr
 MAINTAINER          = 'David Cournapeau',
@@ -60,7 +60,7 @@ from numpy.distutils.core import setup, Extension
 class SndfileNotFoundError(NotFoundError):
     """ sndfile (http://www.mega-nerd.com/libsndfile/) library not found.
     Directories to search for the libraries can be specified in the
-    site.cfg file (section [sndfile]).""" 
+    site.cfg file (section [sndfile])."""
 
 class sndfile_info(system_info):
     #variables to override
@@ -84,19 +84,19 @@ class sndfile_info(system_info):
         prefix  = 'lib'
 
         # Look for the shared library
-        sndfile_libs    = self.get_libs('sndfile_libs', self.libname) 
+        sndfile_libs    = self.get_libs('sndfile_libs', self.libname)
         lib_dirs        = self.get_lib_dirs()
-        tmp 			= None
+        tmp             = None
         for i in lib_dirs:
             tmp = self.check_libs(i, sndfile_libs)
             if tmp is not None:
                 info    = tmp
                 break
         if tmp is None:
-		    raise SndfileNotFoundError("sndfile library not found")
-			
+            raise SndfileNotFoundError("sndfile library not found")
+
         # Look for the header file
-        include_dirs    = self.get_include_dirs() 
+        include_dirs    = self.get_include_dirs()
         inc_dir         = None
         for d in include_dirs:
             p = self.combine_paths(d,self.header)
@@ -104,10 +104,10 @@ class sndfile_info(system_info):
                 inc_dir     = os.path.dirname(p[0])
                 headername  = os.path.abspath(p[0])
                 break
-        
+
         if inc_dir is None:
-		    raise SndfileNotFoundError("header not found")
-			
+            raise SndfileNotFoundError("header not found")
+
         if inc_dir is not None and tmp is not None:
             if sys.platform == 'win32':
                 # win32 case
@@ -120,11 +120,11 @@ class sndfile_info(system_info):
             else:
                 # All others (Linux for sure; what about solaris) ?
                 fullname    = prefix + tmp['libraries'][0] + '.so' + \
-                        '.' + str(SNDFILE_MAJ_VERSION) 
+                        '.' + str(SNDFILE_MAJ_VERSION)
             fullname    = os.path.join(info['library_dirs'][0], fullname)
-            dict_append(info, include_dirs=[inc_dir], 
-                    fullheadloc = headername, 
-                    fulllibloc  = fullname) 
+            dict_append(info, include_dirs=[inc_dir],
+                    fullheadloc = headername,
+                    fulllibloc  = fullname)
         else:
             raise RuntimeError("This is a bug")
 
@@ -150,8 +150,8 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     repdict = generate_enum_dicts(headername)
     repdict['%SHARED_LOCATION%'] = libname
     #do_subst_in_file('pysndfile.py.in', 'pysndfile.py', repdict)
-    do_subst_in_file(os.path.join(pkg_prefix_dir, 'pysndfile.py.in'), 
-            os.path.join(pkg_prefix_dir, 'pysndfile.py'), 
+    do_subst_in_file(os.path.join(pkg_prefix_dir, 'pysndfile.py.in'),
+            os.path.join(pkg_prefix_dir, 'pysndfile.py'),
             repdict)
 
     # Get the version
@@ -164,31 +164,31 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
         maintainer_email = MAINTAINER_EMAIL,
         description = DESCRIPTION,
         license = LICENSE,
-        url = URL, 
+        url = URL,
         download_url = DOWNLOAD_URL,
         long_description = LONG_DESCRIPTION)
 
     # XXX: once in SVN, should add svn version...
     #print config.make_svn_version_py()
 
-    # package_data does not work with sdist for setuptools 0.5 (setuptools bug), 
+    # package_data does not work with sdist for setuptools 0.5 (setuptools bug),
     # so we need to add them here while the bug is not solved...
     config.add_data_files(('docs', \
             ['scikits/audiolab/docs/' + i for i in DOC_FILES]))
 
     config.add_data_files(('test_data', \
-            ['scikits/audiolab/test_data/' + i 
+            ['scikits/audiolab/test_data/' + i
                 for i in TEST_DATA_FILES]))
 
     config.add_data_files(('misc', \
-            ['scikits/audiolab/misc/' + i 
+            ['scikits/audiolab/misc/' + i
                 for i in BAD_FLAC_FILES]))
 
     config.add_data_dir(('examples', 'scikits/audiolab/docs/examples'))
 
     return config
 
-TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au', 
+TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au',
         'test.sdif']
 DOC_FILES = ['audiolab.pdf', 'index.txt']
 BAD_FLAC_FILES = ['Makefile', 'badflac.flac', 'badflac.c']
@@ -203,15 +203,15 @@ if __name__ == "__main__":
     #data_files.extend(['docs/' + i for i in doc_files])
 
     setup(configuration = configuration,
-        install_requires='numpy', # can also add version specifiers      
+        install_requires='numpy', # can also add version specifiers
         namespace_packages=['scikits'],
         packages=setuptools.find_packages(),
         include_package_data = True,
-        #package_data = {'scikits.audiolab': data_files}, 
+        #package_data = {'scikits.audiolab': data_files},
         test_suite="tester", # for python setup.py test
         zip_safe=True, # the package can run out of an .egg file
         #FIXME url, download_url, ext_modules
-        classifiers = 
+        classifiers =
             [ 'Development Status :: 4 - Beta',
               'Environment :: Console',
               'Intended Audience :: Developers',
