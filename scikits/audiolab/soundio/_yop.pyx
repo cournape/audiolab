@@ -45,7 +45,3 @@ def card_name(index):
                 cardname = PyString_FromStringAndSize(sptr, len(sptr))
                 free(sptr)
         return cardname
-
-if __name__ == '__main__':
-        cards = [card_name(i) for i in card_indexes()]
-        print cards
