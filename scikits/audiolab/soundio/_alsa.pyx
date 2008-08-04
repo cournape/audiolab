@@ -63,6 +63,10 @@ cdef extern from "alsa/asoundlib.h":
         int snd_pcm_open(snd_pcm_t **, char*, int, int)
         int snd_pcm_close(snd_pcm_t *)
 
+        int snd_pcm_set_params(snd_pcm_t *, snd_pcm_format_t,
+                        snd_pcm_access_t, unsigned int,
+                        unsigned int, int, unsigned int)
+
         char* snd_strerror(int error)
 
         int snd_card_next(int *icard)
@@ -112,7 +116,7 @@ def card_name(index):
                 free(sptr)
         return cardname
 
-cdef class Device:
+cdef class PCM:
         cdef snd_pcm_t* pcmhdl
         cdef public char* name
 
@@ -129,3 +133,24 @@ cdef class Device:
         def __dealloc__(self):
                 if self.pcmhdl:
                         snd_pcm_close(self.pcmhdl)
+
+cdef class Device:
+        cdef PCM pcm
+        cdef unsigned int samplerate
+        cdef unsigned int channels
+        def __init__(self, samplerate = 48000, channels = 1,
+                     format = SND_PCM_FORMAT_S16,
+                     access = SND_PCM_ACCESS_RW_INTERLEAVED):
+                self.pcm = PCM()
+
+                self.samplerate = samplerate
+                self.channels = channels
+
+                st = snd_pcm_set_params(self.pcm.pcmhdl, format, access, channels,
+                                        samplerate, 1, 1000000)
+                if st < 0:
+                        raise AlsaException()
+
+        def _get_name(self):
+                return self.pcm.name
+        name = property(_get_name)
