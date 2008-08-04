@@ -58,8 +58,10 @@ cdef extern from "alsa/asoundlib.h":
                 SND_PCM_FORMAT_FLOAT64
                 SND_PCM_FORMAT_IEC958_SUBFRAME
         char* snd_strerror(int error)
+
         int snd_card_next(int *icard)
         int snd_card_get_name(int icard, char** name)
+        char* snd_asoundlib_version()
 
 cdef extern from "stdlib.h":
         ctypedef unsigned long size_t
@@ -74,6 +76,9 @@ cdef extern from "Python.h":
 
 class AlsaException(Exception):
         pass
+
+def asoundlib_version():
+        return snd_asoundlib_version()
 
 def card_indexes():
         """Returns a list containing index of cards recognized by alsa."""
