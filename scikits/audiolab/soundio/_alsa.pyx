@@ -57,6 +57,12 @@ cdef extern from "alsa/asoundlib.h":
                 SND_PCM_FORMAT_FLOAT
                 SND_PCM_FORMAT_FLOAT64
                 SND_PCM_FORMAT_IEC958_SUBFRAME
+
+        ctypedef struct snd_pcm_t
+
+        int snd_pcm_open(snd_pcm_t **, char*, int, int)
+        int snd_pcm_close(snd_pcm_t *)
+
         char* snd_strerror(int error)
 
         int snd_card_next(int *icard)
@@ -105,3 +111,21 @@ def card_name(index):
                 cardname = PyString_FromStringAndSize(sptr, len(sptr))
                 free(sptr)
         return cardname
+
+cdef class Device:
+        cdef snd_pcm_t* pcmhdl
+        cdef public char* name
+
+        def __new__(self, device = "default", stream = SND_PCM_STREAM_PLAYBACK):
+                self.pcmhdl = NULL
+
+                st = snd_pcm_open(&self.pcmhdl, device, stream, 0)
+                if st < 0:
+                        raise AlsaException("Cannot open device %s: %s" % (device, snd_strerror(st)))
+
+        def __init__(self, device = "default", stream = SND_PCM_STREAM_PLAYBACK):
+                self.name = device
+
+        def __dealloc__(self):
+                if self.pcmhdl:
+                        snd_pcm_close(self.pcmhdl)
