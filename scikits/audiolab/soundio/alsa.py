@@ -12,12 +12,11 @@ def play(input, samplerate = 48000):
     else:
         raise ValueError("Only ndim 1 or 2 supported")
 
+    if not input.dtype in (np.float32, np.float64):
+        raise ValueError("input should be array of float32 or float64 !")
+
     try:
         dev = Device(samplerate = samplerate, channels = nc)
-
-        assert nc == dev.channels
-        assert input.dtype == np.float32 or input.dtype == np.float64
-
         dev.play_short((16384 * input).astype(np.int16))
     except AlsaException, e:
         raise IOError(str(e))
