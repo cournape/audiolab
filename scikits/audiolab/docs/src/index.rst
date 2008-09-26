@@ -34,7 +34,7 @@ audio files, and export them back, as well as listening to the results of some
 processing; matlab have functions such as wavread, wavwrite, soundsc, etc...
 for that purposes.  The goal of audiolab is to give those capabilities to the
 `scipy`_ environment by wrapping the excellent library `libsndfile`_ from Erik
-Castro de Lopo. Pyaudio supports all format supported by libsndfile, including
+Castro de Lopo. Audiolab supports all format supported by libsndfile, including
 wav, aiff, ircam files, and flac (an open source lossless compressed format);
 see `here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete
 list.
@@ -42,8 +42,6 @@ list.
     **Note**: The library is still in beta stage: reading and writing 
     data is possible, but only in frames, not per item.
     Also, the ability to play data on the system's soundcard is not there yet.
-    I have never encountered any data corruption, except when using the buggy
-    ctypes included in Ubuntu's python 2.5 (bug which was solved recently).
 
     **Note**: The online version of this document is not always up to date. The
     pdf included in the package is the reference, and always in sync with the
@@ -59,7 +57,9 @@ Download
 --------
 
 audiolab is part of scikits: its source can be downloaded directly from the
-scikits svn repository: svn co http://svn.scipy.org/svn/scikits/trunk/audiolab
+scikits svn repository::
+
+	svn co http://svn.scipy.org/svn/scikits/trunk/audiolab
 
 Requirements
 ------------
