@@ -19,9 +19,9 @@
 .. vim:syntax=rest
 .. Last Change: Tue Jul 17 11:00 AM 2007 J
 
-===============================================================
- Pyaudiolab, a python package to make noise with numpy arrays
-===============================================================
+==========================================================
+Audiolab, a python package to make noise with numpy arrays
+==========================================================
 
 Introduction
 ============
@@ -143,20 +143,18 @@ individually by using the corresponding sndfile.get* accessors.
 Importing audio data
 --------------------
 
-Now that we've opened a file, we would like to read its audio content, 
-right ? For now, you can only import the data as floating point data, 
-float  (32 bits) or double (64 bits). The function 
-sndfile.read_frames read n frames,
-where a frame contains a sample of each channel (one in mono, 2 in stereo,
-etc...):
+Now that we've opened a file, we would like to read its audio content, right ?
+For now, you can only import the data as floating point data, float  (32 bits)
+or double (64 bits). The function sndfile.read_frames read n frames, where a
+frame contains a sample of each channel (one in mono, 2 in stereo, etc...):
 
 .. literalinclude:: examples/usage2.py
 
 The above code import 10000 frames, and plot the first channel using matplotlib
-(see below). A frame holds one sample from each channel: 1000 frames of a stereo
-file is 2000 samples. Each channel is one column of the numpy array. The read
-functions follow numpy conventions, that is by default, the data are read as
-double, but you can give a dtype argument to the function.
+(see below). A frame holds one sample from each channel: 1000 frames of a
+stereo file is 2000 samples. Each channel is one column of the numpy array. The
+read functions follow numpy conventions, that is by default, the data are read
+as double, but you can give a dtype argument to the function.
 
 .. htmlonly:: 
 	.. image:: audiolab1.png
@@ -168,13 +166,13 @@ The format class
 
 When opening a file for writing, you need to give various parameters related to
 the format such as the file format, the encoding.  The format class is used to
-create valid formats from those parameters  By default, the format class creates
-a format object with file type wav, and 16 bits pcm encoding: 
+create valid formats from those parameters  By default, the format class
+creates a format object with file type wav, and 16 bits pcm encoding: 
 
 .. literalinclude:: examples/format1.py
 
-prints back "Major Format: AIFF (Apple/SGI), Encoding Format: U-Law"
-and "Major Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float". 
+prints back "Major Format: AIFF (Apple/SGI), Encoding Format: U-Law" and "Major
+Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float". 
 
 To get a list of all possible file format and encoding, the function
 supported_* are available:
