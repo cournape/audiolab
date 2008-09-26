@@ -1,54 +1,75 @@
-py2tex	= PYTHONPATH=/home/david/local/lib/python2.5/site-packages pygmentize -l python -f tex
-rst2tex	= PYTHONPATH=/home/david/local/lib/python2.5/site-packages rst2newlatex.py \
-		  --stylesheet-path base.tex --user-stylesheet user.tex 
+# Makefile for Sphinx documentation
+#
 
-pytexfiles	= audiolab.tex quick1.tex \
-			  usage1.tex \
-			  usage2.tex \
-			  format1.tex \
-			  format2.tex \
-			  write1.tex \
-			  matlab1.tex 
+# You can set these variables from the command line.
+SPHINXOPTS    =
+SPHINXBUILD   = sphinx-build
+PAPER         =
 
-SOURCEPATH	= $(PWD)
+# Internal variables.
+PAPEROPT_a4     = -D latex_paper_size=a4
+PAPEROPT_letter = -D latex_paper_size=letter
+ALLSPHINXOPTS   = -d build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) src
 
-EXTTOCLEAN=.chk .dvi .log .aux .bbl .blg .blig .ilg .toc .lof .lot .idx .ind .out .bak .ps .pdf .bm
+.PHONY: help clean html web pickle htmlhelp latex changes linkcheck
 
-audiolab.pdf: $(pytexfiles)
-	pdflatex $<
-	pdflatex $<
-	pdflatex $<
-
-audiolab.tex: index.txt
-	$(rst2tex) $< > $@
-
-quick1.tex: examples/quick1.py
-	$(py2tex) $< > $@
-
-usage1.tex: examples/usage1.py
-	$(py2tex) $< > $@
-
-usage2.tex: examples/usage2.py
-	$(py2tex) $< > $@
-
-format1.tex: examples/format1.py
-	$(py2tex) $< > $@
-
-format2.tex: examples/format2.py
-	$(py2tex) $< > $@
-
-write1.tex: examples/write1.py
-	$(py2tex) $< > $@
-
-matlab1.tex: examples/matlab1.py
-	$(py2tex) $< > $@
+help:
+	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  html      to make standalone HTML files"
+	@echo "  pickle    to make pickle files"
+	@echo "  json      to make JSON files"
+	@echo "  htmlhelp  to make HTML files and a HTML help project"
+	@echo "  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
+	@echo "  changes   to make an overview over all changed/added/deprecated items"
+	@echo "  linkcheck to check all external links for integrity"
 
 clean:
-	for i in $(pytexfiles); do \
-		rm -f `echo $$i`; \
-	done;
-	for i in $(SOURCEPATH); do \
-		for j in $(EXTTOCLEAN); do \
-			rm -f  `echo $$i/*$$j`; \
-		done; \
-	done;
+	-rm -rf build/*
+
+html:
+	mkdir -p build/html build/doctrees
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) build/html
+	@echo
+	@echo "Build finished. The HTML pages are in build/html."
+
+pickle:
+	mkdir -p build/pickle build/doctrees
+	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) build/pickle
+	@echo
+	@echo "Build finished; now you can process the pickle files."
+
+web: pickle
+
+json:
+	mkdir -p build/json build/doctrees
+	$(SPHINXBUILD) -b json $(ALLSPHINXOPTS) build/json
+	@echo
+	@echo "Build finished; now you can process the JSON files."
+
+htmlhelp:
+	mkdir -p build/htmlhelp build/doctrees
+	$(SPHINXBUILD) -b htmlhelp $(ALLSPHINXOPTS) build/htmlhelp
+	@echo
+	@echo "Build finished; now you can run HTML Help Workshop with the" \
+	      ".hhp project file in build/htmlhelp."
+
+latex:
+	mkdir -p build/latex build/doctrees
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) build/latex
+	@echo
+	@echo "Build finished; the LaTeX files are in build/latex."
+	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
+	      "run these through (pdf)latex."
+
+changes:
+	mkdir -p build/changes build/doctrees
+	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) build/changes
+	@echo
+	@echo "The overview file is in build/changes."
+
+linkcheck:
+	mkdir -p build/linkcheck build/doctrees
+	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) build/linkcheck
+	@echo
+	@echo "Link check complete; look for any errors in the above output " \
+	      "or in build/linkcheck/output.txt."
