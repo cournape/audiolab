@@ -120,13 +120,7 @@ Quick view
 The following code shows you how to open a file for read, reading the first
 1000 frames, and closing it:
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/quick1.py}
-
-.. raw:: latex
-
-    \input{quick1.tex}
+.. literalinclude:: examples/quick1.py
 
 Usage
 =====
@@ -140,13 +134,7 @@ You create a sndfile instance when you want
 to open a file for reading or writing (the file test.flac is included
 in the audiolab package, in the test_data directory):
             
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/usage1.py}
-
-.. raw:: latex
-
-    \input{usage1.tex}
+.. literalinclude:: examples/usage1.py}
 
 Prints you the informations related to the file, like its sampling rate, 
 the number of frames, etc... You can of course get each parameter 
@@ -162,13 +150,7 @@ sndfile.read_frames read n frames,
 where a frame contains a sample of each channel (one in mono, 2 in stereo,
 etc...):
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/usage2.py}
-
-.. raw:: latex
-
-    \input{usage2.tex}
+.. literalinclude:: examples/usage2.py
 
 The above code import 10000 frames, and plot the first channel using matplotlib
 (see below). A frame holds one sample from each channel: 1000 frames of a stereo
@@ -176,9 +158,10 @@ file is 2000 samples. Each channel is one column of the numpy array. The read
 functions follow numpy conventions, that is by default, the data are read as
 double, but you can give a dtype argument to the function.
 
-.. image:: audiolab1.png
-    :width: 500
-    :height: 400
+.. htmlonly:: 
+	.. image:: audiolab1.png
+	    :width: 500
+	    :height: 400
 
 The format class
 ----------------
@@ -188,13 +171,7 @@ the format such as the file format, the encoding.  The format class is used to
 create valid formats from those parameters  By default, the format class creates
 a format object with file type wav, and 16 bits pcm encoding: 
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/format1.py}
-
-.. raw:: latex
-
-    \input{format1.tex}
+.. literalinclude:: examples/format1.py
 
 prints back "Major Format: AIFF (Apple/SGI), Encoding Format: U-Law"
 and "Major Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float". 
@@ -202,13 +179,7 @@ and "Major Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float".
 To get a list of all possible file format and encoding, the function
 supported_* are available:
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/format2.py}
-
-.. raw:: latex
-
-    \input{format2.tex}
+.. literalinclude:: examples/format2.py
 
     **Note**: not all combination of encoding, endianness and format are possible.
     If you try to create a format with incompatible values, you will get an error
@@ -223,13 +194,7 @@ rate (in Hz) you are requesting; all thoses information are mandatory !  The
 class format is used to build a format understable by libsndfile from
 'user-friendly' values. Let's see how it works.
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/write1.py}
-
-.. raw:: latex
-
-    \input{write1.tex}
+.. literalinclude:: examples/write1.py
 
 Matlab-like API
 ---------------
@@ -237,13 +202,7 @@ Matlab-like API
 audiolab also have a matlab-like API for audio IO. Its usage is as similar as it
 can get using python:
 
-.. raw:: html
-
-    {mycolorize;input/softwares/audiolab/matlab1.py}
-
-.. raw:: latex
-
-    \input{matlab1.tex}
+.. literalinclude:: examples/matlab1.py
 
 Known bugs:
 ===========
