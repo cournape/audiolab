@@ -206,6 +206,7 @@ if __name__ == "__main__":
         install_requires='numpy', # can also add version specifiers
         namespace_packages=['scikits'],
         packages=setuptools.find_packages(),
+        version = '0.7',
         include_package_data = True,
         #package_data = {'scikits.audiolab': data_files},
         test_suite="tester", # for python setup.py test
