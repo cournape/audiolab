@@ -1,3 +1,7 @@
+audiolab (0.8dev) Wed, 05 Nov 2008 04:36:27 +0900
+	* sphinxify the documentation
+	* more experimental work on alsa backend (not enabled yet)
+
 audiolab (0.7) Sun, 09 Sep 2007 20:10:27 +0900
 
 	* More robust wrapping of libsndfile: sf_file are objects pointers,
