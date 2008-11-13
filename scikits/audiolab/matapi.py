@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Mon Sep 10 07:00 PM 2007 J
+# Last Change: Thu Nov 13 10:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -44,7 +44,9 @@ def _writer_factory(name, format, def_fs, descr):
         else:
             RuntimeError("Only rank 0, 1, and 2 arrays supported as audio data")
 
-        hdl = sndfile(filename, 'write', format, nc, fs)
+        uformat = formatinfo(format.get_file_format(), encoding=enc,
+                             endianness=format.get_endianness())
+        hdl = sndfile(filename, 'write', uformat, nc, fs)
         try:
             hdl.write_frames(data, nframes)
         finally:
@@ -60,7 +62,7 @@ def _writer_factory(name, format, def_fs, descr):
         - filename: a string for the audio file name 
         - fs: the sampling rate in Hz (%d Hz by default).
         - enc: a string for the encoding such as 'pcm16', etc...(%s by
-          default). Not supported yet !
+          default).
 
     For a total control over options, such as endianness, append data to an
     existing file, etc...  you should use sndfile class instances instead""" \
