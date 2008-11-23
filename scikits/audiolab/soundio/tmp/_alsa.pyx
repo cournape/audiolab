@@ -183,7 +183,7 @@ cdef class AlsaDevice:
                 cdef cnp.ndarray[cnp.int16_t, ndim=2] tx
                 cdef int nr, i, nc, counts
                 cdef int bufsize = 1024
-                #cdef PyObject* o
+                cdef int err
 
                 if not input.ndim == 2:
                         raise ValueError("Only rank 2 for now")
@@ -197,9 +197,10 @@ cdef class AlsaDevice:
 
                 counts = 0
                 for i in range(nr):
-                        o = python_exc.PyErr_Occured()
-                        if o != 0:
-                                print "Occured"
+                        err = python_exc.PyErr_CheckSignals()
+                        if err != 0:
+                                if python_exc.PyErr_ExceptionMatches(KeyboardInterrupt):
+                                        raise KeyboardInterrupt()
                         tx = (32568 * input[i * bufsize:i * bufsize + bufsize, :]).astype(np.int16)
                         st = snd_pcm_writei(self.handle, <void*>tx.data, bufsize)
                         if st < 0:
