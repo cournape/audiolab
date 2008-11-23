@@ -165,16 +165,20 @@ cdef struct format_info:
 
 cdef class AlsaDevice:
         cdef snd_pcm_t *handle
-        def __init__(AlsaDevice self):
+        def __init__(AlsaDevice self, unsigned rate=48000, int nchannels=1):
                 cdef int st
                 cdef unsigned int psize, bsize
+                cdef format_info info
+
+                info.rate = rate
+                info.nchannel = nchannels
 
                 self.handle = <snd_pcm_t*>0
                 st = snd_pcm_open(&self.handle, "default", SND_PCM_STREAM_PLAYBACK, 0)
                 if st < 0:
                         raise AlsaException("Fail opening 'default'")
 
-                set_hw_params(self.handle, &psize, &bsize)
+                set_hw_params(self.handle, info, &psize, &bsize)
                 print "Period size is", psize, ", Buffer size is", bsize
 
                 set_sw_params(self.handle, psize, bsize)
@@ -210,7 +214,7 @@ cdef class AlsaDevice:
                 if self.handle:
                         snd_pcm_close(self.handle)
 
-cdef set_hw_params(snd_pcm_t *hdl, unsigned int* period_size, unsigned int *buffer_size):
+cdef set_hw_params(snd_pcm_t *hdl, format_info info, unsigned int* period_size, unsigned int *buffer_size):
         cdef unsigned int nchannels, buftime, pertime, samplerate
         cdef snd_pcm_hw_params_t *params
         cdef int st
@@ -221,8 +225,8 @@ cdef set_hw_params(snd_pcm_t *hdl, unsigned int* period_size, unsigned int *buff
         buftime = BUFFER_TIME
         pertime = PERIOD_TIME
 
-        nchannels = 2
-        samplerate = 48000
+        nchannels = info.nchannel
+        samplerate = info.rate
         format = SND_PCM_FORMAT_S16_LE
 
         snd_pcm_hw_params_alloca(&params)
