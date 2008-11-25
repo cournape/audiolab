@@ -171,10 +171,10 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     # XXX: once in SVN, should add svn version...
     #print config.make_svn_version_py()
 
-    # package_data does not work with sdist for setuptools 0.5 (setuptools bug),
-    # so we need to add them here while the bug is not solved...
-    config.add_data_files(('docs', \
-            ['scikits/audiolab/docs/' + i for i in DOC_FILES]))
+    ## package_data does not work with sdist for setuptools 0.5 (setuptools bug),
+    ## so we need to add them here while the bug is not solved...
+    #config.add_data_files(('docs', \
+    #        ['scikits/audiolab/docs/' + i for i in DOC_FILES]))
 
     config.add_data_files(('test_data', \
             ['scikits/audiolab/test_data/' + i
@@ -190,7 +190,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
 
 TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au',
         'test.sdif']
-DOC_FILES = ['audiolab.pdf', 'index.txt']
+#DOC_FILES = ['audiolab.pdf', 'index.txt']
 BAD_FLAC_FILES = ['Makefile', 'badflac.flac', 'badflac.c']
 
 if __name__ == "__main__":
