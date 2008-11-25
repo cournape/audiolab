@@ -1,3 +1,8 @@
+audiolab (0.8) Tue, 25 Nov 2008 15:51:03 +0900
+	* Fix sphinx build
+	* fix tests to new numpy testing framework
+	* Release 0.8
+
 audiolab (0.8dev) Wed, 05 Nov 2008 04:36:27 +0900
 	* sphinxify the documentation
 	* more experimental work on alsa backend (not enabled yet)
