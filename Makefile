@@ -13,7 +13,7 @@ PKG_VER 	= $(shell cat scikits/audiolab/info.py | grep __version__ | tr -s " " |
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
 DOCPATH		= $(PWD)/scikits/audiolab/docs/
-EXAMPATH	= $(DOCPATH)/examples
+EXAMPATH	= $(DOCPATH)/src/examples
 
 SCIPYPATH	= /export/bbc8/local/lib/python$(PYVER)/site-packages
 TMPPATH		= $(CURDIR)/../tmp
