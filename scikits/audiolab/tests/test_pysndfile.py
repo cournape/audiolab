@@ -5,8 +5,7 @@ from os.path import join, dirname
 import os
 import sys
 
-from numpy.testing import TestCase, assert_array_equal, NumpyTest, \
-        assert_array_almost_equal, set_package_path, restore_path, set_local_path
+from numpy.testing import TestCase, assert_array_equal, dec
 import numpy as N
 
 from scikits.audiolab import pysndfile
@@ -155,18 +154,18 @@ class test_pysndfile(TestCase):
         finally:
             close_tmp_file(rfd, cfilename)
 
+    @dec.skipif(1, "Broken test and feature")
     def test_supported_features(self):
-        msg = "\nsupported file format are : this test is broken FIXME"
-        #for i in pysndfile.supported_format():
-        #    msg += str(i) + ', '
-        #print msg
-        #msg = "supported encoding format are : "
-        #for i in pysndfile.supported_encoding():
-        #    msg += str(i) + ', '
-        #print msg
-        #msg = "supported endianness are : "
-        #for i in pysndfile.supported_endianness():
-        #    msg += str(i) + ', '
+        for i in pysndfile.supported_format():
+            msg += str(i) + ', '
+        print msg
+        msg = "supported encoding format are : "
+        for i in pysndfile.supported_encoding():
+            msg += str(i) + ', '
+        print msg
+        msg = "supported endianness are : "
+        for i in pysndfile.supported_endianness():
+            msg += str(i) + ', '
         print msg
 
     def test_short_io(self):
