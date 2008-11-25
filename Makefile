@@ -6,6 +6,7 @@
 #
 # TODO: not fake dependencies....
 
+PYVER		= 2.4
 PKG_VER 	= $(shell cat scikits/audiolab/info.py | grep __version__ | tr -s " " | cut -f 3 -d" " \
 			  | cut -f 2 -d\')
 
@@ -14,11 +15,11 @@ DATAPATH	= $(PWD)/scikits/audiolab/test_data/
 DOCPATH		= $(PWD)/scikits/audiolab/docs/
 EXAMPATH	= $(DOCPATH)/examples
 
-SCIPYPATH	= $(HOME)/local/lib/python2.5/site-packages
+SCIPYPATH	= /export/bbc8/local/lib/python$(PYVER)/site-packages
 TMPPATH		= $(CURDIR)/../tmp
 
-PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python2.5/site-packages:$(SCIPYPATH) python -c 
-PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python2.5/site-packages:$(SCIPYPATH) python 
+PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(SCIPYPATH) python -c 
+PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(SCIPYPATH) python 
 
 RELEASELOC	= $(WWWHOMEDIR)/archives/audiolab/releases
 
@@ -57,7 +58,7 @@ dist/audiolab-$(PKG_VER).tar.bz2: doc
 $(TMPPATH): build_test
 
 build_test:
-	$(PYTHONRUN) setup.py install --prefix=$(TMPPATH)
+	$(PYTHONRUN) setup.py install --prefix=$(TMPPATH) --single-version-externally-managed --record=/dev/null
 
 # Clean the tmp dir
 clean_before_run:
