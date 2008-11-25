@@ -75,6 +75,7 @@ cdef extern from "alsa/asoundlib.h":
         int snd_pcm_open(snd_pcm_t **, char*, int, int)
         int snd_pcm_close(snd_pcm_t *)
         int snd_pcm_drain(snd_pcm_t *)
+        int snd_pcm_prepare(snd_pcm_t *)
 
         int snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
         int snd_pcm_hw_params_any(snd_pcm_t*, snd_pcm_hw_params_t *)
@@ -184,10 +185,13 @@ cdef class AlsaDevice:
                 set_sw_params(self.handle, psize, bsize)
 
         def play(AlsaDevice self, cnp.ndarray input):
+                self._play(input)
+
+        cdef int _play(AlsaDevice self, cnp.ndarray input) except -1:
                 cdef cnp.ndarray[cnp.int16_t, ndim=2] tx
-                cdef int nr, i, nc, counts
+                cdef int nr, i, nc
                 cdef int bufsize = 1024
-                cdef int err
+                cdef int err = 0
 
                 if not input.ndim == 2:
                         raise ValueError("Only rank 2 for now")
@@ -199,16 +203,25 @@ cdef class AlsaDevice:
                 tx = np.empty((bufsize, nc), dtype=np.int16)
                 nr = input.size / nc / bufsize
 
-                counts = 0
+                st = snd_pcm_prepare(self.handle)
+                if st:
+                        raise AlsaException("Error while preparing the pcm device")
+
                 for i in range(nr):
                         err = python_exc.PyErr_CheckSignals()
                         if err != 0:
-                                if python_exc.PyErr_ExceptionMatches(KeyboardInterrupt):
-                                        raise KeyboardInterrupt()
+                                break
                         tx = (32568 * input[i * bufsize:i * bufsize + bufsize, :]).astype(np.int16)
                         st = snd_pcm_writei(self.handle, <void*>tx.data, bufsize)
                         if st < 0:
                                 raise AlsaException("Error in writei")
+
+                if err:
+                        print "Got SIGINT: draining the pcm device... "
+                        snd_pcm_drain(self.handle)
+                        return -1
+                snd_pcm_drain(self.handle)
+                return 0
 
         def __dealloc__(AlsaDevice self):
                 if self.handle:
