@@ -216,7 +216,7 @@ if __name__ == "__main__":
               'Environment :: Console',
               'Intended Audience :: Developers',
               'Intended Audience :: Science/Research',
-              'License :: OSI Approved :: LGPL License',
+              'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
               'Topic :: Multimedia :: Sound/Audio',
               'Topic :: Scientific/Engineering']
     )
