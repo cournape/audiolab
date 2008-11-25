@@ -7,20 +7,14 @@ from tempfile import mkstemp
 from numpy.testing import *
 import numpy as N
 
-set_package_path()
-from audiolab.matapi import wavread, auread, aiffread, sdifread, flacread
-from audiolab.matapi import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
-from audiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
-from audiolab.pysndfile import FlacUnsupported
-restore_path()
+from scikits.audiolab.matapi import wavread, auread, aiffread, sdifread, flacread
+from scikits.audiolab.matapi import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
+from scikits.audiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
+from scikits.audiolab.pysndfile import FlacUnsupported
 
-#Optional:
-set_local_path()
-# import modules that are located in the same directory as this file.
 from testcommon import open_tmp_file, close_tmp_file
-restore_path()
 
-class test_audiolab(NumpyTestCase):
+class test_audiolab(TestCase):
     def _test_read(self, func, format, filext):
 	# Create a tmp audio file, write some random data into it, and check it
 	# is the expected data when read from a function from the matapi.

@@ -5,21 +5,17 @@ from os.path import join, dirname
 import os
 import sys
 
-from numpy.testing import NumpyTestCase, assert_array_equal, NumpyTest, \
+from numpy.testing import TestCase, assert_array_equal, NumpyTest, \
         assert_array_almost_equal, set_package_path, restore_path, set_local_path
 import numpy as N
 
-set_package_path()
-from audiolab import pysndfile
-from audiolab.pysndfile import sndfile, formatinfo as audio_format
-restore_path()
+from scikits.audiolab import pysndfile
+from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format
 
-set_local_path()
 from testcommon import open_tmp_file, close_tmp_file
-restore_path()
 
 # XXX: there is a lot to refactor here
-class test_pysndfile(NumpyTestCase):
+class test_pysndfile(TestCase):
     def test_basic_io(self):
         """ Check open, close and basic read/write"""
         # dirty !
@@ -288,7 +284,7 @@ class test_pysndfile(NumpyTestCase):
         except Exception, e:
             raise AssertionError("opening non existing file should raise a IOError exception, got %s instead" % e.__class__)
 
-class test_seek(NumpyTestCase):
+class test_seek(TestCase):
     def test_simple(self):
         ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
         # Open the test file for reading
