@@ -2,7 +2,7 @@ import numpy as N
 
 import scikits.audiolab as audiolab
 
-filename    = 'test.flac'
+filename    = 'test.wav'
 a           = audiolab.sndfile(filename, 'read')
 
 tmp         = a.read_frames(1e4)

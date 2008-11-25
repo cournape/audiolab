@@ -1,6 +1,6 @@
 import scikits.audiolab as audiolab
 
-filename    = 'test.flac'
+filename    = 'test.wav'
 a           = audiolab.sndfile(filename, 'read')
 
 print a
