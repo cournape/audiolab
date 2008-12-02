@@ -1,0 +1,5 @@
+env = Environment()
+env.Append(CFLAGS=Split("-W -Wall -Wextra"))
+env.Append(FRAMEWORKS="CoreAudio")
+
+env.Program("enumerate.c")
