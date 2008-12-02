@@ -1,0 +1,2 @@
+	- Implement ALSA hinting to get list of devices
+	- Support mono and multi-channel (rank 1 and 2) input, double and float
