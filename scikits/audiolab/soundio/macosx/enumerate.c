@@ -3,8 +3,10 @@
 int main()
 {
 	UInt32 sz, ndevices;
-	AudioDeviceID *devices;
+	AudioDeviceID *devices, odevice;
+     	AudioStreamBasicDescription  ostreamdesc;
 	UInt32 i;
+	OSStatus st;
 	char *name;
 
 	AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &sz, NULL);
@@ -38,7 +40,42 @@ int main()
 		free(name);
 	}
 
-
 	free(devices);
+
+	sz = sizeof(AudioDeviceID);
+	st = AudioHardwareGetProperty(
+		kAudioHardwarePropertyDefaultOutputDevice,
+		&sz, &odevice);
+
+	if (odevice == kAudioDeviceUnknown) {
+        	fprintf(stderr, "odevice is kAudioDeviceUnknown\n");
+		return 0;
+	}
+
+	sz = sizeof(ostreamdesc);
+    	st = AudioDeviceGetProperty(odevice, 0, false,
+			kAudioDevicePropertyStreamFormat, &sz,
+			&ostreamdesc);
+	if (st) {
+		fprintf(stderr, "error while getting stream format\n");
+		return 0;
+	}
+
+	fprintf(stderr, "hardware format...\n");
+	fprintf(stderr, "%f mSampleRate\n", ostreamdesc.mSampleRate);
+	fprintf(stderr, "%c%c%c%c mFormatID\n", (int)(ostreamdesc.mFormatID &
+				0xff000000) >> 24, (int)(ostreamdesc.mFormatID & 0x00ff0000) >> 16,
+			(int)(ostreamdesc.mFormatID & 0x0000ff00) >>  8, (int)(ostreamdesc.mFormatID &
+				0x000000ff) >>  0);
+	fprintf(stderr, "%5d mBytesPerPacket\n",
+			(int)ostreamdesc.mBytesPerPacket);
+	fprintf(stderr, "%5d mFramesPerPacket\n",
+			(int)ostreamdesc.mFramesPerPacket);
+	fprintf(stderr, "%5d mBytesPerFrame\n",
+			(int)ostreamdesc.mBytesPerFrame);
+	fprintf(stderr, "%5d mChannelsPerFrame\n",
+			(int)ostreamdesc.mChannelsPerFrame);
+
+
 	return 0;
 }
