@@ -19,7 +19,8 @@ cdef extern from "Python.h":
 class AlsaException(Exception):
         pass
 
-def asoundlib_version():
+def alsa_version():
+        """Return the version of libasound used by the alsa backend."""
         return snd_asoundlib_version()
 
 def card_indexes():
