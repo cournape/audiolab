@@ -215,6 +215,7 @@ if __name__ == "__main__":
     #data_files.extend(['docs/' + i for i in doc_files])
 
     setup(configuration = configuration,
+        name = DISTNAME,
         install_requires='numpy', # can also add version specifiers
         namespace_packages=['scikits'],
         packages=setuptools.find_packages(),
