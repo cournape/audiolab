@@ -49,7 +49,7 @@ def enumerate_devices():
 
 cdef struct format_info:
         # number of channels
-        int nchannel
+        int nchannels
         # Rate (samples/s -> Hz)
         int rate
         # Bits per sample
@@ -59,20 +59,24 @@ cdef struct format_info:
 
 cdef class AlsaDevice:
         cdef snd_pcm_t *handle
+        cdef format_info format
         def __init__(AlsaDevice self, unsigned rate=48000, int nchannels=1):
                 cdef int st
                 cdef snd_pcm_uframes_t psize, bsize
-                cdef format_info info
 
-                info.rate = rate
-                info.nchannel = nchannels
+                self.format.rate = rate
+                self.format.nchannels = nchannels
+
+                if not (nchannels > 0 and nchannels < 3):
+                        raise ValueError,\
+                              "Only mono/stereo signals supported for now"
 
                 self.handle = <snd_pcm_t*>0
                 st = snd_pcm_open(&self.handle, "default", SND_PCM_STREAM_PLAYBACK, 0)
                 if st < 0:
                         raise AlsaException("Fail opening 'default'")
 
-                set_hw_params(self.handle, info, &psize, &bsize)
+                set_hw_params(self.handle, self.format, &psize, &bsize)
                 print "Period size is", psize, ", Buffer size is", bsize
 
                 set_sw_params(self.handle, psize, bsize)
@@ -88,10 +92,12 @@ cdef class AlsaDevice:
 
                 if not input.ndim == 2:
                         raise ValueError("Only rank 2 for now")
-                else:
-                        nc = input.shape[0]
-                        if not (nc > 0 and nc < 3):
-                                raise ValueError("Only mono/stereo for now")
+
+                nc = input.shape[0]
+                if not nc == self.format.nchannels:
+                        raise ValueError(
+                              "AlsaDevice configured for %d channels, "\
+                              "signal has %d channels" % (self.format.nchannels, nc))
 
                 tx = np.empty((nc, bufsize), dtype=np.int16)
                 nr = input.size / nc / bufsize
@@ -131,7 +137,7 @@ cdef set_hw_params(snd_pcm_t *hdl, format_info info, snd_pcm_uframes_t* period_s
         buftime = BUFFER_TIME
         pertime = PERIOD_TIME
 
-        nchannels = info.nchannel
+        nchannels = info.nchannels
         samplerate = info.rate
         format = SND_PCM_FORMAT_S16_LE
 
