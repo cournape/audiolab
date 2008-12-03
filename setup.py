@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Wed Dec 03 07:00 PM 2008 J
+# Last Change: Wed Dec 03 08:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -196,7 +196,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
 
     config.add_subpackage('scikits')
     config.add_subpackage(DISTNAME)
-    config.add_data_files('scikits/__init__.py')
+    #config.add_data_files('scikits/__init__.py')
 
     return config
 
