@@ -1,5 +1,7 @@
 #include <CoreAudio/AudioHardware.h>
 
+const size_t NCHANNELS = 2;
+
 int enumerate_devices()
 {
 	UInt32 sz, ndevices, i;
@@ -102,6 +104,16 @@ int main()
 		return ;
 	} ;
 	fprintf(stderr, "%5d buf size\n", buffer_size);
+
+	/*  set  number of channels */
+	ostreamdesc.mChannelsPerFrame = NCHANNELS;
+	st = AudioDeviceSetProperty(odevice, NULL, 0, false,
+			kAudioDevicePropertyStreamFormat,
+			sizeof(ostreamdesc), &ostreamdesc);
+	if (st) {
+		printf ("Failed setting number of channels\n");
+		return ;
+	} ;
 
 	return 0;
 }
