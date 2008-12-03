@@ -49,10 +49,9 @@ int enumerate_devices()
 
 int main()
 {
-	UInt32 sz, ndevices, buffer_size;
-	AudioDeviceID *devices, odevice;
+	UInt32 sz, buffer_size;
+	AudioDeviceID odevice;
      	AudioStreamBasicDescription  ostreamdesc;
-	UInt32 i;
 	OSStatus st;
 
 	enumerate_devices();
@@ -65,7 +64,7 @@ int main()
 
 	if (odevice == kAudioDeviceUnknown) {
         	fprintf(stderr, "odevice is kAudioDeviceUnknown\n");
-		return 0;
+		return -1;
 	}
 
 	/* Get stream properties of output device */
@@ -75,7 +74,7 @@ int main()
 			&ostreamdesc);
 	if (st) {
 		fprintf(stderr, "error while getting stream format\n");
-		return 0;
+		return -1;
 	}
 
 	fprintf(stderr, "hardware format...\n");
@@ -101,9 +100,9 @@ int main()
 			&sz, &buffer_size);
 	if (st) {
 		printf ("AudioDeviceGetProperty (kAudioDevicePropertyBufferSize) failed.\n"); 
-		return ;
+		return -1;
 	} ;
-	fprintf(stderr, "%5d buf size\n", buffer_size);
+	fprintf(stderr, "%lu buf size\n", buffer_size);
 
 	/*  set  number of channels */
 	ostreamdesc.mChannelsPerFrame = NCHANNELS;
@@ -112,7 +111,7 @@ int main()
 			sizeof(ostreamdesc), &ostreamdesc);
 	if (st) {
 		printf ("Failed setting number of channels\n");
-		return ;
+		return -1;
 	} ;
 
 	return 0;
