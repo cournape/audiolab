@@ -179,57 +179,27 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     # XXX: once in SVN, should add svn version...
     #print config.make_svn_version_py()
 
-    ## package_data does not work with sdist for setuptools 0.5 (setuptools bug),
-    ## so we need to add them here while the bug is not solved...
-    #config.add_data_files(('docs', \
-    #        ['scikits/audiolab/docs/' + i for i in DOC_FILES]))
-
-    config.add_data_files(('test_data', \
-            ['scikits/audiolab/test_data/' + i
-                for i in TEST_DATA_FILES]))
-
-    config.add_data_files(('misc', \
-            ['scikits/audiolab/misc/' + i
-                for i in BAD_FLAC_FILES]))
-
-    config.add_data_dir(('examples', 'scikits/audiolab/docs/examples'))
-
     config.add_subpackage('scikits')
     config.add_subpackage(DISTNAME)
-    #config.add_data_files('scikits/__init__.py')
 
     return config
 
-TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au',
-        'test.sdif']
-#DOC_FILES = ['audiolab.pdf', 'index.txt']
-BAD_FLAC_FILES = ['Makefile', 'badflac.flac', 'badflac.c']
-
 if __name__ == "__main__":
     # setuptools version of config script
-
-    # package_data does not work with sdist for setuptools 0.5 (setuptools bug)
-    # So we cannot add data files via setuptools yet.
-
-    #data_files = ['test_data/' + i for i in TEST_DATA_FILES]
-    #data_files.extend(['docs/' + i for i in doc_files])
-
-    setup(configuration = configuration,
-        name = DISTNAME,
-        install_requires='numpy', # can also add version specifiers
-        namespace_packages=['scikits'],
-        packages=setuptools.find_packages(),
-        include_package_data = True,
-        #package_data = {'scikits.audiolab': data_files},
-        test_suite="tester", # for python setup.py test
-        zip_safe=True, # the package can run out of an .egg file
-        #FIXME url, download_url, ext_modules
-        classifiers =
-            [ 'Development Status :: 4 - Beta',
-              'Environment :: Console',
-              'Intended Audience :: Developers',
-              'Intended Audience :: Science/Research',
-              'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-              'Topic :: Multimedia :: Sound/Audio',
-              'Topic :: Scientific/Engineering']
+    setup(configuration=configuration,
+          name=DISTNAME,
+          install_requires='numpy',
+          namespace_packages=['scikits'],
+          packages=setuptools.find_packages(),
+          include_package_data = True,
+          test_suite="tester", 
+          zip_safe=True,
+          classifiers =
+              [ 'Development Status :: 4 - Beta',
+                'Environment :: Console',
+                'Intended Audience :: Developers',
+                'Intended Audience :: Science/Research',
+                'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+                'Topic :: Multimedia :: Sound/Audio',
+                'Topic :: Scientific/Engineering']
     )
