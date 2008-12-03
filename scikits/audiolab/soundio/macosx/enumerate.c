@@ -55,6 +55,7 @@ int main()
 
 	enumerate_devices();
 
+	/* Get default output device */
 	sz = sizeof(AudioDeviceID);
 	st = AudioHardwareGetProperty(
 		kAudioHardwarePropertyDefaultOutputDevice,
@@ -65,6 +66,7 @@ int main()
 		return 0;
 	}
 
+	/* Get stream properties of output device */
 	sz = sizeof(ostreamdesc);
     	st = AudioDeviceGetProperty(odevice, 0, false,
 			kAudioDevicePropertyStreamFormat, &sz,
@@ -75,11 +77,12 @@ int main()
 	}
 
 	fprintf(stderr, "hardware format...\n");
-	fprintf(stderr, "%f mSampleRate\n", ostreamdesc.mSampleRate);
-	fprintf(stderr, "%c%c%c%c mFormatID\n", (int)(ostreamdesc.mFormatID &
-				0xff000000) >> 24, (int)(ostreamdesc.mFormatID & 0x00ff0000) >> 16,
-			(int)(ostreamdesc.mFormatID & 0x0000ff00) >>  8, (int)(ostreamdesc.mFormatID &
-				0x000000ff) >>  0);
+	fprintf(stderr, "samplerate: %f \n", ostreamdesc.mSampleRate);
+	fprintf(stderr, "%c%c%c%c mFormatID\n", 
+			(int)(ostreamdesc.mFormatID & 0xff000000) >> 24, 
+			(int)(ostreamdesc.mFormatID & 0x00ff0000) >> 16,
+			(int)(ostreamdesc.mFormatID & 0x0000ff00) >>  8, 
+			(int)(ostreamdesc.mFormatID & 0x000000ff) >>  0);
 	fprintf(stderr, "%5d mBytesPerPacket\n",
 			(int)ostreamdesc.mBytesPerPacket);
 	fprintf(stderr, "%5d mFramesPerPacket\n",
