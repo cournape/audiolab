@@ -1,8 +1,9 @@
 import numpy as np
-from _alsa_backend import asoundlib_version, card_indexes, card_name, AlsaDevice
+from _alsa_backend import alsa_version, enumerate_devices, AlsaDevice
 
-print asoundlib_version()
-print card_indexes()
+print alsa_version()
+for i in enumerate_devices():
+    print i
 
 a = AlsaDevice()
 x = np.random.randn(48000 * 6, 2)

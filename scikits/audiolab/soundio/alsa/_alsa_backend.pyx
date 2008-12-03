@@ -23,30 +23,20 @@ def alsa_version():
         """Return the version of libasound used by the alsa backend."""
         return snd_asoundlib_version()
 
-def card_indexes():
-        """Returns a list containing index of cards recognized by alsa."""
-        cdef int icur = -1
+def enumerate_devices():
+        """Return list of found devices (includes user-space ones)."""
+        cdef int st, card
+        cdef char** hints
 
-        cards = []
-        while 1:
-                st = snd_card_next(&icur)
-                if st < 0:
-                        raise AlsaException("Could not get next card")
-                if icur < 0:
-                        break
-                cards.append(icur)
-        return tuple(cards)
-def card_name(index):
-        """Get the name of the card corresponding to the given index."""
-        cdef char* sptr
-        st = snd_card_get_name(index, &sptr)
-        if st < 0:
-                raise AlsaException("Error while getting card name %d: alsa error "\
-                                    "was %s" % (index, snd_strerror(st)))
-        else:
-                cardname = PyString_FromStringAndSize(sptr, len(sptr))
-                stdlib.free(sptr)
-        return cardname
+        devices = []
+        card = -1
+        st = snd_device_name_hint(card, "pcm", <void***>&hints)
+        card = 0
+        while(hints[card] != NULL):
+                devices.append(PyString_FromStringAndSize(hints[card], stdlib.strlen(hints[card])))
+                card += 1
+
+        return devices
 
 cdef struct format_info:
         # number of channels
