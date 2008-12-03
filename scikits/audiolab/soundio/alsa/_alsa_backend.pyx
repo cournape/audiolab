@@ -90,8 +90,8 @@ cdef class AlsaDevice:
                         raise ValueError("Only rank 2 for now")
                 else:
                         nc = input.shape[0]
-                        if not nc == 2:
-                                raise ValueError("Only stereo for now")
+                        if not (nc > 0 and nc < 3):
+                                raise ValueError("Only mono/stereo for now")
 
                 tx = np.empty((nc, bufsize), dtype=np.int16)
                 nr = input.size / nc / bufsize
