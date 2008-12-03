@@ -89,11 +89,11 @@ cdef class AlsaDevice:
                 if not input.ndim == 2:
                         raise ValueError("Only rank 2 for now")
                 else:
-                        nc = input.shape[1]
+                        nc = input.shape[0]
                         if not nc == 2:
                                 raise ValueError("Only stereo for now")
 
-                tx = np.empty((bufsize, nc), dtype=np.int16)
+                tx = np.empty((nc, bufsize), dtype=np.int16)
                 nr = input.size / nc / bufsize
 
                 st = snd_pcm_prepare(self.handle)
@@ -104,7 +104,7 @@ cdef class AlsaDevice:
                         err = python_exc.PyErr_CheckSignals()
                         if err != 0:
                                 break
-                        tx = (32568 * input[i * bufsize:i * bufsize + bufsize, :]).astype(np.int16)
+                        tx = (32568 * input[:, i * bufsize:i * bufsize + bufsize]).astype(np.int16)
                         st = snd_pcm_writei(self.handle, <void*>tx.data, bufsize)
                         if st < 0:
                                 raise AlsaException("Error in writei")

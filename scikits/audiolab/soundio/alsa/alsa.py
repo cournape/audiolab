@@ -6,5 +6,5 @@ for i in enumerate_devices():
     print i
 
 a = AlsaDevice()
-x = np.random.randn(48000 * 6, 2)
+x = np.random.randn(2, 48000 * 6)
 a.play(0.01*x)
