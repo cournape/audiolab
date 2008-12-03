@@ -1,6 +1,7 @@
 snd_strerror
-snd_card_get_name
-snd_card_next
+snd_device_name_hint
+snd_device_name_free_hint
+snd_device_name_get_hint
 snd_asoundlib_version
 snd_pcm_open
 snd_pcm_close
