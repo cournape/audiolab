@@ -31,7 +31,6 @@ cdef extern from 'alsa/asoundlib.h':
 	cdef struct _snd_pcm:
 		pass
 	ctypedef _snd_pcm snd_pcm_t
-	int snd_pcm_hw_params_set_buffer_time_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
 	cdef enum:
 		SND_PCM_ACCESS_MMAP_INTERLEAVED = 0
 	cdef enum:
@@ -53,6 +52,11 @@ cdef extern from 'alsa/asoundlib.h':
 		SND_PCM_ACCESS_LAST = 4
 	ctypedef _snd_pcm_access snd_pcm_access_t
 	int snd_pcm_hw_params_set_access(snd_pcm_t *, snd_pcm_hw_params_t *, snd_pcm_access_t)
+	cdef struct _snd_pcm_sw_params:
+		pass
+	ctypedef _snd_pcm_sw_params snd_pcm_sw_params_t
+	int snd_pcm_sw_params_current(snd_pcm_t *, snd_pcm_sw_params_t *)
+	int snd_pcm_hw_params_set_buffer_time_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
 	cdef enum:
 		SND_PCM_FORMAT_UNKNOWN = -1
 	cdef enum:
@@ -203,23 +207,27 @@ cdef extern from 'alsa/asoundlib.h':
 		SND_PCM_FORMAT_IEC958_SUBFRAME = 18
 	ctypedef _snd_pcm_format snd_pcm_format_t
 	int snd_pcm_hw_params_set_format(snd_pcm_t *, snd_pcm_hw_params_t *, snd_pcm_format_t)
-	int snd_pcm_hw_params_set_channels(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int)
-	char * snd_strerror(int)
 	ctypedef long unsigned int snd_pcm_uframes_t
 	ctypedef long int snd_pcm_sframes_t
 	snd_pcm_sframes_t snd_pcm_writei(snd_pcm_t *, void *, snd_pcm_uframes_t)
-	cdef struct _snd_pcm_sw_params:
-		pass
-	ctypedef _snd_pcm_sw_params snd_pcm_sw_params_t
 	int snd_pcm_sw_params_set_avail_min(snd_pcm_t *, snd_pcm_sw_params_t *, snd_pcm_uframes_t)
-	int snd_pcm_sw_params_current(snd_pcm_t *, snd_pcm_sw_params_t *)
+	char * snd_strerror(int)
 	int snd_device_name_hint(int, char *, void * * *)
 	int snd_pcm_hw_params_get_period_size(snd_pcm_hw_params_t *, snd_pcm_uframes_t *, int *)
 	char * snd_asoundlib_version()
-	int snd_pcm_hw_params_set_period_time_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
+	int snd_pcm_hw_params_set_rate_resample(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int)
+	int snd_pcm_drain(snd_pcm_t *)
+	int snd_pcm_hw_params(snd_pcm_t *, snd_pcm_hw_params_t *)
 	int snd_pcm_hw_params_any(snd_pcm_t *, snd_pcm_hw_params_t *)
 	char * snd_device_name_get_hint(void *, char *)
-	int snd_pcm_drain(snd_pcm_t *)
+	int snd_pcm_hw_params_get_buffer_size(snd_pcm_hw_params_t *, snd_pcm_uframes_t *)
+	int snd_pcm_hw_params_set_rate_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
+	int snd_device_name_free_hint(void * *)
+	int snd_pcm_hw_params_set_period_time_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
+	int snd_pcm_hw_params_set_channels(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int)
+	int snd_pcm_prepare(snd_pcm_t *)
+	int snd_pcm_sw_params(snd_pcm_t *, snd_pcm_sw_params_t *)
+	int snd_pcm_sw_params_set_start_threshold(snd_pcm_t *, snd_pcm_sw_params_t *, snd_pcm_uframes_t)
 	cdef enum:
 		SND_PCM_STREAM_PLAYBACK = 0
 	cdef enum:
@@ -232,11 +240,4 @@ cdef extern from 'alsa/asoundlib.h':
 		SND_PCM_STREAM_LAST = 1
 	ctypedef _snd_pcm_stream snd_pcm_stream_t
 	int snd_pcm_open(snd_pcm_t * *, char *, snd_pcm_stream_t, int)
-	int snd_pcm_hw_params_get_buffer_size(snd_pcm_hw_params_t *, snd_pcm_uframes_t *)
-	int snd_pcm_hw_params_set_rate_near(snd_pcm_t *, snd_pcm_hw_params_t *, unsigned int *, int *)
-	int snd_device_name_free_hint(void * *)
-	int snd_pcm_hw_params(snd_pcm_t *, snd_pcm_hw_params_t *)
-	int snd_pcm_prepare(snd_pcm_t *)
-	int snd_pcm_sw_params(snd_pcm_t *, snd_pcm_sw_params_t *)
-	int snd_pcm_sw_params_set_start_threshold(snd_pcm_t *, snd_pcm_sw_params_t *, snd_pcm_uframes_t)
 	int snd_pcm_close(snd_pcm_t *)
