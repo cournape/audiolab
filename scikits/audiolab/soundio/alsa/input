@@ -1,3 +1,4 @@
+snd_strerror
 snd_card_get_name
 snd_card_next
 snd_asoundlib_version
