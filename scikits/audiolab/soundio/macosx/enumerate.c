@@ -2,7 +2,7 @@
 
 int main()
 {
-	UInt32 sz, ndevices;
+	UInt32 sz, ndevices, buffer_size;
 	AudioDeviceID *devices, odevice;
      	AudioStreamBasicDescription  ostreamdesc;
 	UInt32 i;
@@ -76,6 +76,16 @@ int main()
 	fprintf(stderr, "%5d mChannelsPerFrame\n",
 			(int)ostreamdesc.mChannelsPerFrame);
 
+	/*  get the buffersize that the default device uses for IO */
+	sz = sizeof (UInt32) ;
+	st = AudioDeviceGetProperty(odevice, 0, false,
+			kAudioDevicePropertyBufferSize,
+			&sz, &buffer_size);
+	if (st) {
+		printf ("AudioDeviceGetProperty (kAudioDevicePropertyBufferSize) failed.\n"); 
+		return ;
+	} ;
+	fprintf(stderr, "%5d buf size\n", buffer_size);
 
 	return 0;
 }
