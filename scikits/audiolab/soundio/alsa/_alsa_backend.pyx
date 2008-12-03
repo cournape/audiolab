@@ -140,6 +140,11 @@ cdef set_hw_params(snd_pcm_t *hdl, format_info info, snd_pcm_uframes_t* period_s
         if st < 0:
                 raise AlsaException("Error in _any")
 
+        # Restrict sampling rates to the ones supported by the hardware 
+        st = snd_pcm_hw_params_set_rate_resample(hdl, params, 1)
+        if st < 0:
+                raise AlsaException("Error in _set_rate_resample")
+
         st = snd_pcm_hw_params_set_access(hdl, params, access)
         if st < 0:
                 raise AlsaException("Error in _set_access")
