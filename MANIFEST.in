@@ -1,5 +1,4 @@
 include scikits/audiolab/pysndfile.py.in
-include site.cfg
 include site.cfg.win32
 include COPYING.txt
 include FLAC_SUPPORT.txt
