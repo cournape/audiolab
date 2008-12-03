@@ -1,5 +1,5 @@
 import numpy as np
-from _alsa import asoundlib_version, card_indexes, card_name, AlsaDevice
+from _alsa_backend import asoundlib_version, card_indexes, card_name, AlsaDevice
 
 print asoundlib_version()
 print card_indexes()

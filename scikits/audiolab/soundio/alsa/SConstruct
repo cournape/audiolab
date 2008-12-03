@@ -5,5 +5,5 @@ env.Append(CFLAGS=Split("-W -Wall -Wextra"))
 env.Append(CPPPATH=get_numpy_include_dirs() + ['/usr/include/python2.5'])
 env.Append(LIBS = "asound")
 
-env.LoadableModule("_alsa.c", LDMODULEPREFIX="")
+env.LoadableModule("_alsa_backend.c", LDMODULEPREFIX="")
 env.Program("enumerate.c", LIBS=['asound'])
