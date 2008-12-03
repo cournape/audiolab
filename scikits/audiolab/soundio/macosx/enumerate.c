@@ -93,6 +93,11 @@ int main()
 	fprintf(stderr, "%5d mChannelsPerFrame\n",
 			(int)ostreamdesc.mChannelsPerFrame);
 
+	/* Check we have a Linear PCM device */
+	if (ostreamdesc.mFormatID != kAudioFormatLinearPCM) {
+		fprintf(stderr, "Error, format of output device is not linear PCM\n");
+		return -1;
+	}
 	/*  get the buffersize that the default device uses for IO */
 	sz = sizeof (UInt32) ;
 	st = AudioDeviceGetProperty(odevice, 0, false,
