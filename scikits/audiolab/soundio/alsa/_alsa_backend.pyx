@@ -2,123 +2,16 @@ import numpy as np
 cimport numpy as cnp
 cimport stdlib
 cimport python_exc
-
-cdef extern from "alsa/asoundlib.h":
-        ctypedef enum snd_pcm_stream_t:
-                SND_PCM_STREAM_PLAYBACK
-                SND_PCM_STREAM_CAPTURE
-        ctypedef enum snd_pcm_access_t :
-                SND_PCM_ACCESS_MMAP_INTERLEAVED
-                SND_PCM_ACCESS_MMAP_NONINTERLEAVED
-                SND_PCM_ACCESS_MMAP_COMPLEX
-                SND_PCM_ACCESS_RW_INTERLEAVED
-                SND_PCM_ACCESS_RW_NONINTERLEAVED
-        ctypedef enum snd_pcm_format_t :
-                SND_PCM_FORMAT_UNKNOWN
-                SND_PCM_FORMAT_S8
-                SND_PCM_FORMAT_U8
-                SND_PCM_FORMAT_S16_LE
-                SND_PCM_FORMAT_S16_BE
-                SND_PCM_FORMAT_U16_LE
-                SND_PCM_FORMAT_U16_BE
-                SND_PCM_FORMAT_S24_LE
-                SND_PCM_FORMAT_S24_BE
-                SND_PCM_FORMAT_U24_LE
-                SND_PCM_FORMAT_U24_BE
-                SND_PCM_FORMAT_S32_LE
-                SND_PCM_FORMAT_S32_BE
-                SND_PCM_FORMAT_U32_LE
-                SND_PCM_FORMAT_U32_BE
-                SND_PCM_FORMAT_FLOAT_LE
-                SND_PCM_FORMAT_FLOAT_BE
-                SND_PCM_FORMAT_FLOAT64_LE
-                SND_PCM_FORMAT_FLOAT64_BE
-                SND_PCM_FORMAT_IEC958_SUBFRAME_LE
-                SND_PCM_FORMAT_IEC958_SUBFRAME_BE
-                SND_PCM_FORMAT_MU_LAW
-                SND_PCM_FORMAT_A_LAW
-                SND_PCM_FORMAT_IMA_ADPCM
-                SND_PCM_FORMAT_MPEG
-                SND_PCM_FORMAT_GSM
-                SND_PCM_FORMAT_SPECIAL
-                SND_PCM_FORMAT_S24_3LE
-                SND_PCM_FORMAT_S24_3BE
-                SND_PCM_FORMAT_U24_3LE
-                SND_PCM_FORMAT_U24_3BE
-                SND_PCM_FORMAT_S20_3LE
-                SND_PCM_FORMAT_S20_3BE
-                SND_PCM_FORMAT_U20_3LE
-                SND_PCM_FORMAT_U20_3BE
-                SND_PCM_FORMAT_S18_3LE
-                SND_PCM_FORMAT_S18_3BE
-                SND_PCM_FORMAT_U18_3LE
-                SND_PCM_FORMAT_U18_3BE
-                SND_PCM_FORMAT_S16
-                SND_PCM_FORMAT_U16
-                SND_PCM_FORMAT_S24
-                SND_PCM_FORMAT_U24
-                SND_PCM_FORMAT_S32
-                SND_PCM_FORMAT_U32
-                SND_PCM_FORMAT_FLOAT
-                SND_PCM_FORMAT_FLOAT64
-                SND_PCM_FORMAT_IEC958_SUBFRAME
-
-        ctypedef struct snd_pcm_t
-        ctypedef struct snd_pcm_hw_params_t
-        ctypedef struct snd_pcm_sw_params_t
-        #ctypedef struct snd_pcm_access_t
-        #ctypedef struct snd_pcm_format_t
-
-        # XXX: how to make sure the typedef is OK ?
-        ctypedef unsigned long snd_pcm_uframes_t
-
-        int snd_pcm_open(snd_pcm_t **, char*, int, int)
-        int snd_pcm_close(snd_pcm_t *)
-        int snd_pcm_drain(snd_pcm_t *)
-        int snd_pcm_prepare(snd_pcm_t *)
-
-        int snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
-        int snd_pcm_hw_params_any(snd_pcm_t*, snd_pcm_hw_params_t *)
-        int snd_pcm_hw_params(snd_pcm_t*, snd_pcm_hw_params_t *)
-
-        int snd_pcm_hw_params_set_access(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         snd_pcm_access_t)
-        int snd_pcm_hw_params_set_format(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         snd_pcm_format_t)
-        int snd_pcm_hw_params_set_channels(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         unsigned int)
-        int snd_pcm_hw_params_set_rate_near(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         unsigned int *val, int dir)
-        int snd_pcm_hw_params_set_buffer_time_near(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         unsigned int *val, int dir)
-        int snd_pcm_hw_params_set_period_time_near(snd_pcm_t*, snd_pcm_hw_params_t *,
-                                         unsigned int *val, int dir)
-        int snd_pcm_hw_params_get_period_size(snd_pcm_hw_params_t *,
-                                         unsigned int *val, int dir)
-        int snd_pcm_hw_params_get_buffer_size(snd_pcm_hw_params_t *,
-                                         unsigned int *val)
-
-        int snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
-        int snd_pcm_sw_params(snd_pcm_t*, snd_pcm_sw_params_t *)
-        int snd_pcm_sw_params_current(snd_pcm_t *, snd_pcm_sw_params_t *)
-        int snd_pcm_sw_params_set_start_threshold(snd_pcm_t *,
-                        snd_pcm_sw_params_t *, snd_pcm_uframes_t)
-        int snd_pcm_sw_params_set_avail_min(snd_pcm_t *,
-                        snd_pcm_sw_params_t *, snd_pcm_uframes_t)
-        #int snd_pcm_sw_params_set_avail_min(snd_pcm_t *, snd_pcm_sw_params_t *)
-
-        int snd_pcm_writei(snd_pcm_t *, void*, snd_pcm_uframes_t)
-
-        char* snd_strerror(int error)
-
-        int snd_card_next(int *icard)
-        int snd_card_get_name(int icard, char** name)
-        int snd_card_get_hints(int icard, char* id, void*** hints)
-
-        char* snd_asoundlib_version()
+from alsa cimport *
 
 cdef int BUFFER_TIME  = 500000
 cdef int PERIOD_TIME  = 0
+
+cdef extern from "alsa/asoundlib.h":
+        # This is needed here because it is a macro and is not recognized by
+        # gccxml it seems
+        int snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
+        int snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
 
 cdef extern from "Python.h":
         object PyString_FromStringAndSize(char *v, int len)
