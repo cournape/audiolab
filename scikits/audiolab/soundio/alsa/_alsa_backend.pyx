@@ -27,14 +27,23 @@ def enumerate_devices():
         """Return list of found devices (includes user-space ones)."""
         cdef int st, card
         cdef char** hints
+        cdef char* name
 
         devices = []
+        names = []
+
         card = -1
         st = snd_device_name_hint(card, "pcm", <void***>&hints)
         card = 0
         while(hints[card] != NULL):
-                devices.append(PyString_FromStringAndSize(hints[card], stdlib.strlen(hints[card])))
+                #name = snd_device_name_get_hint(hints[card], "NAME")
+                #names.append(PyString_FromStringAndSize(name, stdlib.strlen(name)))
+                #if name != NULL:
+                #        stdlib.free(name)
+                devices.append(PyString_FromStringAndSize(hints[card], 
+                        stdlib.strlen(hints[card])))
                 card += 1
+        snd_device_name_free_hint(<void**>hints)
 
         return devices
 
