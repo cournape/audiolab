@@ -61,7 +61,7 @@ cdef class AlsaDevice:
         cdef snd_pcm_t *handle
         def __init__(AlsaDevice self, unsigned rate=48000, int nchannels=1):
                 cdef int st
-                cdef unsigned int psize, bsize
+                cdef snd_pcm_uframes_t psize, bsize
                 cdef format_info info
 
                 info.rate = rate
@@ -120,10 +120,10 @@ cdef class AlsaDevice:
                 if self.handle:
                         snd_pcm_close(self.handle)
 
-cdef set_hw_params(snd_pcm_t *hdl, format_info info, unsigned int* period_size, unsigned int *buffer_size):
+cdef set_hw_params(snd_pcm_t *hdl, format_info info, snd_pcm_uframes_t* period_size, snd_pcm_uframes_t *buffer_size):
         cdef unsigned int nchannels, buftime, pertime, samplerate
         cdef snd_pcm_hw_params_t *params
-        cdef int st
+        cdef int st, dir
         cdef snd_pcm_access_t access
         cdef snd_pcm_format_t format
 
@@ -152,15 +152,18 @@ cdef set_hw_params(snd_pcm_t *hdl, format_info info, unsigned int* period_size, 
         if st < 0:
                 raise AlsaException("Error in _set_channels")
 
-        st = snd_pcm_hw_params_set_rate_near(hdl, params, &samplerate, 0)
+        dir = 0
+        st = snd_pcm_hw_params_set_rate_near(hdl, params, &samplerate, &dir)
         if st < 0:
                 raise AlsaException("Error in _set_rate_near")
 
-        st = snd_pcm_hw_params_set_buffer_time_near(hdl, params, &buftime, 0)
+        dir = 0
+        st = snd_pcm_hw_params_set_buffer_time_near(hdl, params, &buftime, &dir)
         if st < 0:
                 raise AlsaException("Error in _set_buffer_near")
 
-        st = snd_pcm_hw_params_set_period_time_near(hdl, params, &pertime, 0)
+        dir = 0
+        st = snd_pcm_hw_params_set_period_time_near(hdl, params, &pertime, &dir)
         if st < 0:
                 raise AlsaException("Error in _set_period_time_near")
 
@@ -168,7 +171,8 @@ cdef set_hw_params(snd_pcm_t *hdl, format_info info, unsigned int* period_size, 
         if st < 0:
                 raise AlsaException("Error in applying hw params")
 
-        st = snd_pcm_hw_params_get_period_size(params, period_size, 0)
+        dir = 0
+        st = snd_pcm_hw_params_get_period_size(params, period_size, &dir)
         if st < 0:
                 raise AlsaException("Error in get_period_sizse")
 
