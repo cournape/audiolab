@@ -1,12 +1,9 @@
 #include <CoreAudio/AudioHardware.h>
 
-int main()
+int enumerate_devices()
 {
-	UInt32 sz, ndevices, buffer_size;
-	AudioDeviceID *devices, odevice;
-     	AudioStreamBasicDescription  ostreamdesc;
-	UInt32 i;
-	OSStatus st;
+	UInt32 sz, ndevices, i;
+	AudioDeviceID *devices;
 	char *name;
 
 	AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &sz, NULL);
@@ -19,6 +16,7 @@ int main()
 	AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &sz, devices);
 
 	for (i = 0; i < ndevices; ++i) {
+		/* Get name of device */
 		AudioDeviceGetPropertyInfo(devices[i], 0, false,
 					   kAudioDevicePropertyDeviceName, &sz,
 					   NULL);
@@ -28,6 +26,8 @@ int main()
 				name);
 		printf("%s \n", name);
 		free(name);
+
+		/* Get manufacturer of device */
 		AudioDeviceGetPropertyInfo(devices[i], 0, false,
 					   kAudioDevicePropertyDeviceManufacturer, 
 				           &sz,
@@ -41,6 +41,19 @@ int main()
 	}
 
 	free(devices);
+
+	return 0;
+}
+
+int main()
+{
+	UInt32 sz, ndevices, buffer_size;
+	AudioDeviceID *devices, odevice;
+     	AudioStreamBasicDescription  ostreamdesc;
+	UInt32 i;
+	OSStatus st;
+
+	enumerate_devices();
 
 	sz = sizeof(AudioDeviceID);
 	st = AudioHardwareGetProperty(
