@@ -4,6 +4,7 @@ from os.path import join
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     confgr = Configuration('audiolab',parent_package,top_path)
+    confgr.add_subpackage('soundio')
     return confgr
 
 if __name__ == "__main__":
