@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Tue Jul 29 12:00 PM 2008 J
+# Last Change: Wed Dec 03 07:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -158,7 +158,8 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     from scikits.audiolab.info import VERSION as audiolab_version
 
     from numpy.distutils.misc_util import Configuration
-    config = Configuration(package_name,parent_package,top_path,
+    config = Configuration(None,parent_package,top_path,
+        namespace_packages = ['scikits'],
         version     = audiolab_version,
         maintainer  = MAINTAINER,
         maintainer_email = MAINTAINER_EMAIL,
@@ -167,6 +168,13 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
         url = URL,
         download_url = DOWNLOAD_URL,
         long_description = LONG_DESCRIPTION)
+
+    config.set_options(
+            ignore_setup_xxx_py=True,
+            assume_default_configuration=True,
+            delegate_options_to_subpackages=True,
+            quiet=True,
+            )
 
     # XXX: once in SVN, should add svn version...
     #print config.make_svn_version_py()
@@ -185,6 +193,10 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
                 for i in BAD_FLAC_FILES]))
 
     config.add_data_dir(('examples', 'scikits/audiolab/docs/examples'))
+
+    config.add_subpackage('scikits')
+    config.add_subpackage(DISTNAME)
+    config.add_data_files('scikits/__init__.py')
 
     return config
 
