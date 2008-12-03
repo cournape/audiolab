@@ -64,12 +64,12 @@ def configuration(parent_package='', top_path=None, package_name='soundio'):
     config = Configuration(package_name, parent_package, top_path)
 
     alsa_info = AlsaInfo()
-    alsa_config = alsa_info.get_info(0)
-    if alsa_config:
+    try:
+        alsa_config = alsa_info.get_info(0)
         config.add_extension("_alsa_backend", sources = ["alsa/_alsa_backend.c"],
                              extra_info=alsa_config)
-    else:
-        warning.warn("Alsa not found - alsa backend not build")
+    except NotFoundError:
+        warnings.warn("Alsa not found - alsa backend not build")
 
     return config
 
