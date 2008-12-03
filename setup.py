@@ -50,6 +50,13 @@ LICENSE             = 'LGPL'
 DOWNLOAD_URL        = URL
 
 SNDFILE_MAJ_VERSION = 1
+CLASSIFIERS = ['Development Status :: 4 - Beta', 
+        'Environment :: Console',
+        'Intended Audience :: Developers', 
+        'Intended Audience :: Science/Research', 
+        'License :: OSI Approved :: GNU Library or Lesser General '\
+        'Public License (LGPL)', 'Topic :: Multimedia :: Sound/Audio',
+        'Topic :: Scientific/Engineering']
 
 # The following is more or less random copy/paste from numpy.distutils ...
 import setuptools
@@ -194,12 +201,4 @@ if __name__ == "__main__":
           include_package_data = True,
           test_suite="tester", 
           zip_safe=True,
-          classifiers =
-              [ 'Development Status :: 4 - Beta',
-                'Environment :: Console',
-                'Intended Audience :: Developers',
-                'Intended Audience :: Science/Research',
-                'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-                'Topic :: Multimedia :: Sound/Audio',
-                'Topic :: Scientific/Engineering']
-    )
+          classifiers=CLASSIFIERS)
