@@ -11,7 +11,7 @@ from scikits.audiolab import wavread, auread, aiffread, sdifread, flacread
 from scikits.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
 from scikits.audiolab import PyaudioException
 from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format
-from scikits.audiolab.pysndfile import FlacUnsupported
+from scikits.audiolab.pysndfile.pysndfile import FlacUnsupported
 
 from testcommon import open_tmp_file, close_tmp_file
 
