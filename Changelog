@@ -1,3 +1,6 @@
+audiolab (0.9dev) Wed, 03 Dec 2008 21:34:48 +0900
+	* Add cython-based alsa backend in audiolab.soundio
+
 audiolab (0.8) Tue, 25 Nov 2008 15:51:03 +0900
 	* Fix sphinx build
 	* fix tests to new numpy testing framework
