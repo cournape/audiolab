@@ -31,7 +31,7 @@ import setuptools
 from distutils.errors import DistutilsError
 from numpy.distutils.core import setup
 
-from release import *
+from common import *
 
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
