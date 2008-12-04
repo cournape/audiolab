@@ -87,7 +87,7 @@ def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     confgr = Configuration('pysndfile',parent_package,top_path)
 
-    if os.path.exists('pysndfile.py'): 
+    if os.path.exists('pysndfile.py'):
         os.remove('pysndfile.py')
 
     # Check that sndfile can be found and get necessary informations
@@ -101,7 +101,10 @@ def configuration(parent_package='',top_path=None):
     from generate_const import generate_enum_dicts
     repdict = generate_enum_dicts(headername)
     repdict['%SHARED_LOCATION%'] = libname
-    do_subst_in_file('pysndfile.py.in', 'pysndfile.py', repdict)
+
+    pkg_dir = os.path.dirname(__file__)
+    do_subst_in_file(os.path.join(pkg_dir, 'pysndfile.py.in'),
+                     os.path.join(pkg_dir, 'pysndfile.py'), repdict)
 
     return confgr
 
