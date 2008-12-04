@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Mon Sep 10 07:00 PM 2007 J
+# Last Change: Thu Dec 04 01:00 PM 2008 J
 """
 audiolab: a small toolbox to read, write and play audio to and from
 numpy arrays.
@@ -26,7 +26,7 @@ from pysndfile import supported_format, supported_endianness, \
                                        supported_encoding
 #from scikits.audiolab.matapi import wavread, aiffread, flacread, auread, \
 #        sdifread, wavwrite, aiffwrite, flacwrite, auwrite, sdifwrite
-from matapi import *
+from pysndfile.matapi import *
 
 __all__ = filter(lambda s:not s.startswith('_'),dir())
 

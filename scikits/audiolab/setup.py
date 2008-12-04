@@ -7,6 +7,7 @@ TEST_DATA_FILES = ['test.raw', 'test.flac', 'test.wav', 'test.au', 'test.sdif']
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     confgr = Configuration('audiolab',parent_package,top_path)
+    confgr.add_subpackage('pysndfile')
     confgr.add_subpackage('soundio')
 
     confgr.add_data_files(('test_data',
