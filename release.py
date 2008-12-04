@@ -13,10 +13,6 @@ to record and listen to data in numpy arrays.
 LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself. See
 COPYING.txt for details.  """
 
-from os.path import join
-import os
-import sys
-
 DISTNAME            = 'scikits.audiolab'
 DESCRIPTION         = 'A python module to make noise from numpy arrays'
 LONG_DESCRIPTION    = descr
