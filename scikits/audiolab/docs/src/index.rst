@@ -4,7 +4,7 @@
         crumb: audiolab
         link-title: audiolab
         encoding: utf-8
-        output-encoding: None 
+        output-encoding: None
         file: audiolab1.png
         file: quick1.py
         file: usage1.py
@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Tue Jul 17 11:00 AM 2007 J
+.. Last Change: Thu Dec 04 05:00 PM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -39,7 +39,7 @@ wav, aiff, ircam files, and flac (an open source lossless compressed format);
 see `here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete
 list.
 
-    **Note**: The library is still in beta stage: reading and writing 
+    **Note**: The library is still in beta stage: reading and writing
     data is possible, but only in frames, not per item.
     Also, the ability to play data on the system's soundcard is not there yet.
 
@@ -52,7 +52,19 @@ list.
 
 Download and installation
 =========================
-                
+
+Supported platforms
+-------------------
+
+Audiolab has been run succesfully on the following platforms:
+
+    - linux ubuntu (32 and 64 bits)
+    - windows XP (32 bits)
+    - Mac OS X (10.5)
+
+I would be interested to hear anyone who succeesfully used it on other
+platforms.
+
 Download
 --------
 
@@ -70,28 +82,21 @@ audiolab requires the following softwares:
  - libsndfile (including the header sndfile.h, which means linux users should
    download the libsndfile-dev package).
  - numpy (any version >= 1.0 should work).
- - ctypes (version >= 1.0.1)
+ - ctypes (version >= 1.0.1; ctypes is included in python 2.5)
+ - setuptools
 
-Starting with version 2.5, python include ctypes in its standart library, so you
-don't need to install ctypes separately in this case.
+On Ubuntu, you can install the dependencies as follow::
 
-It has been run succesfully on the following platforms:
+        sudo apt-get install python-dev python-numpy python-setuptools libsndfile-dev
 
-    - linux ubuntu (32 and 64 bits)
-    - windows XP
+Optional
+--------
 
-I would be interested to hear anyone who succeesfully used it on other
-plateforms (Mac Os X, solaris, etc...).
+Audiolab can optionally install audio backends. For now, only alsa is
+supported, for linux audio support. You need alsa headers for this to work; on
+Ubuntu, you can install them with the following command::
 
-    **Note**: the ctypes used in python2.5 package in ubuntu (and maybe debian
-    as well) *had* a nasty bug which makes it impossible to use 64 bits integers. You
-    should NOT use this package with audiolab (importing audiolab should fail,
-    but if the version is not correctly detected, you will have file corruption when
-    writing data to audio files). Run the test to check everything is working (a
-    test case tests this issue).
-
-    `<https://launchpad.net/ubuntu/+source/python2.5/+bug/71914>`_
-
+        sudo apt-get install libasound2-dev
 
 Installation
 ------------
@@ -109,10 +114,11 @@ distribution in the file README-precompiled-dll.txt. See also site.cfg.win32.
 
 License
 -------
-            
+
 audiolab is released under the LGPL, which forces you to release back the
-modifications you may make in the version of audiolab you are distributing,
-but you can still use it in closed softwares.
+modifications you may make in the version of audiolab you are distributing, but
+you can still use it in closed softwares, as long as you don't use a modified
+version of it.
 
 Quick view
 ==========
@@ -124,20 +130,20 @@ The following code shows you how to open a file for read, reading the first
 
 Usage
 =====
-            
+
 Opening a file and getting its parameters
 -----------------------------------------
 
 Once imported, audiolab gives you access the sndfile class, which is the
-class of audiolab use to open audio files. 
+class of audiolab use to open audio files.
 You create a sndfile instance when you want
 to open a file for reading or writing (the file test.flac is included
 in the audiolab package, in the test_data directory):
-            
+
 .. literalinclude:: examples/usage1.py}
 
-Prints you the informations related to the file, like its sampling rate, 
-the number of frames, etc... You can of course get each parameter 
+Prints you the informations related to the file, like its sampling rate,
+the number of frames, etc... You can of course get each parameter
 individually by using the corresponding sndfile.get* accessors.
 
 Importing audio data
@@ -156,7 +162,7 @@ stereo file is 2000 samples. Each channel is one column of the numpy array. The
 read functions follow numpy conventions, that is by default, the data are read
 as double, but you can give a dtype argument to the function.
 
-.. htmlonly:: 
+.. htmlonly::
 	.. image:: audiolab1.png
 	    :width: 500
 	    :height: 400
@@ -167,12 +173,12 @@ The format class
 When opening a file for writing, you need to give various parameters related to
 the format such as the file format, the encoding.  The format class is used to
 create valid formats from those parameters  By default, the format class
-creates a format object with file type wav, and 16 bits pcm encoding: 
+creates a format object with file type wav, and 16 bits pcm encoding:
 
 .. literalinclude:: examples/format1.py
 
 prints back "Major Format: AIFF (Apple/SGI), Encoding Format: U-Law" and "Major
-Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float". 
+Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float".
 
 To get a list of all possible file format and encoding, the function
 supported_* are available:
@@ -202,6 +208,11 @@ can get using python:
 
 .. literalinclude:: examples/matlab1.py
 
+Sound output
+------------
+
+New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
+
 Known bugs:
 ===========
 
@@ -209,7 +220,7 @@ Known bugs:
    files (which are necessary for the functions flacread/flacwrite). The
    problem seems to be with libFLAC; for this reason, seek in flac files is not
    enabled by default for now. See FLAC_SUPPORT.txt for more informations.
-    
+
 TODO
 ====
 
