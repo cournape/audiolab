@@ -618,6 +618,18 @@ broken)"""
 
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
 
+    # Functions to get informations about the file
+    def nframes(self):
+        """ Return the number of frames of the file"""
+        if self._mode == SFM_READ:
+            # XXX: is this reliable for any file (think pipe and co ?)
+            return self._sfinfo.frames
+
+        # In write/rwrite mode, the only reliable way to get the number of
+        # frames is to use seek.
+        raise NotImplementedError("Sorry, getting the current number of"
+                "frames in write modes is not supported yet")
+    
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
     integer, as used internally by sndfile."""
