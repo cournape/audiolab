@@ -7,7 +7,7 @@
 # TODO: not fake dependencies....
 
 PYVER		= 2.5
-#PKG_VER		= $(shell python -c "from setup import build_fverstring; build_fverstring()")
+PKG_VER		= 0.9.0dev
 
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
@@ -15,7 +15,7 @@ DOCPATH		= $(PWD)/scikits/audiolab/docs/
 EXAMPATH	= $(DOCPATH)/src/examples
 
 SCIPYPATH	= /export/bbc8/local/lib/python$(PYVER)/site-packages
-TMPPATH		= $(CURDIR)/../tmp
+TMPPATH		= $(PWD)/tmp
 
 PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python -c
 PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python
@@ -52,14 +52,23 @@ dist/audiolab-$(PKG_VER).zip: doc
 dist/audiolab-$(PKG_VER).tar.bz2: doc
 		python setup.py sdist --format=bztar
 
-#=======================================================
-# Code related to building audiolab in a tmp directory
-#=======================================================
-# Install the package in a tmp directory
-$(TMPPATH): build_test
+#=====================================
+# Building audiolab in a tmp directory
+#=====================================
+build_sdist:
+	python setup.py sdist --format=bztar
 
-build_test:
-	$(PYTHONRUN) setup.py install --prefix=$(TMPPATH) --single-version-externally-managed --record=/dev/null
+$(TMPPATH):
+	mkdir -p $(TMPPATH)
+
+extract_sdist: $(TMPPATH) build_sdist
+	cp dist/scikits.audiolab-$(PKG_VER).tar.bz2 $(TMPPATH)
+	(cd $(TMPPATH) && tar -xjf scikits.audiolab-$(PKG_VER).tar.bz2)
+
+build_test: extract_sdist
+	(cd $(TMPPATH)/scikits.audiolab-$(PKG_VER) && $(PYTHONRUN) setup.py \
+		install --prefix=$(TMPPATH) \
+		--single-version-externally-managed --record=/dev/null)
 
 # Clean the tmp dir
 clean_before_run:
@@ -116,3 +125,6 @@ doc:
 
 clean: clean_before_run
 	cd $(DOCPATH) && $(MAKE) clean
+	rm -rf $(TMPPATH)
+	rm -rf build
+	rm -rf dist
