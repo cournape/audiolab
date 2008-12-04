@@ -1,4 +1,4 @@
-# Last Change: Thu Dec 04 02:00 PM 2008 J
+# Last Change: Thu Dec 04 07:00 PM 2008 J
 #
 # This makefile is used to do all the "tricky things" before a release,
 # including updating the doc, installing and testing the package, uploading the
@@ -114,7 +114,7 @@ run_tests: build_test
 	@echo "=============== running test ============"
 	@cd $(TMPPATH) && PYTHONPATH=$(RUNPYTHONPATH) \
 		nosetests -v -s \
-		$(TMPPATH)/lib/python$(PYVER)/site-packages/scikits
+		$(TMPPATH)/lib/python$(PYVER)/site-packages/scikits/audiolab
 	@echo "=============== Done ============"
 
 #=====================
