@@ -82,6 +82,7 @@ def write_version():
     f = open(fname, "w")
     f.writelines("version = '%s'\n" % build_verstring())
     f.writelines("dev = %s" % DEV)
+    f.writelines("full_version = %s" % build_fverstring())
     f.close()
 
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
