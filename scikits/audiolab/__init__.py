@@ -18,8 +18,8 @@ Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself. See
 COPYING.txt for details.  """
 
-from version import version
-__version__ = version
+from version import version as _version
+__version__ = _version
 
 from pysndfile import formatinfo, sndfile
 from pysndfile import supported_format, supported_endianness, \
