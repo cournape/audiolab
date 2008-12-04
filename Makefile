@@ -110,7 +110,7 @@ tests: run_tests examples
 	@echo "=================================="
 
 # Run all tests
-run_tests: $(TMPPATH)
+run_tests: build_test
 	@echo "=============== running test ============"
 	@cd $(TMPPATH) && PYTHONPATH=$(RUNPYTHONPATH) \
 		nosetests -v -s \
