@@ -1,6 +1,6 @@
-include scikits/audiolab/pysndfile.py.in
+include scikits/audiolab/pysndfile/pysndfile.py.in
 include site.cfg.win32
 include COPYING.txt
 include FLAC_SUPPORT.txt
-include header_parser.py
-include generate_const.py
+include scikits/audiolab/pysndfile/header_parser.py
+include scikits/audiolab/pysndfile/generate_const.py
