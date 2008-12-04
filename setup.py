@@ -49,6 +49,11 @@ URL                 = 'http://www.ar.media.kyoto-u.ac.jp/members/david/softwares
 LICENSE             = 'LGPL'
 DOWNLOAD_URL        = URL
 
+MAJOR = 0
+MINOR = 9
+MICRO = 0
+DEV = True
+
 CLASSIFIERS = ['Development Status :: 4 - Beta', 
         'Environment :: Console',
         'Intended Audience :: Developers', 
@@ -62,18 +67,33 @@ import setuptools
 
 from distutils.errors import DistutilsError
 from numpy.distutils.core import setup
+
+def build_verstring():
+    return '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+
+def build_fverstring():
+    if DEV:
+        return build_verstring() + 'dev'
+    else:
+        return build_verstring()
+
+def write_version():
+    fname = os.path.join("scikits", "audiolab", "version.py")
+    f = open(fname, "w")
+    f.writelines("VERSION = '%s'\n" % build_verstring())
+    f.writelines("DEV = %s" % DEV)
+    f.close()
+
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
+    write_version()
     pkg_prefix_dir = os.path.join('scikits', 'audiolab')
-
-    # Get the version
-    from scikits.audiolab.info import VERSION as audiolab_version
 
     from numpy.distutils.misc_util import Configuration
     config = Configuration(None,parent_package,top_path,
         namespace_packages = ['scikits'],
-        version     = audiolab_version,
+        version     = build_fverstring(),
         maintainer  = MAINTAINER,
         maintainer_email = MAINTAINER_EMAIL,
         description = DESCRIPTION,
