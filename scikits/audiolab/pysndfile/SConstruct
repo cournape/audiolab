@@ -1,0 +1,8 @@
+from numpy.distutils.misc_util import get_numpy_include_dirs
+
+env = Environment()
+env.Append(CFLAGS=Split("-W -Wall -Wextra -g"))
+env.Append(CPPPATH=get_numpy_include_dirs() + ['/usr/include/python2.5'])
+env.Append(LIBS = "sndfile")
+
+env.LoadableModule("_sndfile.c", LDMODULEPREFIX="")
