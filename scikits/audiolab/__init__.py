@@ -23,7 +23,8 @@ __version__ = version
 
 from pysndfile import formatinfo, sndfile
 from pysndfile import supported_format, supported_endianness, \
-                      supported_encoding, PyaudioException
+                      supported_encoding, PyaudioException, \
+                      PyaudioIOError
 #from scikits.audiolab.matapi import wavread, aiffread, flacread, auread, \
 #        sdifread, wavwrite, aiffwrite, flacwrite, auwrite, sdifwrite
 from pysndfile.matapi import *

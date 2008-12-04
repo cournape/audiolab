@@ -10,7 +10,7 @@ import numpy as N
 
 from scikits.audiolab import pysndfile
 from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format, \
-                                       PyaudioException
+                                       PyaudioException, PyaudioIOError
 
 from testcommon import open_tmp_file, close_tmp_file, TEST_DATA_DIR
 
@@ -250,7 +250,7 @@ class test_pysndfile(TestCase):
             try:
                 a.seek(2 ** 60)
                 raise Exception("Seek really succeded ! This should not happen")
-            except pysndfile.PyaudioIOError, e:
+            except PyaudioIOError, e:
                 pass
         finally:
             a.close()
