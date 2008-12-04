@@ -303,8 +303,9 @@ cdef class Sndfile:
     cdef int _byfd
     cdef Format _format
     cdef int _mode
+    cdef SF_INFO _sfinfo
     def __init__(Sndfile self, filename, mode='read', format=None,
-                 int channels=0, int fs=0):
+                 int channels=0, int samplerate=0):
         """Create an instance of sndfile.
 
         :Parameters:
@@ -318,7 +319,7 @@ cdef class Sndfile:
                 in.
             channels : int
                 number of channels.
-            fs : int
+            samplerate : int
                 sampling rate.
 
         :Returns:
@@ -329,7 +330,6 @@ cdef class Sndfile:
 
         format, channels and samplerate need to be given only in the write
         modes and for raw files.  """
-        cdef SF_INFO sfinfo
         cdef int sfmode
 
         self.hdl = NULL
@@ -353,23 +353,23 @@ cdef class Sndfile:
             raise ValueError("mode %s not recognized" % str(mode))
 
         # Fill the sfinfo struct
-        sfinfo.frames = 0
-        sfinfo.channels = channels
-        sfinfo.samplerate = fs
+        self._sfinfo.frames = 0
+        self._sfinfo.channels = channels
+        self._sfinfo.samplerate = samplerate
 
-        sfinfo.sections = 0
-        sfinfo.seekable = SF_FALSE
+        self._sfinfo.sections = 0
+        self._sfinfo.seekable = SF_FALSE
         if mode == 'read' and format is None:
-            sfinfo.format = 0
+            self._sfinfo.format = 0
         else:
-            sfinfo.format = format.format_int()
+            self._sfinfo.format = format.format_int()
 
         # XXX: check how cython behave with this kind of code
         if filename is int:
             raise ValueError("Opening by fd not supported yet.")
             self._byfd = SF_TRUE
         else:
-            self.hdl = sf_open(filename, sfmode, &sfinfo)
+            self.hdl = sf_open(filename, sfmode, &self._sfinfo)
             self.filename = filename
             self._byfd = SF_FALSE
         self._mode = sfmode
@@ -390,7 +390,7 @@ broken)"""
             raise IOError("error while opening %s\n\t->%s" % (filename, msg))
 
         if mode == 'read':
-            type, enc, endian = int_to_format(sfinfo.format)
+            type, enc, endian = int_to_format(self._sfinfo.format)
             self._format = Format(type, enc, endian)
         else:
             self._format = format
@@ -402,6 +402,14 @@ broken)"""
             sf_close(self.hdl)
             self.hdl = NULL
 
+    def samplerate(self):
+        """ Return the samplerate (sampling frequency) of the file in Hz"""
+        return self._sfinfo.samplerate
+    
+    def channels(self):
+        """ Return the number of channels of the file"""
+        return self._sfinfo.channels
+    
     def close(Sndfile self):
         """close the file."""
         self.__del__()
@@ -410,22 +418,22 @@ broken)"""
         """return user friendly file format string"""
         return _ENUM_TO_STR_FILE_FORMAT[self._format.file_format_int()]
 
-    def encoding(self):
+    def encoding(Sndfile self):
         """return user friendly encoding string"""
         return _ENUM_TO_STR_ENCODING[self._format.encoding_int()]
 
-    def endianness(self):
+    def endianness(Sndfile self):
         """return user friendly endianness string"""
         return _ENUM_TO_STR_ENDIAN[self._format.endianness_int()]
 
-    def __str__(self):
+    def __str__(Sndfile self):
         repstr = ["----------------------------------------"]
         #if self._byfd:
         #    repstr  += "File        : %d (opened by file descriptor)\n" % self.fd
         #else:
         #    repstr  += "File        : %s\n" % self.filename
-        #repstr  += "Channels    : %d\n" % self._sfinfo.channels
-        #repstr  += "Sample rate : %d\n" % self._sfinfo.samplerate
+        repstr  += ["Channels    : %d" % self._sfinfo.channels]
+        repstr  += ["Sample rate : %d" % self._sfinfo.samplerate]
         #repstr  += "Frames      : %d\n" % self._sfinfo.frames
         repstr  += ["Raw Format  : %#010x" % self._format.format_int()]
         repstr  += ["File format : %s" % self.file_format()]
