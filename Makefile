@@ -7,7 +7,7 @@
 # TODO: not fake dependencies....
 
 PYVER		= 2.5
-PKG_VER		= $(shell python -c "from setup import build_fverstring; build_fverstring()")
+#PKG_VER		= $(shell python -c "from setup import build_fverstring; build_fverstring()")
 
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
@@ -19,6 +19,8 @@ TMPPATH		= $(CURDIR)/../tmp
 
 PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python -c
 PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python
+
+RUNPYTHONPATH	= $(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH)
 
 RELEASELOC	= $(WWWHOMEDIR)/archives/audiolab/releases
 
@@ -101,7 +103,9 @@ tests: run_tests examples
 # Run all tests
 run_tests: $(TMPPATH)
 	@echo "=============== running test ============"
-	@cd $(TMPPATH) && nosetests -v -s $(TMPPATH)/lib/python$(PYVER)/site-packages/scikits
+	@cd $(TMPPATH) && PYTHONPATH=$(RUNPYTHONPATH) \
+		nosetests -v -s \
+		$(TMPPATH)/lib/python$(PYVER)/site-packages/scikits
 	@echo "=============== Done ============"
 
 #=====================
