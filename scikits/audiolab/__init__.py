@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Dec 04 01:00 PM 2008 J
+# Last Change: Thu Dec 04 02:00 PM 2008 J
 """
 audiolab: a small toolbox to read, write and play audio to and from
 numpy arrays.
@@ -23,7 +23,7 @@ __version__ = version
 
 from pysndfile import formatinfo, sndfile
 from pysndfile import supported_format, supported_endianness, \
-                                       supported_encoding
+                      supported_encoding, PyaudioException
 #from scikits.audiolab.matapi import wavread, aiffread, flacread, auread, \
 #        sdifread, wavwrite, aiffwrite, flacwrite, auwrite, sdifwrite
 from pysndfile.matapi import *

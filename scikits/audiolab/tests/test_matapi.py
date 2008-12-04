@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Dec 04 12:00 PM 2008 J
+# Last Change: Thu Dec 04 02:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -7,9 +7,10 @@ from tempfile import mkstemp
 from numpy.testing import *
 import numpy as N
 
-from scikits.audiolab.matapi import wavread, auread, aiffread, sdifread, flacread
-from scikits.audiolab.matapi import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
-from scikits.audiolab.pysndfile import PyaudioException, sndfile, formatinfo as audio_format
+from scikits.audiolab import wavread, auread, aiffread, sdifread, flacread
+from scikits.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
+from scikits.audiolab import PyaudioException
+from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format
 from scikits.audiolab.pysndfile import FlacUnsupported
 
 from testcommon import open_tmp_file, close_tmp_file
