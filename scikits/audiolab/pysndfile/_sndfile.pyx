@@ -544,6 +544,80 @@ broken)"""
             raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
         return ty
 
+    def write_frames(self, cnp.ndarray input, sf_count_t nframes = -1):
+        """write data to file.
+        
+        Parameters
+        ----------
+            input : ndarray
+                array containing data to write.  
+            nframes : int
+                number of frames to write.
+
+        Notes
+        -----
+
+        - One row per channel.
+        - updates the write pointer.
+        - if float are given when the file contains integer data, you should
+          put normalized data (that is the range [-1..1] will be written as the
+          maximum range allowed by the integer bitwidth)."""
+        # First, get the number of channels and frames from input
+        if not input.ndim == 2:
+            raise Exception("Expect array of rank, got %d" 
+                            % input.ndim)
+            nc = input.shape[0]
+
+        if nframes == -1:
+            nframes = np.size(input)
+
+        # Number of channels should be the one expected
+        if not nc == self._sfinfo.channels:
+            raise Exception("Expected %d channels, got %d" %
+                            (self._sfinfo.channels, nc))
+
+        input = np.require(input, requirements = 'F')
+
+        # XXX: check for overflow ?
+        if input.dtype == np.float64:
+            res = self.write_frame_double(input, nframes)
+        elif input.dtype == np.float32:
+            res = self.write_frame_float(input, nframes)
+        elif input.dtype == np.int:
+            res = self.write_frame_int(input, nframes)
+        elif input.dtype == np.short:
+            res = self.write_frame_short(input, nframes)
+        else:
+            raise Exception("type of input &s not understood" % str(input.dtype))
+
+        if not(res == nframes):
+            raise IOError("write %d frames, expected to write %d"
+                          % res, nframes)
+
+    cdef sf_count_t write_frames_double(self, cnp.ndarray input, 
+                                        sf_count_t nframes=-1):
+        cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
+
+        return sf_writef_double(self.hdl, <double*>input.data, nframes)
+
+    cdef sf_count_t write_frames_float(self, cnp.ndarray input, 
+                                       sf_count_t nframes=-1):
+        cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
+
+        return sf_writef_float(self.hdl, <float*>input.data, nframes)
+
+    cdef sf_count_t write_frames_int(self, cnp.ndarray input, 
+                                     sf_count_t nframes=-1):
+        cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
+
+        return sf_writef_int(self.hdl, <int*>input.data, nframes)
+
+    cdef sf_count_t write_frames_short(self, cnp.ndarray input, 
+                                       sf_count_t nframes=-1):
+        cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
+
+        return sf_writef_short(self.hdl, <short*>input.data, nframes)
+
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
     integer, as used internally by sndfile."""
