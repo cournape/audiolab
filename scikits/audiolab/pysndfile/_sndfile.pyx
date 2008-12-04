@@ -211,7 +211,7 @@ cdef class Format:
         def __get__(self):
             return self._encoding_str
 
-    cdef int format_raw_int(self):
+    cdef int format_int(self):
         return self._format_raw_int
 
     # Syntactic sugar
@@ -348,7 +348,7 @@ cdef class Sndfile:
         if mode == 'read' and format is None:
             sfinfo.format = 0
         else:
-            sfinfo.format = format.format_raw_int()
+            sfinfo.format = format.format_int()
 
         # XXX: check how cython behave with this kind of code
         if filename is int:
