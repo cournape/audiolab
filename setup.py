@@ -88,8 +88,10 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
     write_version(os.path.join("scikits", "audiolab", "version.py"))
-    write_version(os.path.join("scikits", "audiolab", "docs", "src",
-                               "audiolab_version.py"))
+    # XXX: find a way to include the doc in sdist
+    if os.path.exists(os.path.join("scikits", "audiolab", "docs", "src")):
+        write_version(os.path.join("scikits", "audiolab", "docs", "src",
+                                   "audiolab_version.py"))
     pkg_prefix_dir = os.path.join('scikits', 'audiolab')
 
     from numpy.distutils.misc_util import Configuration
@@ -116,6 +118,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
 
     config.add_subpackage('scikits')
     config.add_data_files('scikits/__init__.py')
+
     config.add_subpackage(DISTNAME)
 
     return config
