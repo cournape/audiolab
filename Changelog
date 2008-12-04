@@ -1,6 +1,8 @@
 audiolab (0.9dev) Thu, 04 Dec 2008 17:23:04 +0900
 	* Move sndfile wrapper into audiolab.pysndfile (Importing from
 	scikits.audiolab should still work)
+	* Add a DeprecationWarning for read_frames/write_frames convention wrt
+	axis.
 
 audiolab (0.9dev) Wed, 03 Dec 2008 21:34:48 +0900
 	* Add cython-based alsa backend in audiolab.soundio
