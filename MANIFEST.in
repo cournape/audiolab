@@ -12,3 +12,4 @@ include scikits/audiolab/test_data/test.flac
 include scikits/audiolab/test_data/test.raw
 include scikits/audiolab/test_data/test.sdif
 include scikits/audiolab/test_data/test.wav
+recursive-include scikits/audiolab/docs *
