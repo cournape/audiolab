@@ -190,9 +190,9 @@ supported_* are available:
 
 .. literalinclude:: examples/format2.py
 
-    **Note**: not all combination of encoding, endianness and format are possible.
-    If you try to create a format with incompatible values, you will get an error
-    while creating an instance of format.
+Note that not all combination of encoding, endianness and format are possible.
+If you try to create a format with incompatible values, you will get an
+exception while creating an instance of format.
 
 Writing data to a file
 ----------------------
@@ -223,6 +223,8 @@ New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
 Known bugs:
 ===========
 
+ - the function supported_* are broken (they never worked correctly). This will
+   be fixed for audiolab 0.10
  - there seems to be a problem when using libsndfile fseek facilities with flac
    files (which are necessary for the functions flacread/flacwrite). The
    problem seems to be with libFLAC; for this reason, seek in flac files is not
