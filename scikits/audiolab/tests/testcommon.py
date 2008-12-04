@@ -2,6 +2,11 @@ import os
 from tempfile import mkstemp
 import sys
 
+import scikits.audiolab
+
+TEST_DATA_DIR = os.path.join(os.path.dirname(scikits.audiolab.__file__),
+                             'test_data')
+
 def open_tmp_file(name):
     """On any sane platforms, return a fd on a tmp file. On windows, returns
     the filename, and as such, is not secure (someone else can reopen the file

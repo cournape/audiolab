@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Tue Jul 17 11:00 AM 2007 J
+# Last Change: Thu Dec 04 12:00 PM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
@@ -11,14 +11,14 @@ import numpy as N
 from scikits.audiolab import pysndfile
 from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format
 
-from testcommon import open_tmp_file, close_tmp_file
+from testcommon import open_tmp_file, close_tmp_file, TEST_DATA_DIR
 
 # XXX: there is a lot to refactor here
 class test_pysndfile(TestCase):
     def test_basic_io(self):
         """ Check open, close and basic read/write"""
         # dirty !
-        ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
             nbuff = 22050
@@ -54,13 +54,13 @@ class test_pysndfile(TestCase):
         if sys.platform == 'win32':
             print "Not testing opening by fd because does not work on win32"
         else:
-            ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+            ofilename = join(TEST_DATA_DIR, 'test.wav')
             fd = os.open(ofilename, os.O_RDONLY)
             hdl = sndfile(fd, 'read')
             hdl.close()
 
     def test_raw(self):
-        rawname = join(dirname(pysndfile.__file__), 'test_data', 'test.raw')
+        rawname = join(TEST_DATA_DIR, 'test.raw')
         format  = audio_format('raw', 'pcm16', 'little')
         a       = sndfile(rawname, 'read', format, 1, 11025)
         assert a.get_nframes() == 11290
@@ -69,7 +69,7 @@ class test_pysndfile(TestCase):
     def test_float64(self):
         """Check float64 write/read works"""
         # dirty !
-        ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
         try:
             nbuff           = 22050
@@ -113,7 +113,7 @@ class test_pysndfile(TestCase):
     def test_float32(self):
         """Check float write/read works"""
         # dirty !
-        ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
             nbuff           = 22050
@@ -243,7 +243,7 @@ class test_pysndfile(TestCase):
 
     def test_bigframes(self):
         """ Try to seek really far"""
-        rawname = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        rawname = join(TEST_DATA_DIR, 'test.wav')
         a       = sndfile(rawname, 'read')
         try:
             try:
@@ -285,7 +285,7 @@ class test_pysndfile(TestCase):
 
 class test_seek(TestCase):
     def test_simple(self):
-        ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
         # Open the test file for reading
         a       = sndfile(ofilename, 'read')
         nframes = a.get_nframes()
@@ -322,7 +322,7 @@ class test_seek(TestCase):
 
     def test_rw(self):
         """Test read/write pointers for seek."""
-        ofilename = join(dirname(pysndfile.__file__), 'test_data', 'test.wav')
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename   = open_tmp_file('rwseektest.wav')
         try:
             ref = sndfile(ofilename, 'read')
