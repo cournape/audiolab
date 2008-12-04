@@ -451,11 +451,27 @@ broken)"""
     def read_frames(self, sf_count_t nframes, dtype=np.float64):
         """Read nframes frames of the file.
         
-        :Parameters:
+        Parameters
+        ----------
             nframes : int
                 number of frames to read.
             dtype : numpy dtype
-                dtype of the returned array containing read data (see note)."""
+                dtype of the returned array containing read data (see note).
+
+        Note
+        ----
+
+        - One row per channel.
+        - if float are requested when the file contains integer data, you will
+          get normalized data (that is the max possible integer will be 1.0,
+          and the minimal possible value -1.0).
+        - updates the write pointer.
+        - if integers are requested when the file contains floating point data,
+          it may give wrong results because there is an ambiguity: if the
+          floating data are normalized, you can get a file with only 0 !
+          Getting integer data from files encoded in normalized floating point
+          is not supported (this is an audiolab limitation: sndfile supports
+          it).""" 
         if nframes < 0:
             raise ValueError("number of frames has to be >= 0 (was %d)" % 
                              nframes)
