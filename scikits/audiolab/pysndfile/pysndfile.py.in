@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Wed Oct 03 05:00 PM 2007 J
+# Last Change: Thu Dec 04 06:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -713,7 +713,7 @@ out of luck, because its implementation of POSIX open is broken)"""
         -----
         
         - read_frames updates the read pointer.
-        - One column is one channel.
+        - One column is one channel (one row per channel after 0.9)
         - if float are requested when the file contains integer data, you will
           get normalized data (that is the max possible integer will be 1.0,
           and the minimal possible value -1.0).
@@ -722,6 +722,11 @@ out of luck, because its implementation of POSIX open is broken)"""
           floating data are normalized, you can get a file with only 0 !
           Getting integer data from files encoded in normalized floating point
           is not supported (yet: sndfile supports it).""" 
+        warnings.warn("Output of read_frames will change after 0.9: instead "
+                "of one channel/column, read_frames will return an array with "
+                "one row per channel convention, to fit more with numpy "
+                "convention (algorithm applied along last axis by default)",
+                DeprecationWarning)
         c_nframes   = _num2int64(nframes)
         if c_nframes < 0:
             raise ValueError("number of frames has to be >= 0")
@@ -768,11 +773,16 @@ out of luck, because its implementation of POSIX open is broken)"""
         Notes
         -----
 
-        - one channel is one column
+        - One column is one channel (one row per channel after 0.9)
         - updates the write pointer.
         - if float are given when the file contains integer data, you should
           put normalized data (that is the range [-1..1] will be written as the
           maximum range allowed by the integer bitwidth)."""
+        warnings.warn("Input format of write_frames will change after 0.9: instead "
+                "of one channel/column, write_frames will take an array with "
+                "one row per channel, to fit more with numpy "
+                "convention (algorithm applied along last axis by default)",
+                DeprecationWarning)
         # First, get the number of channels and frames from input
         if input.ndim   == 1:
             nc      = 1
