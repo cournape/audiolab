@@ -77,18 +77,19 @@ def build_fverstring():
     else:
         return build_verstring()
 
-def write_version():
-    fname = os.path.join("scikits", "audiolab", "version.py")
+def write_version(fname):
     f = open(fname, "w")
     f.writelines("version = '%s'\n" % build_verstring())
-    f.writelines("dev = %s" % DEV)
-    f.writelines("full_version = %s" % build_fverstring())
+    f.writelines("dev = %s\n" % DEV)
+    f.writelines("full_version = %s\n" % build_fverstring())
     f.close()
 
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-    write_version()
+    write_version(os.path.join("scikits", "audiolab", "version.py"))
+    write_version(os.path.join("scikits", "audiolab", "docs", "src",
+                               "audiolab_version.py"))
     pkg_prefix_dir = os.path.join('scikits', 'audiolab')
 
     from numpy.distutils.misc_util import Configuration
