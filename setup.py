@@ -54,10 +54,10 @@ MINOR = 9
 MICRO = 0
 DEV = True
 
-CLASSIFIERS = ['Development Status :: 4 - Beta', 
+CLASSIFIERS = ['Development Status :: 4 - Beta',
         'Environment :: Console',
-        'Intended Audience :: Developers', 
-        'Intended Audience :: Science/Research', 
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Library or Lesser General '\
         'Public License (LGPL)', 'Topic :: Multimedia :: Sound/Audio',
         'Topic :: Scientific/Engineering']
@@ -126,6 +126,6 @@ if __name__ == "__main__":
           namespace_packages=['scikits'],
           packages=setuptools.find_packages(),
           include_package_data = True,
-          test_suite="tester", 
+          test_suite="tester",
           zip_safe=True,
           classifiers=CLASSIFIERS)
