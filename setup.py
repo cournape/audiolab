@@ -80,8 +80,8 @@ def build_fverstring():
 def write_version(fname):
     f = open(fname, "w")
     f.writelines("version = '%s'\n" % build_verstring())
-    f.writelines("dev = %s\n" % DEV)
-    f.writelines("full_version = %s\n" % build_fverstring())
+    f.writelines("dev =%s\n" % DEV)
+    f.writelines("full_version = '%s'\n" % build_fverstring())
     f.close()
 
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
