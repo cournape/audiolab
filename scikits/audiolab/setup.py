@@ -10,7 +10,7 @@ def configuration(parent_package='', top_path=None):
     confgr.add_subpackage('soundio')
 
     confgr.add_data_files(('test_data',
-                           ['test_data' + i for i in TEST_DATA_FILES]))
+                           [join('test_data', i) for i in TEST_DATA_FILES]))
 
     #config.add_data_files(('misc', \
     #        ['scikits/audiolab/misc/' + i
