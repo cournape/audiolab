@@ -1,6 +1,8 @@
 import sys
 import warnings
 
+import numpy as np
+
 if sys.platform[:5] == 'linux':
     BACKEND = 'ALSA'
 else:
@@ -13,7 +15,15 @@ if BACKEND == 'ALSA':
         warnings.warn("Could not import alsa backend; most probably, you did not have alsa headers when building audiolab")
 
     def _play(input, rate):
-        nc = input.shape[0]
+        if input.ndim == 1:
+            input = input[np.newaxis, :]
+            nc = 1
+        elif input.ndim == 2:
+            nc = input.shape[0]
+        else:
+            raise ValueError, \
+                  "Only input of rank 1 and 2 supported for now."
+
         dev = AlsaDevice(rate=rate, nchannels=nc)
         dev.play(input)
 else:
