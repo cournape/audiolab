@@ -288,6 +288,7 @@ cdef class Sndfile:
     cdef object filename
     cdef int _byfd
     cdef Format _format
+    cdef int _mode
     def __init__(Sndfile self, filename, mode='read', format=None,
                  int channels=0, int fs=0):
         """Create an instance of sndfile.
@@ -315,6 +316,7 @@ cdef class Sndfile:
         format, channels and samplerate need to be given only in the write
         modes and for raw files.  """
         cdef SF_INFO sfinfo
+        cdef int sfmode
 
         self.hdl = NULL
 
@@ -356,6 +358,7 @@ cdef class Sndfile:
             self.hdl = sf_open(filename, sfmode, &sfinfo)
             self.filename = filename
             self._byfd = SF_FALSE
+        self._mode = sfmode
 
         if self.hdl == NULL:
             if self._byfd == SF_TRUE:
