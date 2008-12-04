@@ -1,4 +1,5 @@
 import sys
+import warnings
 
 if sys.platform[:5] == 'linux':
     BACKEND = 'ALSA'
@@ -9,8 +10,7 @@ if BACKEND == 'ALSA':
     try:
         from scikits.audiolab.soundio._alsa_backend import AlsaDevice
     except ImportError, e:
-        print e
-        raise ImportError("Error while importing alsa backend")
+        warnings.warn("Could not import alsa backend; most probably, you did not have alsa headers when building audiolab")
 
     def _play(input, rate):
         nc = input.shape[0]
