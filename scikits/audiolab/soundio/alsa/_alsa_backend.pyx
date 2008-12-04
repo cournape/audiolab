@@ -60,11 +60,11 @@ cdef struct format_info:
 cdef class AlsaDevice:
         cdef snd_pcm_t *handle
         cdef format_info format
-        def __init__(AlsaDevice self, unsigned rate=48000, int nchannels=1):
+        def __init__(AlsaDevice self, unsigned int fs=48000, int nchannels=1):
                 cdef int st
                 cdef snd_pcm_uframes_t psize, bsize
 
-                self.format.rate = rate
+                self.format.rate = fs
                 self.format.nchannels = nchannels
 
                 if not (nchannels > 0 and nchannels < 3):

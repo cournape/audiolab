@@ -14,7 +14,7 @@ if BACKEND == 'ALSA':
     except ImportError, e:
         warnings.warn("Could not import alsa backend; most probably, you did not have alsa headers when building audiolab")
 
-    def _play(input, rate):
+    def _play(input, fs):
         if input.ndim == 1:
             input = input[np.newaxis, :]
             nc = 1
@@ -24,14 +24,14 @@ if BACKEND == 'ALSA':
             raise ValueError, \
                   "Only input of rank 1 and 2 supported for now."
 
-        dev = AlsaDevice(rate=rate, nchannels=nc)
+        dev = AlsaDevice(fs=fs, nchannels=nc)
         dev.play(input)
 else:
-    def _play(input, rate):
+    def _play(input, fs):
         raise NotImplementedError("No Backend implemented for you platform %s"
                                   % os.name)
 
-def play(input, rate=44100):
+def play(input, fs=44100):
     """Play the signal in vector input to the default output device.
 
     Only floating point input are supported for now: input is assumed to be in
@@ -42,7 +42,7 @@ def play(input, rate=44100):
     ----------
         input: array
             input signal of rank 2. Each row is assumed to be one channel.
-        rate: int
+        fs: int
             sampling rate (in Hz)
     """
-    return _play(input, rate)
+    return _play(input, fs)
