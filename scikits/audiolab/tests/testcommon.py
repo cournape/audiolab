@@ -22,4 +22,3 @@ def close_tmp_file(fd, filename):
     file."""
     os.close(fd)
     os.remove(filename)
-    

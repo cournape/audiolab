@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Tue Jul 17 11:00 AM 2007 J
+# Last Change: Thu Dec 04 12:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -16,8 +16,8 @@ from testcommon import open_tmp_file, close_tmp_file
 
 class test_audiolab(TestCase):
     def _test_read(self, func, format, filext):
-	# Create a tmp audio file, write some random data into it, and check it
-	# is the expected data when read from a function from the matapi.
+        # Create a tmp audio file, write some random data into it, and check it
+        # is the expected data when read from a function from the matapi.
         rfd, fd, cfilename   = open_tmp_file('pysndfiletest.' + filext)
         try:
             nbuff = 22050
@@ -124,8 +124,8 @@ class test_audiolab(TestCase):
             m1.update(f1.read())
             m2.update(f2.read())
 
-	    f1.close()
-	    f2.close()
+            f1.close()
+            f2.close()
             assert m1.hexdigest() == m2.hexdigest()
         finally:
             close_tmp_file(rfd1, cfilename1)
