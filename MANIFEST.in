@@ -2,6 +2,7 @@ include scikits/audiolab/pysndfile/pysndfile.py.in
 include site.cfg.win32
 include COPYING.txt
 include FLAC_SUPPORT.txt
+include release.py
 include scikits/audiolab/pysndfile/header_parser.py
 include scikits/audiolab/pysndfile/generate_const.py
 include scikits/audiolab/test_data/original.aif
