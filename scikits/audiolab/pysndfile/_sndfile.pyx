@@ -212,7 +212,21 @@ cdef class Format:
             return self._encoding_str
 
     cdef int format_int(self):
+        """Return the full format integer (binary OR of file format, encoding
+        and endianness)."""
         return self._format_raw_int
+
+    cdef int file_format_int(self):
+        """Return the file format int."""
+        return self._format_raw_int & SF_FORMAT_TYPEMASK
+
+    cdef int encoding_int(self):
+        """Return the encoding part of the format int."""
+        return self._format_raw_int & SF_FORMAT_SUBMASK
+
+    cdef int endianness_int(self):
+        """Return the endianness part of the format int."""
+        return self._format_raw_int & SF_FORMAT_ENDMASK
 
     # Syntactic sugar
     def __str__(self):
@@ -391,6 +405,40 @@ broken)"""
     def close(Sndfile self):
         """close the file."""
         self.__del__()
+
+    def file_format(self):
+        """return user friendly file format string"""
+        return _ENUM_TO_STR_FILE_FORMAT[self._format.file_format_int()]
+
+    def encoding(self):
+        """return user friendly encoding string"""
+        return _ENUM_TO_STR_ENCODING[self._format.encoding_int()]
+
+    def endianness(self):
+        """return user friendly endianness string"""
+        return _ENUM_TO_STR_ENDIAN[self._format.endianness_int()]
+
+    def __str__(self):
+        repstr = ["----------------------------------------"]
+        #if self._byfd:
+        #    repstr  += "File        : %d (opened by file descriptor)\n" % self.fd
+        #else:
+        #    repstr  += "File        : %s\n" % self.filename
+        #repstr  += "Channels    : %d\n" % self._sfinfo.channels
+        #repstr  += "Sample rate : %d\n" % self._sfinfo.samplerate
+        #repstr  += "Frames      : %d\n" % self._sfinfo.frames
+        repstr  += ["Raw Format  : %#010x" % self._format.format_int()]
+        repstr  += ["File format : %s" % self.file_format()]
+        repstr  += ["Encoding    : %s" % self.encoding()]
+        repstr  += ["Endianness  : %s" % self.endianness()]
+        #repstr  += "Sections    : %d\n" % self._sfinfo.sections
+        #if self._sfinfo.seekable:
+        #    seek    = 'True'
+        #else:
+        #    seek    = 'False'
+        #repstr  += "Seekable    : %s\n" % seek
+        #repstr  += "Duration    : %s\n" % self._generate_duration_str()
+        return "\n".join(repstr)
 
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
