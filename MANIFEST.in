@@ -4,3 +4,10 @@ include COPYING.txt
 include FLAC_SUPPORT.txt
 include scikits/audiolab/pysndfile/header_parser.py
 include scikits/audiolab/pysndfile/generate_const.py
+include scikits/audiolab/test_data/original.aif
+include scikits/audiolab/test_data/test.aiff
+include scikits/audiolab/test_data/test.au
+include scikits/audiolab/test_data/test.flac
+include scikits/audiolab/test_data/test.raw
+include scikits/audiolab/test_data/test.sdif
+include scikits/audiolab/test_data/test.wav
