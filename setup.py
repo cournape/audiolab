@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Dec 04 02:00 PM 2008 J
+# Last Change: Thu Dec 04 07:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -113,6 +113,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     #print config.make_svn_version_py()
 
     config.add_subpackage('scikits')
+    config.add_data_files('scikits/__init__.py')
     config.add_subpackage(DISTNAME)
 
     return config
