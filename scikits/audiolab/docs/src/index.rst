@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Thu Dec 04 06:00 PM 2008 J
+.. Last Change: Thu Dec 04 07:00 PM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -39,9 +39,14 @@ wav, aiff, ircam files, and flac (an open source lossless compressed format);
 see `here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete
 list.
 
+    **Note**: starting at version 0.10, read/write data convention will change
+    from one column per channel to one row per channel, to follow numpy
+    conventions.
+
     **Note**: The library is still in beta stage: reading and writing
     data is possible, but only in frames, not per item.
-    Also, the ability to play data on the system's soundcard is not there yet.
+    Also, the ability to play data on the system's soundcard is not there yet,
+    except on Linux.
 
     **Note**: The online version of this document is not always up to date. The
     pdf included in the package is the reference, and always in sync with the
@@ -140,7 +145,7 @@ You create a sndfile instance when you want
 to open a file for reading or writing (the file test.flac is included
 in the audiolab package, in the test_data directory):
 
-.. literalinclude:: examples/usage1.py}
+.. literalinclude:: examples/usage1.py
 
 Prints you the informations related to the file, like its sampling rate,
 the number of frames, etc... You can of course get each parameter
