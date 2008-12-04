@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Thu Dec 04 05:00 PM 2008 J
+.. Last Change: Thu Dec 04 06:00 PM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -212,6 +212,8 @@ Sound output
 ------------
 
 New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
+
+.. literalinclude:: examples/play.py
 
 Known bugs:
 ===========
