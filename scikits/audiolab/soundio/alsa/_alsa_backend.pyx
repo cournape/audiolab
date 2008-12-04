@@ -110,7 +110,12 @@ cdef class AlsaDevice:
                         err = python_exc.PyErr_CheckSignals()
                         if err != 0:
                                 break
-                        tx = (32568 * input[:, i * bufsize:i * bufsize + bufsize]).astype(np.int16)
+                        # We make sure the buffer is in fortran order to deal
+                        # with interleaved data.
+                        tx = np.asfortranarray(
+                                32568 * input[:, i * bufsize:
+                                                 i * bufsize + bufsize],
+                                np.int16)
                         st = snd_pcm_writei(self.handle, <void*>tx.data, bufsize)
                         if st < 0:
                                 raise AlsaException("Error in writei")
