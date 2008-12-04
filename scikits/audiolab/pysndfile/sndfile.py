@@ -18,4 +18,5 @@ except IOError, e:
     print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 a = Sndfile('test.wav')
-print a
+for d in [np.float64, np.float32, np.int, np.short]:
+    a.read_frames(1000, dtype=d)

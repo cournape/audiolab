@@ -448,6 +448,86 @@ broken)"""
         #repstr  += "Duration    : %s\n" % self._generate_duration_str()
         return "\n".join(repstr)
 
+    def read_frames(self, sf_count_t nframes, dtype=np.float64):
+        """Read nframes frames of the file.
+        
+        :Parameters:
+            nframes : int
+                number of frames to read.
+            dtype : numpy dtype
+                dtype of the returned array containing read data (see note)."""
+        if nframes < 0:
+            raise ValueError("number of frames has to be >= 0 (was %d)" % 
+                             nframes)
+        
+        # TODO: inout argument
+        # XXX: rank 1 vs rank 2 for mono ?
+        # XXX: endianness of dtype vs endianness of sndfile ?
+        if dtype == np.float64:
+            y = self.read_frames_double(nframes)
+        elif dtype == np.float32:
+            y = self.read_frames_float(nframes)
+        elif dtype == np.int32:
+            y = self.read_frames_int(nframes)
+        elif dtype == np.int16:
+            y = self.read_frames_short(nframes)
+        else:
+            RuntimeError("Sorry, dtype %s not supported" % str(dtype))
+
+        return y
+
+    cdef read_frames_double(Sndfile self, sf_count_t nframes):
+        cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
+        cdef sf_count_t res
+
+        # Use Fortran order to cope with interleaving
+        ty = np.empty((self._sfinfo.channels, nframes), 
+                      dtype=np.float64, order='F')
+
+        res = sf_readf_double(self.hdl, <double*>ty.data, nframes)
+        if not res == nframes:
+            raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
+        return ty
+
+    cdef read_frames_float(Sndfile self, sf_count_t nframes):
+        cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
+        cdef sf_count_t res
+
+        # Use Fortran order to cope with interleaving
+        ty = np.empty((self._sfinfo.channels, nframes), 
+                      dtype=np.float32, order='F')
+
+        res = sf_readf_float(self.hdl, <float*>ty.data, nframes)
+        if not res == nframes:
+            raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
+        return ty
+
+    cdef read_frames_int(Sndfile self, sf_count_t nframes):
+        cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
+        cdef sf_count_t res
+
+        # Use Fortran order to cope with interleaving
+        ty = np.empty((self._sfinfo.channels, nframes), 
+                      dtype=np.int, order='F')
+
+        res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
+        if not res == nframes:
+            raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
+        return ty
+
+    cdef read_frames_short(Sndfile self, sf_count_t nframes):
+        cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
+        cdef sf_count_t res
+
+        # Use Fortran order to cope with interleaving
+        ty = np.empty((self._sfinfo.channels, nframes), 
+                      dtype=np.short, order='F')
+
+        res = sf_readf_short(self.hdl, <short*>ty.data, nframes)
+        if not res == nframes:
+            raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
+        return ty
+
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
     integer, as used internally by sndfile."""
