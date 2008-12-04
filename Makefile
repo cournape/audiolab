@@ -1,4 +1,4 @@
-# Last Change: Tue Jul 17 11:00 AM 2007 J
+# Last Change: Thu Dec 04 02:00 PM 2008 J
 #
 # This makefile is used to do all the "tricky things" before a release,
 # including updating the doc, installing and testing the package, uploading the
@@ -6,9 +6,8 @@
 #
 # TODO: not fake dependencies....
 
-PYVER		= 2.4
-PKG_VER 	= $(shell cat scikits/audiolab/info.py | grep __version__ | tr -s " " | cut -f 3 -d" " \
-			  | cut -f 2 -d\')
+PYVER		= 2.5
+PKG_VER		= $(shell python -c "from setup import build_fverstring; build_fverstring()")
 
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
@@ -18,8 +17,8 @@ EXAMPATH	= $(DOCPATH)/src/examples
 SCIPYPATH	= /export/bbc8/local/lib/python$(PYVER)/site-packages
 TMPPATH		= $(CURDIR)/../tmp
 
-PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(SCIPYPATH) python -c 
-PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(SCIPYPATH) python 
+PYTHONCMD	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python -c
+PYTHONRUN	= PYTHONPATH=$(TMPPATH)/lib/python$(PYVER)/site-packages:$(PYTHONPATH) python
 
 RELEASELOC	= $(WWWHOMEDIR)/archives/audiolab/releases
 
@@ -29,7 +28,7 @@ release: do_release upload_release
 
 upload_release:  dist/audiolab-$(PKG_VER).tar.gz \
 	dist/audiolab-$(PKG_VER).tar.bz2 \
-	dist/audiolab-$(PKG_VER).zip 
+	dist/audiolab-$(PKG_VER).zip
 	@echo "Uploading version $(PKG_VER) ..."
 	@read n
 	rcp dist/audiolab-$(PKG_VER).tar.gz $(RELEASELOC)
@@ -40,7 +39,7 @@ src: build_src
 
 build_src: dist/audiolab-$(PKG_VER).tar.gz \
 	dist/audiolab-$(PKG_VER).tar.bz2 \
-	dist/audiolab-$(PKG_VER).zip 
+	dist/audiolab-$(PKG_VER).zip
 
 dist/audiolab-$(PKG_VER).tar.gz: doc
 		python setup.py sdist --format=gztar
