@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # setuptools version of config script
     setup(configuration=configuration,
           name=DISTNAME,
-          install_requires='numpy',
+          install_requires=INSTALL_REQUIRE,
           namespace_packages=['scikits'],
           packages=setuptools.find_packages(),
           include_package_data = True,
