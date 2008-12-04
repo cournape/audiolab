@@ -101,7 +101,7 @@ tests: run_tests examples
 # Run all tests
 run_tests: $(TMPPATH)
 	@echo "=============== running test ============"
-	cd .. && $(PYTHONCMD) "import scikits.audiolab as audiolab; print audiolab; audiolab.test()"
+	@cd $(TMPPATH) && nosetests -v -s $(TMPPATH)/lib/python$(PYVER)/site-packages/scikits
 	@echo "=============== Done ============"
 
 #=====================
