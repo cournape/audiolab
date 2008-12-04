@@ -112,6 +112,7 @@ def sndfile_version():
 
 cdef class Format:
     cdef SF_INFO _sf_info
+    cdef int _format_raw_int
     cdef object _type, _encoding, _endianness
     cdef object _format_str, _encoding_str, _endian_str
     def __init__(self, type = 'wav', encoding = 'pcm16', endianness = 'file'):
@@ -200,6 +201,8 @@ cdef class Format:
         self._encoding_str = PyString_FromStringAndSize(format_info.name,
                                              stdlib.strlen(format_info.name))
 
+        self._format_raw_int = format
+
     property format:
         def __get__(self):
             return self._format_str
@@ -207,6 +210,9 @@ cdef class Format:
     property encoding:
         def __get__(self):
             return self._encoding_str
+
+    cdef int format_raw_int(self):
+        return self._format_raw_int
 
     # Syntactic sugar
     def __str__(self):
@@ -276,3 +282,124 @@ cdef _major_formats_int():
         majors.append(info.format)
 
     return majors
+
+cdef class Sndfile:
+    cdef SNDFILE *hdl
+    cdef object filename
+    cdef int _byfd
+    cdef Format _format
+    def __init__(Sndfile self, filename, mode='read', format=None,
+                 int channels=0, int fs=0):
+        """Create an instance of sndfile.
+
+        :Parameters:
+            filename : string or int
+                name of the file to open (string), or file descriptor (integer)
+            mode : string
+                'read' for read, 'write' for write, or 'rwrite' for read and
+                write.
+            format : Format
+                when opening a new file for writing, give the format to write
+                in.
+            channels : int
+                number of channels.
+            fs : int
+                sampling rate.
+
+        :Returns:
+            sndfile: a valid sndfile object
+
+        Notes
+        -----
+
+        format, channels and samplerate need to be given only in the write
+        modes and for raw files.  """
+        cdef SF_INFO sfinfo
+
+        self.hdl = NULL
+
+        # Check the mode is one of the expected values
+        if mode == 'read':
+            sfmode = SFM_READ
+        elif mode == 'write':
+            sfmode = SFM_WRITE
+            if format is None:
+                raise ValueError, \
+                      "For write mode, you should provide"\
+                      "a format argument !"
+        elif mode == 'rwrite':
+            sfmode  = SFM_RDWR
+            if format is None:
+                raise ValueError, \
+                      "For write mode, you should provide"\
+                      "a format argument !"
+        else:
+            raise ValueError("mode %s not recognized" % str(mode))
+
+        # Fill the sfinfo struct
+        sfinfo.frames = 0
+        sfinfo.channels = channels
+        sfinfo.samplerate = fs
+
+        sfinfo.sections = 0
+        sfinfo.seekable = SF_FALSE
+        if mode == 'read' and format is None:
+            sfinfo.format = 0
+        else:
+            sfinfo.format = format.format_raw_int()
+
+        # XXX: check how cython behave with this kind of code
+        if filename is int:
+            raise ValueError("Opening by fd not supported yet.")
+            self._byfd = SF_TRUE
+        else:
+            self.hdl = sf_open(filename, sfmode, &sfinfo)
+            self.filename = filename
+            self._byfd = SF_FALSE
+
+        if self.hdl == NULL:
+            if self._byfd == SF_TRUE:
+                msg = "error while opening file descriptor %d\n\t->" % self.fd
+            else:
+                msg = "error while opening file %s\n\t-> " % self.filename
+            msg += sf_strerror(self.hdl)
+            if self._byfd:
+                msg += """
+(Check that the mode argument passed to sndfile is the same than the one used
+when getting the file descriptor, eg do not pass 'read' to sndfile if you
+passed 'write' to the method you used to get the file descriptor. If you are on
+win32, you are out of luck, because its implementation of POSIX open is
+broken)"""
+            raise IOError("error while opening %s\n\t->%s" % (filename, msg))
+
+        if mode == 'read':
+            type, enc, endian = int_to_format(sfinfo.format)
+            self._format = Format(type, enc, endian)
+        else:
+            self._format = format
+
+        # XXX: Handle FLAC problem
+
+    def __dealloc__(Sndfile self):
+        if self.hdl:
+            sf_close(self.hdl)
+            self.hdl = NULL
+
+    def close(Sndfile self):
+        """close the file."""
+        self.__del__()
+
+cdef int_to_format(int format):
+    """Gives a triple of strings (format, encoding, endian) given actual format
+    integer, as used internally by sndfile."""
+    cdef int ctype, cencoding, cendian
+    ctype = format & SF_FORMAT_TYPEMASK
+    cencoding = format & SF_FORMAT_SUBMASK
+    cendian = format & SF_FORMAT_ENDMASK
+
+    if not format == (ctype | cencoding | cendian):
+        raise RuntimeError("Inconsistent format: this is a bug")
+
+    return _ENUM_TO_STR_FILE_FORMAT[ctype], \
+           _ENUM_TO_STR_ENCODING[cencoding], \
+           _ENUM_TO_STR_ENDIAN[cendian]
