@@ -1,4 +1,4 @@
-# Last Change: Thu Dec 04 07:00 PM 2008 J
+# Last Change: Fri Dec 05 11:00 AM 2008 J
 #
 # This makefile is used to do all the "tricky things" before a release,
 # including updating the doc, installing and testing the package, uploading the
@@ -7,7 +7,7 @@
 # TODO: not fake dependencies....
 
 PYVER		= 2.5
-PKG_VER		= 0.9.0dev
+PKG_VER		= 0.10.0
 
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
