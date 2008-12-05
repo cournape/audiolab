@@ -651,6 +651,54 @@ broken)"""
 
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
 
+    def seek(Sndfile self, sf_count_t offset, int whence=0, mode='rw'):
+        """similar to python seek function, taking only in account audio data.
+        
+        Parameters
+        ----------
+            offset : int
+                the number of frames (eg two samples for stereo files) to move
+                relatively to position set by whence.
+            whence : int
+                only 0 (beginning), 1 (current) and 2 (end of the file) are
+                valid.
+            mode : string
+                If set to 'rw', both read and write pointers are updated. If
+                'r' is given, only read pointer is updated, if 'w', only the
+                write one is (this may of course make sense only if you open
+                the file in a certain mode).
+
+        Returns
+        -------
+            offset : int
+                the number of frames from the beginning of the file
+
+        Notes
+        -----
+        
+        - one only takes into account audio data. 
+        - if an invalid seek is given (beyond or before the file), an IOError
+          is launched; note that this is different from the seek method of a
+          File object."""
+        cdef sf_count_t st
+        if mode == 'rw':
+            # Update both read and write pointers
+            st = sf_seek(self.hdl, offset, whence)
+        elif mode == 'r':
+            whence = whence | SFM_READ
+            st = sf_seek(self.hdl, offset, whence)
+        elif mode == 'w':
+            whence = whence | SFM_WRITE
+            st = sf_seek(self.hdl, offset, whence)
+        else:
+            raise ValueError("mode should be one of 'r', 'w' or 'rw' only")
+
+        if st == -1:
+            msg = "Error while seeking, libsndfile error is %s" \
+                  % sf_strerror(self.hdl)
+            raise IOError(msg)
+        return st
+
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
     integer, as used internally by sndfile."""
