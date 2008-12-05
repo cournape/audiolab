@@ -429,6 +429,13 @@ broken)"""
         """close the file."""
         self._close()
 
+    def sync(Sndfile self):
+        """call the operating system's function to force the writing of all
+        file cache buffers to disk the file.
+
+        No effect if file is open as read"""
+        sf_write_sync(self.hdl)
+
     # Functions to get informations about the file
     #def get_nframes(self):
     #    warnings.warn("Deprecated; please use the nframes attribute instead.",
@@ -676,7 +683,7 @@ broken)"""
 
     def seek(Sndfile self, sf_count_t offset, int whence=0, mode='rw'):
         """similar to python seek function, taking only in account audio data.
-        
+
         Parameters
         ----------
             offset : int
@@ -698,8 +705,8 @@ broken)"""
 
         Notes
         -----
-        
-        - one only takes into account audio data. 
+
+        - one only takes into account audio data.
         - if an invalid seek is given (beyond or before the file), an IOError
           is launched; note that this is different from the seek method of a
           File object."""
