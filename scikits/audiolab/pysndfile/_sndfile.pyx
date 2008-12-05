@@ -1,5 +1,7 @@
 import numpy as np
 import warnings
+import copy
+
 cimport numpy as cnp
 cimport stdlib
 from sndfile cimport *
@@ -457,6 +459,10 @@ broken)"""
         def __get__(self):
             """ Return the number of channels of the file"""
             return self._sfinfo.channels
+
+    property format:
+        def __get__(self):
+            return copy.copy(self._format)
 
     def file_format(self):
         """return user friendly file format string"""
