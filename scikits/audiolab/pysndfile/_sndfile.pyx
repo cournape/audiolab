@@ -372,6 +372,8 @@ cdef class Sndfile:
                       "Bad value of samplerate (%d) or channels (%d)" % \
                       (samplerate, channels)
             self._sfinfo.format = format.format_int()
+            if sf_format_check(&self._sfinfo) == SF_FALSE:
+                raise ValueError("Bad format specification: check arguments.")
 
         # XXX: check how cython behave with this kind of code
         if isinstance(filename, int):
