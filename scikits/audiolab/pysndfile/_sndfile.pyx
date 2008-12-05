@@ -229,6 +229,13 @@ cdef class Format:
         """Return the endianness part of the format int."""
         return self._format_raw_int & SF_FORMAT_ENDMASK
 
+    def __copy__(self):
+        typ, enc, endian = int_to_format(self._format_raw_int)
+        return Format(typ, enc, endian)
+
+    def __deepcopy__(self):
+        return self.__copy__()
+
     # Syntactic sugar
     def __str__(self):
         s = ["Major Format: %s" % self._format_str]
