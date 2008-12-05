@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Dec 04 02:00 PM 2008 J
+# Last Change: Fri Dec 05 11:00 AM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
@@ -8,9 +8,8 @@ import sys
 from numpy.testing import TestCase, assert_array_equal, dec
 import numpy as N
 
-from scikits.audiolab import pysndfile
-from scikits.audiolab.pysndfile import sndfile, formatinfo as audio_format, \
-                                       PyaudioException, PyaudioIOError
+from scikits.audiolab import PyaudioException, PyaudioIOError
+from scikits.audiolab import sndfile, formatinfo as audio_format
 
 from testcommon import open_tmp_file, close_tmp_file, TEST_DATA_DIR
 
