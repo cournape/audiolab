@@ -412,17 +412,40 @@ broken)"""
             sf_close(self.hdl)
             self.hdl = NULL
 
-    def samplerate(self):
-        """ Return the samplerate (sampling frequency) of the file in Hz"""
-        return self._sfinfo.samplerate
-
-    def channels(self):
-        """ Return the number of channels of the file"""
-        return self._sfinfo.channels
-
     def close(Sndfile self):
         """close the file."""
         self._close()
+
+    # Functions to get informations about the file
+    #def get_nframes(self):
+    #    warnings.warn("Deprecated; please use the nframes attribute instead.",
+    #                  DeprecationWarning)
+    #    return self.nframes
+
+    cdef sf_count_t _get_nframes(self):
+        """ Return the number of frames of the file"""
+        if self._mode == SFM_READ:
+            # XXX: is this reliable for any file (think pipe and co ?)
+            return self._sfinfo.frames
+
+        # In write/rwrite mode, the only reliable way to get the number of
+        # frames is to use seek.
+        raise NotImplementedError("Sorry, getting the current number of"
+                "frames in write modes is not supported yet")
+
+    property nframes:
+        def __get__(self):
+            return self._get_nframes()
+
+    property samplerate:
+        def __get__(self):
+            """ Return the samplerate (sampling frequency) of the file in Hz"""
+            return self._sfinfo.samplerate
+
+    property channels:
+        def __get__(self):
+            """ Return the number of channels of the file"""
+            return self._sfinfo.channels
 
     def file_format(self):
         """return user friendly file format string"""
@@ -627,27 +650,6 @@ broken)"""
         cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
 
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
-
-    # Functions to get informations about the file
-    #def get_nframes(self):
-    #    warnings.warn("Deprecated; please use the nframes attribute instead.",
-    #                  DeprecationWarning)
-    #    return self.nframes
-
-    cdef sf_count_t _get_nframes(self):
-        """ Return the number of frames of the file"""
-        if self._mode == SFM_READ:
-            # XXX: is this reliable for any file (think pipe and co ?)
-            return self._sfinfo.frames
-
-        # In write/rwrite mode, the only reliable way to get the number of
-        # frames is to use seek.
-        raise NotImplementedError("Sorry, getting the current number of"
-                "frames in write modes is not supported yet")
-
-    property nframes:
-        def __get__(self):
-            return self._get_nframes()
 
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
