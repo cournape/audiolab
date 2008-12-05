@@ -405,11 +405,11 @@ broken)"""
     def samplerate(self):
         """ Return the samplerate (sampling frequency) of the file in Hz"""
         return self._sfinfo.samplerate
-    
+
     def channels(self):
         """ Return the number of channels of the file"""
         return self._sfinfo.channels
-    
+
     def close(Sndfile self):
         """close the file."""
         self.__del__()
@@ -450,7 +450,7 @@ broken)"""
 
     def read_frames(self, sf_count_t nframes, dtype=np.float64):
         """Read nframes frames of the file.
-        
+
         Parameters
         ----------
             nframes : int
@@ -471,11 +471,11 @@ broken)"""
           floating data are normalized, you can get a file with only 0 !
           Getting integer data from files encoded in normalized floating point
           is not supported (this is an audiolab limitation: sndfile supports
-          it).""" 
+          it)."""
         if nframes < 0:
-            raise ValueError("number of frames has to be >= 0 (was %d)" % 
+            raise ValueError("number of frames has to be >= 0 (was %d)" %
                              nframes)
-        
+
         # TODO: inout argument
         # XXX: rank 1 vs rank 2 for mono ?
         # XXX: endianness of dtype vs endianness of sndfile ?
@@ -497,7 +497,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes), 
+        ty = np.empty((self._sfinfo.channels, nframes),
                       dtype=np.float64, order='F')
 
         res = sf_readf_double(self.hdl, <double*>ty.data, nframes)
@@ -510,7 +510,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes), 
+        ty = np.empty((self._sfinfo.channels, nframes),
                       dtype=np.float32, order='F')
 
         res = sf_readf_float(self.hdl, <float*>ty.data, nframes)
@@ -523,7 +523,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes), 
+        ty = np.empty((self._sfinfo.channels, nframes),
                       dtype=np.int, order='F')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
@@ -536,7 +536,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes), 
+        ty = np.empty((self._sfinfo.channels, nframes),
                       dtype=np.short, order='F')
 
         res = sf_readf_short(self.hdl, <short*>ty.data, nframes)
@@ -546,11 +546,11 @@ broken)"""
 
     def write_frames(self, cnp.ndarray input, sf_count_t nframes = -1):
         """write data to file.
-        
+
         Parameters
         ----------
             input : ndarray
-                array containing data to write.  
+                array containing data to write.
             nframes : int
                 number of frames to write.
 
@@ -564,7 +564,7 @@ broken)"""
           maximum range allowed by the integer bitwidth)."""
         # First, get the number of channels and frames from input
         if not input.ndim == 2:
-            raise Exception("Expect array of rank, got %d" 
+            raise Exception("Expect array of rank, got %d"
                             % input.ndim)
             nc = input.shape[0]
 
@@ -594,25 +594,25 @@ broken)"""
             raise IOError("write %d frames, expected to write %d"
                           % res, nframes)
 
-    cdef sf_count_t write_frames_double(self, cnp.ndarray input, 
+    cdef sf_count_t write_frames_double(self, cnp.ndarray input,
                                         sf_count_t nframes=-1):
         cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
 
         return sf_writef_double(self.hdl, <double*>input.data, nframes)
 
-    cdef sf_count_t write_frames_float(self, cnp.ndarray input, 
+    cdef sf_count_t write_frames_float(self, cnp.ndarray input,
                                        sf_count_t nframes=-1):
         cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
 
         return sf_writef_float(self.hdl, <float*>input.data, nframes)
 
-    cdef sf_count_t write_frames_int(self, cnp.ndarray input, 
+    cdef sf_count_t write_frames_int(self, cnp.ndarray input,
                                      sf_count_t nframes=-1):
         cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
 
         return sf_writef_int(self.hdl, <int*>input.data, nframes)
 
-    cdef sf_count_t write_frames_short(self, cnp.ndarray input, 
+    cdef sf_count_t write_frames_short(self, cnp.ndarray input,
                                        sf_count_t nframes=-1):
         cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
 
@@ -629,7 +629,7 @@ broken)"""
         # frames is to use seek.
         raise NotImplementedError("Sorry, getting the current number of"
                 "frames in write modes is not supported yet")
-    
+
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
     integer, as used internally by sndfile."""
