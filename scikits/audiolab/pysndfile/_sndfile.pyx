@@ -304,7 +304,7 @@ cdef class Sndfile:
     cdef Format _format
     cdef int _mode
     cdef SF_INFO _sfinfo
-    def __init__(Sndfile self, filename, mode='read', format=None,
+    def __init__(Sndfile self, filename, mode='read', Format format=None,
                  int channels=0, int samplerate=0):
         """Create an instance of sndfile.
 
