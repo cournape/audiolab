@@ -602,9 +602,13 @@ broken)"""
         cdef int nc
 
         # First, get the number of channels and frames from input
-        if not input.ndim == 2:
+        if input.ndim == 2:
+            nc = input.shape[0]
+        elif input.ndim == 1:
+            nc = 1
+            input = input[None, :]
+        else:
             raise ValueError("Expect array of rank 2, got %d" % input.ndim)
-        nc = input.shape[0]
 
         if nframes == -1:
             nframes = np.size(input)
