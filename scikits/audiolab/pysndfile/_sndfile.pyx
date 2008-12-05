@@ -374,7 +374,7 @@ cdef class Sndfile:
             self._sfinfo.format = format.format_int()
 
         # XXX: check how cython behave with this kind of code
-        if filename is int:
+        if isinstance(filename, int):
             raise ValueError("Opening by fd not supported yet.")
         else:
             self.hdl = sf_open(filename, sfmode, &self._sfinfo)
