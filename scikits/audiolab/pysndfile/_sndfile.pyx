@@ -399,6 +399,9 @@ broken)"""
         # XXX: Handle FLAC problem
 
     def __dealloc__(Sndfile self):
+        self._close()
+
+    cdef _close(Sndfile self):
         if self.hdl:
             sf_close(self.hdl)
             self.hdl = NULL
@@ -413,7 +416,7 @@ broken)"""
 
     def close(Sndfile self):
         """close the file."""
-        self.__del__()
+        self._close()
 
     def file_format(self):
         """return user friendly file format string"""
