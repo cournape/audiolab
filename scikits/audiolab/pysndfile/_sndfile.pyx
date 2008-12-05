@@ -365,6 +365,11 @@ cdef class Sndfile:
         if mode == 'read' and format is None:
             self._sfinfo.format = 0
         else:
+            # XXX: do this correctly, by using sf_check
+            if samplerate == 0 or channels == 0:
+                raise ValueError, \
+                      "Bad value of samplerate (%d) or channels (%d)" % \
+                      (samplerate, channels)
             self._sfinfo.format = format.format_int()
 
         # XXX: check how cython behave with this kind of code
