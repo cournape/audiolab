@@ -618,13 +618,13 @@ broken)"""
 
         # XXX: check for overflow ?
         if input.dtype == np.float64:
-            res = self.write_frame_double(input, nframes)
+            res = self.write_frames_double(input, nframes)
         elif input.dtype == np.float32:
-            res = self.write_frame_float(input, nframes)
+            res = self.write_frames_float(input, nframes)
         elif input.dtype == np.int:
-            res = self.write_frame_int(input, nframes)
+            res = self.write_frames_int(input, nframes)
         elif input.dtype == np.short:
-            res = self.write_frame_short(input, nframes)
+            res = self.write_frames_short(input, nframes)
         else:
             raise Exception("type of input &s not understood" % str(input.dtype))
 
