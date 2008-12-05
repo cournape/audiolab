@@ -253,7 +253,7 @@ def available_file_formats():
     return [_ENUM_TO_STR_FILE_FORMAT[i & SF_FORMAT_TYPEMASK] for i in
             _major_formats_int()]
 
-def available_encoding(major):
+def available_encodings(major):
     """Return lists of available encoding for the given major format."""
     if not _SNDFILE_FILE_FORMAT.has_key(major):
         raise ValueError("Unknown file format %s" % major)
