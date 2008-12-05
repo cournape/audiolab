@@ -73,9 +73,6 @@ class sndfile_info(system_info):
                 fullname    = prefix + tmp['libraries'][0] + '.so' + \
                         '.' + str(SNDFILE_MAJ_VERSION)
             fullname    = os.path.join(info['library_dirs'][0], fullname)
-            #dict_append(info, include_dirs=[inc_dir],
-            #        fullheadloc = headername,
-            #        fulllibloc  = fullname)
             dict_append(info, include_dirs=[inc_dir])
         else:
             raise RuntimeError("This is a bug")
@@ -92,20 +89,9 @@ def configuration(parent_package='',top_path=None):
         os.remove('pysndfile.py')
 
     # Check that sndfile can be found and get necessary informations
-    # (assume only one header and one library file)
     sf_info     = sndfile_info()
     sf_config   = sf_info.get_info(2)
-    #headername  = sf_config['fullheadloc']
-    #libname     = sf_config['fulllibloc']
 
-    ## Now, generate pysndfile.py.in
-    #from generate_const import generate_enum_dicts
-    #repdict = generate_enum_dicts(headername)
-    #repdict['%SHARED_LOCATION%'] = libname
-
-    #pkg_dir = os.path.dirname(__file__)
-    #do_subst_in_file(os.path.join(pkg_dir, 'pysndfile.py.in'),
-    #                 os.path.join(pkg_dir, 'pysndfile.py'), repdict)
     confgr.add_extension('_sndfile', ['_sndfile.c'], extra_info=sf_config)
 
     return confgr
