@@ -595,7 +595,7 @@ broken)"""
         Notes
         -----
 
-        - One row per channel.
+        - One column per channel.
         - updates the write pointer.
         - if float are given when the file contains integer data, you should
           put normalized data (that is the range [-1..1] will be written as the
