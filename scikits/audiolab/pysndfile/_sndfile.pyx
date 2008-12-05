@@ -375,7 +375,9 @@ cdef class Sndfile:
 
         # XXX: check how cython behave with this kind of code
         if isinstance(filename, int):
-            raise ValueError("Opening by fd not supported yet.")
+            self.hdl = sf_open_fd(filename, sfmode, &self._sfinfo, SF_FALSE)
+            self.fd = filename
+            self.filename = ""
         else:
             self.hdl = sf_open(filename, sfmode, &self._sfinfo)
             self.filename = filename
