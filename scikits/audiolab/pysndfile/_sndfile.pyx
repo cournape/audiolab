@@ -214,6 +214,11 @@ cdef class Format:
         def __get__(self):
             return self._encoding_str
 
+    # XXX sndfile vs our custom representation
+    property endianness:
+        def __get__(self):
+            return _ENUM_TO_STR_ENDIAN[self.endianness_int()]
+
     cdef int format_int(self):
         """Return the full format integer (binary OR of file format, encoding
         and endianness)."""
