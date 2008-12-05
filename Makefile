@@ -11,7 +11,7 @@ PKG_VER		= 0.10.0dev
 
 BASEPATH	= $(PWD)
 DATAPATH	= $(PWD)/scikits/audiolab/test_data/
-DOCPATH		= $(PWD)/scikits/audiolab/docs/
+DOCPATH		= $(PWD)/docs/
 EXAMPATH	= $(DOCPATH)/src/examples
 
 SCIPYPATH	= /export/bbc8/local/lib/python$(PYVER)/site-packages
