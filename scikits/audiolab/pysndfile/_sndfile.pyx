@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 cimport numpy as cnp
 cimport stdlib
 from sndfile cimport *
@@ -628,7 +629,12 @@ broken)"""
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
 
     # Functions to get informations about the file
-    def nframes(self):
+    #def get_nframes(self):
+    #    warnings.warn("Deprecated; please use the nframes attribute instead.",
+    #                  DeprecationWarning)
+    #    return self.nframes
+
+    cdef sf_count_t _get_nframes(self):
         """ Return the number of frames of the file"""
         if self._mode == SFM_READ:
             # XXX: is this reliable for any file (think pipe and co ?)
@@ -638,6 +644,10 @@ broken)"""
         # frames is to use seek.
         raise NotImplementedError("Sorry, getting the current number of"
                 "frames in write modes is not supported yet")
+
+    property nframes:
+        def __get__(self):
+            return self._get_nframes()
 
 cdef int_to_format(int format):
     """Gives a triple of strings (format, encoding, endian) given actual format
