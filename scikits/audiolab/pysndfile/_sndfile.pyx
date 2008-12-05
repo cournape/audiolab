@@ -599,19 +599,20 @@ broken)"""
         - if float are given when the file contains integer data, you should
           put normalized data (that is the range [-1..1] will be written as the
           maximum range allowed by the integer bitwidth)."""
+        cdef int nc
+
         # First, get the number of channels and frames from input
         if not input.ndim == 2:
-            raise Exception("Expect array of rank, got %d"
-                            % input.ndim)
-            nc = input.shape[0]
+            raise ValueError("Expect array of rank 2, got %d" % input.ndim)
+        nc = input.shape[0]
 
         if nframes == -1:
             nframes = np.size(input)
 
         # Number of channels should be the one expected
         if not nc == self._sfinfo.channels:
-            raise Exception("Expected %d channels, got %d" %
-                            (self._sfinfo.channels, nc))
+            raise ValueError("Expected %d channels, got %d" %
+                             (self._sfinfo.channels, nc))
 
         input = np.require(input, requirements = 'F')
 
