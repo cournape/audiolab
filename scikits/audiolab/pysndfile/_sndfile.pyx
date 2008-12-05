@@ -498,7 +498,7 @@ broken)"""
         Note
         ----
 
-        - One row per channel.
+        - One column per channel.
         - if float are requested when the file contains integer data, you will
           get normalized data (that is the max possible integer will be 1.0,
           and the minimal possible value -1.0).
@@ -527,15 +527,16 @@ broken)"""
         else:
             RuntimeError("Sorry, dtype %s not supported" % str(dtype))
 
+        if y.shape[1] == 1:
+            return y[:, 0]
         return y
 
     cdef read_frames_double(Sndfile self, sf_count_t nframes):
         cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes),
-                      dtype=np.float64, order='F')
+        ty = np.empty((nframes, self._sfinfo.channels),
+                      dtype=np.float64, order='C')
 
         res = sf_readf_double(self.hdl, <double*>ty.data, nframes)
         if not res == nframes:
@@ -547,7 +548,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes),
+        ty = np.empty((nframes, self._sfinfo.channels),
                       dtype=np.float32, order='F')
 
         res = sf_readf_float(self.hdl, <float*>ty.data, nframes)
@@ -560,7 +561,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes),
+        ty = np.empty((nframes, self._sfinfo.channels),
                       dtype=np.int, order='F')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
@@ -573,7 +574,7 @@ broken)"""
         cdef sf_count_t res
 
         # Use Fortran order to cope with interleaving
-        ty = np.empty((self._sfinfo.channels, nframes),
+        ty = np.empty((nframes, self._sfinfo.channels),
                       dtype=np.short, order='F')
 
         res = sf_readf_short(self.hdl, <short*>ty.data, nframes)
@@ -603,10 +604,10 @@ broken)"""
 
         # First, get the number of channels and frames from input
         if input.ndim == 2:
-            nc = input.shape[0]
+            nc = input.shape[1]
         elif input.ndim == 1:
             nc = 1
-            input = input[None, :]
+            input = input[:, None]
         else:
             raise ValueError("Expect array of rank 2, got %d" % input.ndim)
 
@@ -618,7 +619,7 @@ broken)"""
             raise ValueError("Expected %d channels, got %d" %
                              (self._sfinfo.channels, nc))
 
-        input = np.require(input, requirements = 'F')
+        input = np.require(input, requirements = 'C')
 
         # XXX: check for overflow ?
         if input.dtype == np.float64:
