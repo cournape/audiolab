@@ -300,7 +300,7 @@ cdef _major_formats_int():
 cdef class Sndfile:
     cdef SNDFILE *hdl
     cdef object filename
-    cdef int _byfd
+    cdef int fd
     cdef Format _format
     cdef int _mode
     cdef SF_INFO _sfinfo
@@ -331,6 +331,9 @@ cdef class Sndfile:
         format, channels and samplerate need to be given only in the write
         modes and for raw files.  """
         cdef int sfmode
+        # -1 will indicate that the file has been open from filename, not from
+        # file descriptor
+        self.fd = -1
 
         self.hdl = NULL
 
@@ -367,20 +370,18 @@ cdef class Sndfile:
         # XXX: check how cython behave with this kind of code
         if filename is int:
             raise ValueError("Opening by fd not supported yet.")
-            self._byfd = SF_TRUE
         else:
             self.hdl = sf_open(filename, sfmode, &self._sfinfo)
             self.filename = filename
-            self._byfd = SF_FALSE
         self._mode = sfmode
 
         if self.hdl == NULL:
-            if self._byfd == SF_TRUE:
-                msg = "error while opening file descriptor %d\n\t->" % self.fd
-            else:
+            if self.fd == -1:
                 msg = "error while opening file %s\n\t-> " % self.filename
+            else:
+                msg = "error while opening file descriptor %d\n\t->" % self.fd
             msg += sf_strerror(self.hdl)
-            if self._byfd:
+            if not self.fd == -1:
                 msg += """
 (Check that the mode argument passed to sndfile is the same than the one used
 when getting the file descriptor, eg do not pass 'read' to sndfile if you
@@ -428,23 +429,23 @@ broken)"""
 
     def __str__(Sndfile self):
         repstr = ["----------------------------------------"]
-        #if self._byfd:
-        #    repstr  += "File        : %d (opened by file descriptor)\n" % self.fd
-        #else:
-        #    repstr  += "File        : %s\n" % self.filename
+        if not self.fd == -1:
+            repstr += ["File        : %d (opened by file descriptor)" % self.fd]
+        else:
+            repstr += ["File        : %s" % self.filename]
         repstr  += ["Channels    : %d" % self._sfinfo.channels]
         repstr  += ["Sample rate : %d" % self._sfinfo.samplerate]
-        #repstr  += "Frames      : %d\n" % self._sfinfo.frames
+        repstr  += ["Frames      : %d" % self._sfinfo.frames]
         repstr  += ["Raw Format  : %#010x" % self._format.format_int()]
         repstr  += ["File format : %s" % self.file_format()]
         repstr  += ["Encoding    : %s" % self.encoding()]
         repstr  += ["Endianness  : %s" % self.endianness()]
         #repstr  += "Sections    : %d\n" % self._sfinfo.sections
-        #if self._sfinfo.seekable:
-        #    seek    = 'True'
-        #else:
-        #    seek    = 'False'
-        #repstr  += "Seekable    : %s\n" % seek
+        if self._sfinfo.seekable == SF_TRUE:
+            seek    = True
+        else:
+            seek    = False
+        repstr  += ["Seekable    : %s\n" % seek]
         #repstr  += "Duration    : %s\n" % self._generate_duration_str()
         return "\n".join(repstr)
 
