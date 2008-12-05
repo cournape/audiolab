@@ -206,7 +206,7 @@ cdef class Format:
 
         self._format_raw_int = format
 
-    property format:
+    property file_format:
         def __get__(self):
             return self._format_str
 
