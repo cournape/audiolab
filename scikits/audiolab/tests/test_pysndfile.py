@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Dec 05 11:00 AM 2008 J
+# Last Change: Fri Dec 05 03:00 PM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
@@ -234,7 +234,7 @@ class test_pysndfile(TestCase):
                         format, channels = 22000, samplerate = 1)
                 raise Exception("Try to open a file with more than 256 "\
                         "channels, this should not succeed !")
-            except RuntimeError, e:
+            except ValueError, e:
                 #print "Gave %d channels, error detected is \"%s\"" % (22000, e)
                 pass
 
