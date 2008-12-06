@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 10:00 PM 2008 J
+# Last Change: Sat Dec 06 11:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -41,30 +41,30 @@ class test_audiolab(TestCase):
 
     def test_wavread(self):
         """ Check wavread """
-        self._test_read(wavread, audio_format('wav', 'pcm16', 'file'), 'wav') 
+        self._test_read(wavread, audio_format('wav', 'pcm16', 'file'), 'wav')
 
     def test_flacread(self):
         """ Check flacread """
         try:
-            self._test_read(flacread, audio_format('flac', 'pcm16', 'file'), 'flac') 
+            self._test_read(flacread, audio_format('flac', 'pcm16', 'file'), 'flac')
         except NotImplementedError:
             print "Flac unsupported, flacread not tested"
 
     def test_auread(self):
         """ Check auread """
-        self._test_read(auread, audio_format('au', 'ulaw', 'file'), 'au') 
+        self._test_read(auread, audio_format('au', 'ulaw', 'file'), 'au')
 
     def test_aiffread(self):
         """ Check aiffread """
-        self._test_read(aiffread, audio_format('aiff', 'pcm16', 'file'), 'aiff') 
+        self._test_read(aiffread, audio_format('aiff', 'pcm16', 'file'), 'aiff')
 
     def test_sdifread(self):
         """ Check sdifread (ircam format) """
-        self._test_read(sdifread, audio_format('ircam', 'pcm16', 'file'), 'sdif') 
+        self._test_read(sdifread, audio_format('ircam', 'pcm16', 'file'), 'sdif')
 
     def test_bad_wavread(self):
         """ Check wavread on bad file"""
-        # Create a tmp audio file with non wav format, write some random data into it, 
+        # Create a tmp audio file with non wav format, write some random data into it,
         # and check it can not be opened by wavread
         rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
         try:
