@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Thu Dec 04 07:00 PM 2008 J
+.. Last Change: Sun Dec 07 01:00 AM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -35,18 +35,23 @@ processing; matlab have functions such as wavread, wavwrite, soundsc, etc...
 for that purposes.  The goal of audiolab is to give those capabilities to the
 `scipy`_ environment by wrapping the excellent library `libsndfile`_ from Erik
 Castro de Lopo. Audiolab supports all format supported by libsndfile, including
-wav, aiff, ircam files, and flac (an open source lossless compressed format);
-see `here <http://www.mega-nerd.com/libsndfile/#Features">`_ for a complete
-list.
+wav, aiff, ircam files, flac (an open source lossless compressed format) and
+ogg vorbist (an open source compressed format - simlar to MP3 without the
+license issues); see `here <http://www.mega-nerd.com/libsndfile/#Features">`_
+for a complete list.
 
-    **Note**: starting at version 0.10, read/write data convention will change
-    from one column per channel to one row per channel, to follow numpy
-    conventions.
+The main features of audiolab are:
+        - reading all formats supported by sndfile, and put the data into numpy
+          arrays. The array dtype can be selected
+        - writing all formats supported by sndfile from data in numpy arrays.
+          The array dtype can be selected
+        - A matlab-like API for some file formats, like wavread. Wav, aiff,
+          flac, au, and ogg formats are supported.
+        - A play function to output data from numpy array into the sound device
+          of your computer (Only ALSA for linux is implemented ATM).
 
-    **Note**: The library is still in beta stage: reading and writing
-    data is possible, but only in frames, not per item.
-    Also, the ability to play data on the system's soundcard is not there yet,
-    except on Linux.
+    **Note**: The library is still in flux: the API can still change before the
+    1.0 version.
 
     **Note**: The online version of this document is not always up to date. The
     pdf included in the package is the reference, and always in sync with the
@@ -84,10 +89,8 @@ Requirements
 audiolab requires the following softwares:
 
  - a python interpreter.
- - libsndfile (including the header sndfile.h, which means linux users should
-   download the libsndfile-dev package).
+ - libsndfile
  - numpy (any version >= 1.0 should work).
- - ctypes (version >= 1.0.1; ctypes is included in python 2.5)
  - setuptools
 
 On Ubuntu, you can install the dependencies as follow::
@@ -113,43 +116,137 @@ create a file site.cfg to set the location of libsndfile and its header (there
 are site.cfg examples which should give you an idea how to use them on your
 platform).
 
-For windows users: the library distributed by Erik Castro de Lopo cannot be
-used directly; you need to follow the instructions given in libsndfile
-distribution in the file README-precompiled-dll.txt. See also site.cfg.win32.
-
 License
 -------
 
 audiolab is released under the LGPL, which forces you to release back the
 modifications you may make in the version of audiolab you are distributing, but
 you can still use it in closed softwares, as long as you don't use a modified
-version of it.
-
-Quick view
-==========
-
-The following code shows you how to open a file for read, reading the first
-1000 frames, and closing it:
-
-.. literalinclude:: examples/quick1.py
+version of it. The soundio module to output data onto sound devices is under
+the BSD, though.
 
 Usage
 =====
 
+Overview
+--------
+
+For simple usage, the matlab-like API is the simplest to use. For example, if
+you want to read a wav file, you can do it in one function call
+
+.. literalinclude:: examples/over_matlab.py
+
+This read the file test.wav, and returns the data, sampling rate as well as the
+encoding as a string. Similar function exists for writing, and for other
+formats: wav, aiff, au, ircam, ogg and flac formats are supported through this
+simple API.
+
+Sndfile class
+~~~~~~~~~~~~~
+
+For more control (for example writing with a non default encoding, controling
+output array dtype), the Sndfile class should be used. Internally, the simple
+functions are just wrappers around this class. Let's see a simple example on
+how to use the Sndfile class for reading:
+
+.. literalinclude:: examples/over1.py
+
+As you can see the usage for reading is straightfoward. A Sndfile instance
+first created, and the instance is used for reading, as well as for quering
+meta-data about the file, like the sampling rate or the number of channels.
+
+The read_frames method can optionally take a dtype argument like many numpy
+functions, to select the dtype of the output array. The exact semantics are
+more complicated than with numpy though, because of audio encoding
+specificities (see encoding section). 
+
+Writing audio file from data in numpy arrays is a bit more complicated, because
+you need to tell the Sndfile class about the file type, encoding and
+endianness, as well as the sampling rate and number of channels. For
+simplicity, the file format, encoding and endianness is controled from an
+helper class, Format:
+
+.. literalinclude:: examples/over2.py
+
+The Format class can be used to control more precisely the encoding or the
+endianness of the written file:
+
+.. literalinclude:: examples/over3.py
+
+Sound output
+~~~~~~~~~~~~
+
+audiolab also have some facilities to output sound from numpy arrays:
+
+.. literalinclude:: examples/over_play.py
+
+The function play is a wrapper around a platform-specific audio backend. For
+now, only ALSA backend (Linux) is implemented. Core Audio backend for support
+on Mac OS X will be soon available. Other backends (for windows, OSS for
+Solaris/BSD) may be added later.
+
+.. Encoding and array dtype
+.. ------------------------
+.. 
+.. Common audio files are encoded in fixed point (integers): for example, the
+.. usual wav files are encoded in 16 bits, and a sample can take any value in the
+.. [-32768, 32768] range. Some audio files also support floating point encoding,
+.. in which case the data are conventionally normalized in the [-1..1] range. 
+..        
+.. There is a difference though: depending on the dtype, the values in the array
+.. can be vastly different: if the dtype is a floating point type, all values are
+.. between -1 and 1, if the dtype It is becuase audiolab follows the same
+.. convention as libsndfile - which is the most used convention for pcm audio data
+.. representation
+.. 
+.. Matlab-like API
+.. ---------------
+.. 
+.. audiolab also have a matlab-like API for audio IO. Its usage is as similar as it
+.. can get using python:
+.. 
+.. .. literalinclude:: examples/matlab1.py
+.. 
+.. Sound output
+.. ------------
+.. 
+.. New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
+.. 
+.. .. literalinclude:: examples/play.py
+
+Obsolete API
+============
+
+This section documents the old, deprecated API.
+
+        **NOTE** The old sndfile and formatinfo has been obsoleted in 0.10.
+        Those classes were based on ctypes code, the new code is based on
+        cython, and is more reliable, as well as more conformant to python
+        conventions. In 0.10, the sndfile and formatinfo classes are thin
+        wrappers around the Sndfile and Format classes, and you are advised to
+        use those instead.
+
+Overview
+--------
+
+The following code shows you how to open a file for read, reading the first
+1000 frames, and closing it:
+
+.. literalinclude:: examples/obsolete/quick1.py
+
 Opening a file and getting its parameters
 -----------------------------------------
 
-Once imported, audiolab gives you access the sndfile class, which is the
-class of audiolab use to open audio files.
-You create a sndfile instance when you want
-to open a file for reading or writing (the file test.flac is included
-in the audiolab package, in the test_data directory):
+Once imported, audiolab gives you access the sndfile class, which is the class
+of audiolab use to open audio files.  You create a sndfile instance when you
+want to open a file for reading or writing (the file test.flac is included in
+the audiolab package, in the test_data directory):
 
-.. literalinclude:: examples/usage1.py
+.. literalinclude:: examples/obsolete/usage1.py
 
-Prints you the informations related to the file, like its sampling rate,
-the number of frames, etc... You can of course get each parameter
-individually by using the corresponding sndfile.get* accessors.
+Prints you the informations related to the file, like its sampling rate, the
+number of frames, etc... You can of course get each parameter individually by
+using the corresponding sndfile.get* accessors.
 
 Importing audio data
 --------------------
@@ -159,18 +256,13 @@ For now, you can only import the data as floating point data, float  (32 bits)
 or double (64 bits). The function sndfile.read_frames read n frames, where a
 frame contains a sample of each channel (one in mono, 2 in stereo, etc...):
 
-.. literalinclude:: examples/usage2.py
+.. literalinclude:: examples/obsolete/usage2.py
 
 The above code import 10000 frames, and plot the first channel using matplotlib
 (see below). A frame holds one sample from each channel: 1000 frames of a
 stereo file is 2000 samples. Each channel is one column of the numpy array. The
 read functions follow numpy conventions, that is by default, the data are read
 as double, but you can give a dtype argument to the function.
-
-.. htmlonly::
-	.. image:: audiolab1.png
-	    :width: 500
-	    :height: 400
 
 The format class
 ----------------
@@ -180,19 +272,10 @@ the format such as the file format, the encoding.  The format class is used to
 create valid formats from those parameters  By default, the format class
 creates a format object with file type wav, and 16 bits pcm encoding:
 
-.. literalinclude:: examples/format1.py
+.. literalinclude:: examples/obsolete/format1.py
 
 prints back "Major Format: AIFF (Apple/SGI), Encoding Format: U-Law" and "Major
 Format: SF (Berkeley/IRCAM/CARL), Encoding Format: 32 bit float".
-
-To get a list of all possible file format and encoding, the function
-supported_* are available:
-
-.. literalinclude:: examples/format2.py
-
-Note that not all combination of encoding, endianness and format are possible.
-If you try to create a format with incompatible values, you will get an
-exception while creating an instance of format.
 
 Writing data to a file
 ----------------------
@@ -203,22 +286,7 @@ rate (in Hz) you are requesting; all thoses information are mandatory !  The
 class format is used to build a format understable by libsndfile from
 'user-friendly' values. Let's see how it works.
 
-.. literalinclude:: examples/write1.py
-
-Matlab-like API
----------------
-
-audiolab also have a matlab-like API for audio IO. Its usage is as similar as it
-can get using python:
-
-.. literalinclude:: examples/matlab1.py
-
-Sound output
-------------
-
-New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
-
-.. literalinclude:: examples/play.py
+.. literalinclude:: examples/obsolete/write1.py
 
 Known bugs:
 ===========
