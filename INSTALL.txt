@@ -15,10 +15,9 @@ Requirements
 
 To run correctly, audiolab requires the following softwares:
 
-        - python (> 2.3): http://www.python.org
+        - python (> 2.4): http://www.python.org
         - setuptools:
           http://peak.telecommunity.com/DevCenter/setuptools#installing-setuptools
-        - ctypes (included in python starting from version 2.5)
         - numpy: http://www.scipy.org/Numpy
         - libsndfile: http://www.mega-nerd.com/libsndfile/
 
