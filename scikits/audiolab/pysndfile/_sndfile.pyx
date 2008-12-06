@@ -532,9 +532,9 @@ broken)"""
         repstr  += ["Sample rate : %d" % self._sfinfo.samplerate]
         repstr  += ["Frames      : %d" % self._sfinfo.frames]
         repstr  += ["Raw Format  : %#010x" % self._format.format_int()]
-        repstr  += ["File format : %s" % self.file_format()]
-        repstr  += ["Encoding    : %s" % self.encoding()]
-        repstr  += ["Endianness  : %s" % self.endianness()]
+        repstr  += ["File format : %s" % self.file_format]
+        repstr  += ["Encoding    : %s" % self.encoding]
+        repstr  += ["Endianness  : %s" % self.endianness]
         #repstr  += "Sections    : %d\n" % self._sfinfo.sections
         if self._sfinfo.seekable == SF_TRUE:
             seek    = True
