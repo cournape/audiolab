@@ -220,3 +220,17 @@ class sndfile:
 
     def __str__(self):
         return self._sndfile.__str__()
+
+def supported_format():
+    raise RuntimeError, \
+          "This function is broken. Please see " \
+          "scikits.audiolab.available_file_formats"
+
+def supported_endianness():
+    raise RuntimeError,
+          "This function is broken - and does not even make sense."
+
+def supported_encoding():
+    raise RuntimeError, \
+          "This function is broken. Please see " \
+          "scikits.audiolab.available_encodings"
