@@ -80,7 +80,7 @@ def _reader_factory(name, filetype, descr):
         try:
             if not hdl.format.file_format == filetype:
                 raise ValueError, "%s is not a %s file (is %s)" \
-                      % (filename, filetype, hdl.format.file_format))
+                      % (filename, filetype, hdl.format.file_format)
 
             fs = hdl.samplerate
             enc = hdl.encoding
