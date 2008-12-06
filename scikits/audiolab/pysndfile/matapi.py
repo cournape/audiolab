@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Nov 13 10:00 PM 2008 J
+# Last Change: Sat Dec 06 06:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -7,12 +7,12 @@
 # the terms of the GNU Lesser General Public License as published by the Free
 # Software Foundation; either version 2.1 of the License, or (at your option)
 # any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 # FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
 # details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -38,7 +38,7 @@ def _writer_factory(name, format, def_fs, descr):
         if N.ndim(data) <= 1:
             nc      = 1
             nframes = N.size(data)
-        elif N.ndim(data) == 2: 
+        elif N.ndim(data) == 2:
             nc      = data.shape[1]
             nframes = data.shape[0]
         else:
@@ -59,7 +59,7 @@ def _writer_factory(name, format, def_fs, descr):
 
     Args:
         - data: a rank 0, 1 (mono) or 2 (one channel per col) numpy array
-        - filename: a string for the audio file name 
+        - filename: a string for the audio file name
         - fs: the sampling rate in Hz (%d Hz by default).
         - enc: a string for the encoding such as 'pcm16', etc...(%s by
           default).
@@ -70,7 +70,7 @@ def _writer_factory(name, format, def_fs, descr):
     basic_writer.__doc__    = doc
     basic_writer.__name__   = name
     return basic_writer
-    
+
 # template for reader functions
 def _reader_factory(name, filetype, descr):
     """Factory for reader functions ala matlab."""
@@ -105,22 +105,22 @@ def _reader_factory(name, filetype, descr):
     Returns a tuple (data, fs, enc), where :
         - data are the read data (one column per channel)
         - fs, the sampling rate
-        - enc, a string which is the encoding of the file, such as 'pcm16', 
+        - enc, a string which is the encoding of the file, such as 'pcm16',
         'float32', etc...
 
-    For a total control over options, such as output's dtype, etc..., 
+    For a total control over options, such as output's dtype, etc...,
     you should use sndfile class instances instead""" % (str(descr),)
     basic_reader.__doc__    = doc
     basic_reader.__name__   = name
     return basic_reader
-    
-wavread     = _reader_factory('wavread', 'wav', 
+
+wavread     = _reader_factory('wavread', 'wav',
                     formatinfo('wav', 'pcm16').get_major_str())
 auread      = _reader_factory('auread', 'au',
                     formatinfo('au', 'pcm16').get_major_str())
-aiffread    = _reader_factory('aiffread', 'aiff', 
+aiffread    = _reader_factory('aiffread', 'aiff',
                     formatinfo('aiff', 'pcm16').get_major_str())
-sdifread    = _reader_factory('sdifread', 'ircam', 
+sdifread    = _reader_factory('sdifread', 'ircam',
                     formatinfo('ircam', 'pcm16').get_major_str())
 
 _f1          = formatinfo('wav', 'pcm16')
@@ -136,7 +136,7 @@ _f4          = formatinfo('ircam', 'pcm16')
 sdifwrite   = _writer_factory('sdifwrite', _f4, 44100, _f4.get_major_str())
 
 try:
-    flacread    = _reader_factory('flacread', 'flac', 
+    flacread    = _reader_factory('flacread', 'flac',
                         formatinfo('flac', 'pcm16').get_major_str())
     _f5          = formatinfo('flac', 'pcm16')
     flacwrite   = _writer_factory('flacwrite', _f5, 44100, _f5.get_major_str())
