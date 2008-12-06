@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 10:00 PM 2008 J
+# Last Change: Sat Dec 06 11:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -23,7 +23,6 @@ import numpy as N
 
 from _sndfile import Format, Sndfile, available_file_formats, \
                      available_encodings, sndfile_version
-from compat import PyaudioException, FlacUnsupported
 
 __all__ = []
 _MATAPI_FORMAT = ['wav', 'aiff', 'au', 'sdif', 'flac', 'ogg']
@@ -80,8 +79,8 @@ def _reader_factory(name, filetype, descr):
         hdl = Sndfile(filename, 'read')
         try:
             if not hdl.format.file_format == filetype:
-                raise PyaudioException("%s is not a %s file (is %s)" \
-                        % (filename, filetype, hdl.format.file_format))
+                raise ValueError, "%s is not a %s file (is %s)" \
+                      % (filename, filetype, hdl.format.file_format))
 
             fs = hdl.samplerate
             enc = hdl.encoding
