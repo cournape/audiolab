@@ -4,8 +4,6 @@ import sys
 from numpy.distutils.system_info import system_info, NotFoundError, dict_append, so_ext
 from numpy.distutils.core import setup, Extension
 
-from header_parser import do_subst_in_file
-
 SNDFILE_MAJ_VERSION = 1
 
 class SndfileNotFoundError(NotFoundError):
