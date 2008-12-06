@@ -6,8 +6,7 @@ Things to do before a release
       exceptions launched are pretty random...
     - add inout argument in read method to avoid recreating a buffer.
     - more tests
-    - add an audio player for at least linux/windows/mac os x (0.8-0.9) -> This
-      will be done in a different branch
+    - add an audio player for at windows/mac os x
 
 Pending issues
 --------------
@@ -23,6 +22,3 @@ Maybe ?
       major), and add an axis argument. -> this is a bit tricky, actually, as
       sndfile only supports interleaved data, where F order actually make sense. 
       Not sure what to do
-    - ogg vorbis support ? libsndfile does not support ogg (yet). Maybe use the
-      reference lib, but this may be a bit complicated to support both library
-      at the same time.
