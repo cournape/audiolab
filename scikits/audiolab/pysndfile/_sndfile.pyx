@@ -48,8 +48,6 @@ _SNDFILE_ENCODING    = {
 
     'dpcm8' : SF_FORMAT_DPCM_8,
     'dpcm16': SF_FORMAT_DPCM_16,
-
-    'vorbis': SF_FORMAT_VORBIS
 }
 
 _SNDFILE_FILE_FORMAT = {
@@ -72,13 +70,20 @@ _SNDFILE_FILE_FORMAT = {
     'avr'   : SF_FORMAT_AVR,
     'wavex' : SF_FORMAT_WAVEX,
     'sd2'   : SF_FORMAT_SD2,
-    'flac'  : SF_FORMAT_FLAC,
-    'caf'   : SF_FORMAT_CAF,
-    'wve'   : SF_FORMAT_WVE,
-    'ogg'   : SF_FORMAT_OGG,
-    'mpc2k' : SF_FORMAT_MPC2K,
-    'rf64'  : SF_FORMAT_RF64,
 }
+
+# XXX: this is ugly, but I have not found a better way. Since those are
+# relatively recent and not available on all sndfile available, harcode the
+# values to avoid breaking compilation older sndfile.
+_SNDFILE_ENCODING['vorbis']    = 0x0060
+
+_SNDFILE_FILE_FORMAT['flac']    = 0x170000
+_SNDFILE_FILE_FORMAT['caf']     = 0x180000
+_SNDFILE_FILE_FORMAT['wve']     = 0x190000
+_SNDFILE_FILE_FORMAT['ogg']     = 0x200000
+_SNDFILE_FILE_FORMAT['mpc2k']   = 0x210000
+_SNDFILE_FILE_FORMAT['rf64']    = 0x220000
+
 
 _SNDFILE_ENDIAN = {
     'file'      : SF_ENDIAN_FILE,
