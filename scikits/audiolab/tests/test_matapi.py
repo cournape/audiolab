@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 07:00 PM 2008 J
+# Last Change: Sat Dec 06 10:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -11,7 +11,6 @@ from scikits.audiolab import wavread, auread, aiffread, sdifread, flacread
 from scikits.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
 from scikits.audiolab import PyaudioException
 from scikits.audiolab import Sndfile, Format as audio_format
-from scikits.audiolab.pysndfile.pysndfile import FlacUnsupported
 
 from testcommon import open_tmp_file, close_tmp_file
 
@@ -48,7 +47,7 @@ class test_audiolab(TestCase):
         """ Check flacread """
         try:
             self._test_read(flacread, audio_format('flac', 'pcm16', 'file'), 'flac') 
-        except FlacUnsupported:
+        except NotImplementedError:
             print "Flac unsupported, flacread not tested"
 
     def test_auread(self):
