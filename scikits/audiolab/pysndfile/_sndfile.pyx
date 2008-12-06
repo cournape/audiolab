@@ -118,7 +118,6 @@ cdef class Format:
     cdef int _format_raw_int
     cdef object _type, _encoding, _endianness
     cdef object _format_str, _encoding_str, _endian_str
-    cdef object _format_str, _encoding_str, _endian_str
     def __init__(self, type = 'wav', encoding = 'pcm16', endianness = 'file'):
         """Build a valid format usable by the sndfile class when
         opening an audio file for writing.
@@ -202,16 +201,15 @@ cdef class Format:
 
     property file_format:
         def __get__(self):
-            return self._format_str
+            return self._type
 
     property encoding:
         def __get__(self):
-            return self._encoding_str
+            return self._encoding
 
-    # XXX sndfile vs our custom representation
     property endianness:
         def __get__(self):
-            return _ENUM_TO_STR_ENDIAN[self.endianness_int()]
+            return self._endianness
 
     cdef int format_int(self):
         """Return the full format integer (binary OR of file format, encoding
