@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 06:00 PM 2008 J
+# Last Change: Sat Dec 06 07:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -21,8 +21,8 @@
 
 import numpy as N
 
-from pysndfile import formatinfo, sndfile
-from pysndfile import PyaudioException, FlacUnsupported
+from _sndfile import Format, Sndfile
+from compat import PyaudioException, FlacUnsupported
 
 __all__ = []
 _MATAPI_FORMAT = ['wav', 'aiff', 'au', 'sdif', 'flac']
@@ -33,7 +33,7 @@ for i in _MATAPI_FORMAT:
 def _writer_factory(name, format, def_fs, descr):
     """ Create a writer function with fileformat described by format, default
     sampling rate def_fs, and docstring descr."""
-    def basic_writer(data, filename, fs = def_fs, enc = format.get_encoding()):
+    def basic_writer(data, filename, fs = def_fs, enc = format.encoding):
         """Common "template" to all write functions."""
         if N.ndim(data) <= 1:
             nc      = 1
@@ -44,15 +44,15 @@ def _writer_factory(name, format, def_fs, descr):
         else:
             RuntimeError("Only rank 0, 1, and 2 arrays supported as audio data")
 
-        uformat = formatinfo(format.get_file_format(), encoding=enc,
-                             endianness=format.get_endianness())
-        hdl = sndfile(filename, 'write', uformat, nc, fs)
+        uformat = Format(format.file_format, encoding=enc,
+                             endianness=format.endianness)
+        hdl = Sndfile(filename, 'write', uformat, nc, fs)
         try:
             hdl.write_frames(data, nframes)
         finally:
             hdl.close()
     doc = \
-    """ wrapper around pysndfile to write %s file,
+    """ wrapper around pySndfile to write %s file,
     in a similar manner to matlab's wavwrite/auwrite and the likes.
 
     OVERWRITES EXISTING FILE !
@@ -65,8 +65,8 @@ def _writer_factory(name, format, def_fs, descr):
           default).
 
     For a total control over options, such as endianness, append data to an
-    existing file, etc...  you should use sndfile class instances instead""" \
-            % (str(descr), def_fs, format.get_encoding())
+    existing file, etc...  you should use Sndfile class instances instead""" \
+            % (str(descr), def_fs, format.encoding)
     basic_writer.__doc__    = doc
     basic_writer.__name__   = name
     return basic_writer
@@ -76,21 +76,21 @@ def _reader_factory(name, filetype, descr):
     """Factory for reader functions ala matlab."""
     def basic_reader(filename, last = None, first = 0):
         """Common "template" to all read functions."""
-        hdl = sndfile(filename, 'read')
+        hdl = Sndfile(filename, 'read')
         try:
-            if not hdl.get_file_format() == filetype:
+            if not hdl.format.file_format == filetype:
                 raise PyaudioException("%s is not a %s file (is %s)" \
-                        % (filename, filetype, hdl.get_file_format()))
+                        % (filename, filetype, hdl.format.file_format))
 
-            fs = hdl.get_samplerate()
-            enc = hdl.get_encoding()
+            fs = hdl.samplerate
+            enc = hdl.encoding
             # Set the pointer to start position
             nf  = hdl.seek(first, 1)
             if not nf == first:
                 raise IOError("Error while seeking at starting position")
 
             if last is None:
-                nframes = hdl.get_nframes() - first
+                nframes = hdl.nframes - first
                 data    = hdl.read_frames(nframes)
             else:
                 data    = hdl.read_frames(last)
@@ -99,7 +99,7 @@ def _reader_factory(name, filetype, descr):
 
         return data, fs, enc
     doc = \
-    """ wrapper around pysndfile to read a %s file in float64,
+    """ wrapper around pySndfile to read a %s file in float64,
     in a similar manner to matlab wavread/auread/etc...
 
     Returns a tuple (data, fs, enc), where :
@@ -109,37 +109,37 @@ def _reader_factory(name, filetype, descr):
         'float32', etc...
 
     For a total control over options, such as output's dtype, etc...,
-    you should use sndfile class instances instead""" % (str(descr),)
+    you should use Sndfile class instances instead""" % (str(descr),)
     basic_reader.__doc__    = doc
     basic_reader.__name__   = name
     return basic_reader
 
 wavread     = _reader_factory('wavread', 'wav',
-                    formatinfo('wav', 'pcm16').get_major_str())
+                    Format('wav', 'pcm16').file_format)
 auread      = _reader_factory('auread', 'au',
-                    formatinfo('au', 'pcm16').get_major_str())
+                    Format('au', 'pcm16').file_format)
 aiffread    = _reader_factory('aiffread', 'aiff',
-                    formatinfo('aiff', 'pcm16').get_major_str())
+                    Format('aiff', 'pcm16').file_format)
 sdifread    = _reader_factory('sdifread', 'ircam',
-                    formatinfo('ircam', 'pcm16').get_major_str())
+                    Format('ircam', 'pcm16').file_format)
 
-_f1          = formatinfo('wav', 'pcm16')
-wavwrite    = _writer_factory('wavwrite', _f1, 8000, _f1.get_major_str())
+_f1          = Format('wav', 'pcm16')
+wavwrite    = _writer_factory('wavwrite', _f1, 8000, _f1.file_format)
 
-_f2          = formatinfo('au', 'ulaw')
-auwrite     = _writer_factory('auwrite', _f2, 8000, _f2.get_major_str())
+_f2          = Format('au', 'ulaw')
+auwrite     = _writer_factory('auwrite', _f2, 8000, _f2.file_format)
 
-_f3          = formatinfo('aiff', 'pcm16')
-aiffwrite   = _writer_factory('aiffwrite', _f3, 8000, _f3.get_major_str())
+_f3          = Format('aiff', 'pcm16')
+aiffwrite   = _writer_factory('aiffwrite', _f3, 8000, _f3.file_format)
 
-_f4          = formatinfo('ircam', 'pcm16')
-sdifwrite   = _writer_factory('sdifwrite', _f4, 44100, _f4.get_major_str())
+_f4          = Format('ircam', 'pcm16')
+sdifwrite   = _writer_factory('sdifwrite', _f4, 44100, _f4.file_format)
 
 try:
     flacread    = _reader_factory('flacread', 'flac',
-                        formatinfo('flac', 'pcm16').get_major_str())
-    _f5          = formatinfo('flac', 'pcm16')
-    flacwrite   = _writer_factory('flacwrite', _f5, 44100, _f5.get_major_str())
+                        Format('flac', 'pcm16').file_format)
+    _f5          = Format('flac', 'pcm16')
+    flacwrite   = _writer_factory('flacwrite', _f5, 44100, _f5.file_format)
 except FlacUnsupported,e:
     print e
     print "Matlab API for FLAC is disabled"

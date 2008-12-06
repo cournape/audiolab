@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Dec 05 11:00 AM 2008 J
+# Last Change: Sat Dec 06 07:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -10,7 +10,7 @@ import numpy as N
 from scikits.audiolab import wavread, auread, aiffread, sdifread, flacread
 from scikits.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite
 from scikits.audiolab import PyaudioException
-from scikits.audiolab import sndfile, formatinfo as audio_format
+from scikits.audiolab import Sndfile, Format as audio_format
 from scikits.audiolab.pysndfile.pysndfile import FlacUnsupported
 
 from testcommon import open_tmp_file, close_tmp_file
@@ -19,18 +19,18 @@ class test_audiolab(TestCase):
     def _test_read(self, func, format, filext):
         # Create a tmp audio file, write some random data into it, and check it
         # is the expected data when read from a function from the matapi.
-        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.' + filext)
+        rfd, fd, cfilename   = open_tmp_file('pySndfiletest.' + filext)
         try:
             nbuff = 22050
             noise = 0.1 * N.random.randn(nbuff)
 
             # Open the copy file for writing
-            b = sndfile(cfilename, 'write', format, 1, nbuff)
+            b = Sndfile(cfilename, 'write', format, 1, nbuff)
             b.write_frames(noise, nbuff)
             b.close()
 
             # Reread the data
-            b = sndfile(cfilename, 'read')
+            b = Sndfile(cfilename, 'read')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -74,13 +74,13 @@ class test_audiolab(TestCase):
 
             # Open the copy file for writing
             format  = audio_format('aiff', 'pcm16')
-            b       = sndfile(cfilename, 'write', format, 1, nbuff)
+            b       = Sndfile(cfilename, 'write', format, 1, nbuff)
 
             b.write_frames(noise, nbuff)
 
             b.close()
 
-            b   = sndfile(cfilename, 'read')
+            b   = Sndfile(cfilename, 'read')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -103,8 +103,8 @@ class test_audiolab(TestCase):
             fs      = nbuff
             noise   = 0.1 * N.random.randn(nbuff)
 
-            # Open the first file for writing with sndfile
-            b       = sndfile(cfilename1, 'write', format, 1, fs)
+            # Open the first file for writing with Sndfile
+            b       = Sndfile(cfilename1, 'write', format, 1, fs)
 
             b.write_frames(noise, nbuff)
 
