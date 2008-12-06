@@ -182,8 +182,12 @@ cdef class Format:
 
         ret = sf_format_check(&self._sf_info)
         if ret is not SF_TRUE:
-            raise RuntimeError("sf_format_check failed: this is more likely a"\
-                               " bug in audiolab, please report it")
+            msg = "The combination (type=%s|encoding=%s|endianness=%s) " \
+                  "you requested is not supported. " \
+                  "You can use available_formats and " \
+                  "available_encodings functions to query which formats "\
+                  "and encodings are available."
+            raise ValueError(msg % (type, encoding, endianness))
 
         # Get the sndfile string description of the format type
         format_info.format = ctype
