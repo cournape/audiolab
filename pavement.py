@@ -69,6 +69,12 @@ if paver.doctools.has_sphinx:
 
     @task
     @needs(['paver.doctools.html'])
+    def html_build():
+        """Build Audiolab's html documentation."""
+        pass
+
+    @task
+    @needs(['html_build'])
     def html():
         """Build Audiolab's documentation and install it into
         scikits/audiolab/docs"""
