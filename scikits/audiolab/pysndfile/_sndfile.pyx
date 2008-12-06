@@ -118,6 +118,7 @@ cdef class Format:
     cdef int _format_raw_int
     cdef object _type, _encoding, _endianness
     cdef object _format_str, _encoding_str, _endian_str
+    cdef object _format_str, _encoding_str, _endian_str
     def __init__(self, type = 'wav', encoding = 'pcm16', endianness = 'file'):
         """Build a valid format usable by the sndfile class when
         opening an audio file for writing.
@@ -132,13 +133,6 @@ cdef class Format:
         """
         cdef int format, ctype, cencoding, cendian, st
         cdef SF_FORMAT_INFO format_info
-        #
-        # Notes
-        # -----
-        #
-        # Valid type strings are listed by file_format_dic.keys() Valid encoding
-        # strings are listed by encoding_dic.keys() Valid endianness strings are
-        # listed by endianness_dic.keys() """
 
         # Keep the arguments
         self._type = type
