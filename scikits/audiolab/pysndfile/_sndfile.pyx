@@ -476,17 +476,19 @@ broken)"""
         def __get__(self):
             return copy.copy(self._format)
 
-    def file_format(self):
-        """return user friendly file format string"""
-        return _ENUM_TO_STR_FILE_FORMAT[self._format.file_format_int()]
+    # Those are convenience: they can be accessed from the format object
+    # attached to the Sndfile instance.
+    property file_format:
+        def __get__(self):
+            return self._format.file_format
 
-    def encoding(Sndfile self):
-        """return user friendly encoding string"""
-        return _ENUM_TO_STR_ENCODING[self._format.encoding_int()]
+    property encoding:
+        def __get__(self):
+            return self._format.encoding
 
-    def endianness(Sndfile self):
-        """return user friendly endianness string"""
-        return _ENUM_TO_STR_ENDIAN[self._format.endianness_int()]
+    property endianness:
+        def __get__(self):
+            return self._format.endianness
 
     def __str__(Sndfile self):
         repstr = ["----------------------------------------"]
