@@ -3,6 +3,11 @@ audiolab (0.10dev) Sat, 06 Dec 2008 20:05:04 +0900
 	our cython wrapper around sndfile
 	* matapi and matapi unit tests now use Sndfile instead of sndfile
 	* Remove ctypes-based sndfile wrapper
+	* Better error message for bad file format specification in Format
+	__init__
+	* Fix flac read/write matapi + tests
+	* Fix compilation of sndfile wrapper when flac is not available
+	* Add ogg reade/write
 
 audiolab (0.9) Thu, 04 Dec 2008 22:25:43 +0900
 	* Add paver script to automatically build doc
