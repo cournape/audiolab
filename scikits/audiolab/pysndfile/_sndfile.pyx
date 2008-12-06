@@ -246,8 +246,8 @@ cdef class Format:
     # Syntactic sugar
     def __str__(self):
         s = ["Major Format: %s" % self._format_str]
-        s += ["\tEncoding Format: %s" % self._encoding_str]
-        #s += ["\tEndianness: %s" % self._endian_str]
+        s += ["Encoding Format: %s" % self._encoding_str]
+        s += ["Endianness: %s" % self.endianness]
         return "\n".join(s)
 
     def __repr__(self):
