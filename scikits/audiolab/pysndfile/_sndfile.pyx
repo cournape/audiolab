@@ -256,16 +256,30 @@ cdef class Format:
 
 def available_file_formats():
     """Return lists of available major formats."""
-    return [_ENUM_TO_STR_FILE_FORMAT[i & SF_FORMAT_TYPEMASK] for i in
-            _major_formats_int()]
+    ret = []
+    for i in _major_formats_int():
+        # Handle the case where libsndfile supports a format we don't
+        if not _ENUM_TO_STR_FILE_FORMAT.has_key(i & SF_FORMAT_TYPEMASK):
+            warnings.warn("Format %#10x not yet supported by audiolab" % 
+                          (i & SF_FORMAT_TYPEMASK))
+        else:
+            ret.append(_ENUM_TO_STR_FILE_FORMAT[i & SF_FORMAT_TYPEMASK])
+    return ret
 
 def available_encodings(major):
     """Return lists of available encoding for the given major format."""
     if not _SNDFILE_FILE_FORMAT.has_key(major):
         raise ValueError("Unknown file format %s" % major)
 
-    return [_ENUM_TO_STR_ENCODING[i & SF_FORMAT_SUBMASK] for i in
-            _sub_formats_int(_SNDFILE_FILE_FORMAT[major])]
+    ret = []
+    for i in _sub_formats_int(_SNDFILE_FILE_FORMAT[major]):
+        # Handle the case where libsndfile supports an encoding we don't
+        if not _ENUM_TO_STR_ENCODING.has_key(i & SF_FORMAT_SUBMASK):
+            warnings.warn("Encoding %#10x not yet supported by audiolab" % 
+                          (i & SF_FORMAT_SUBMASK))
+        else:
+            ret.append(_ENUM_TO_STR_ENCODING[i & SF_FORMAT_SUBMASK])
+    return ret
 
 cdef _sub_formats_int(int format):
     """Return list of subtype formats given the major format.
