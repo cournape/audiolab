@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 07:00 PM 2008 J
+# Last Change: Sat Dec 06 10:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -21,11 +21,12 @@
 
 import numpy as N
 
-from _sndfile import Format, Sndfile
+from _sndfile import Format, Sndfile, available_file_formats, \
+                     available_encodings, sndfile_version
 from compat import PyaudioException, FlacUnsupported
 
 __all__ = []
-_MATAPI_FORMAT = ['wav', 'aiff', 'au', 'sdif', 'flac']
+_MATAPI_FORMAT = ['wav', 'aiff', 'au', 'sdif', 'flac', 'ogg']
 for i in _MATAPI_FORMAT:
     __all__.extend(['%sread' % i, '%swrite' % i])
 
@@ -135,16 +136,33 @@ aiffwrite   = _writer_factory('aiffwrite', _f3, 8000, _f3.file_format)
 _f4          = Format('ircam', 'pcm16')
 sdifwrite   = _writer_factory('sdifwrite', _f4, 44100, _f4.file_format)
 
-try:
-    flacread    = _reader_factory('flacread', 'flac',
-                        Format('flac', 'pcm16').file_format)
-    _f5          = Format('flac', 'pcm16')
-    flacwrite   = _writer_factory('flacwrite', _f5, 44100, _f5.file_format)
-except FlacUnsupported,e:
-    print e
-    print "Matlab API for FLAC is disabled"
-    def missing_flacread(*args):
-        raise UnimplementedError("Matlab API for FLAC is disabled on your "\
-                                 "installation")
-    flacread    = missing_flacread
-    flacwrite   = missing_flacread
+# Deal with formats which may not be available depending on the sndfile version
+# / build options
+_AFORMATS = available_file_formats()
+_SNDFILE_VER = sndfile_version()
+def _missing_function(format):
+    def foo(*args, **kw):
+        raise NotImplementedError, \
+              "Matlab API for %s is disabled: format %s is not supported by "\
+              "your version of libsndfile is %s" % (format, 
+                                                    format,
+                                                    _SNDFILE_VER)
+    foo.__doc__ = "This function is not supported with your version " \
+                  "of libsndfile."
+    return foo
+
+if 'flac' in _AFORMATS:
+    f = Format('flac', 'pcm16')
+    flacread = _reader_factory('flacread', 'flac', f.file_format)
+    flacwrite = _writer_factory('flacwrite', f, 44100, f.file_format)
+else:
+    flacread = _missing_function('flac')
+    flacwrite = _missing_function('flac')
+
+if 'ogg' in _AFORMATS:
+    f = Format('ogg', 'vorbis')
+    oggread = _reader_factory('oggread', 'ogg', f.file_format)
+    oggwrite = _writer_factory('oggwrite', f, 44100, f.file_format)
+else:
+    oggread = _missing_function('ogg vorbis')
+    oggwrite = _missing_function('ogg_vorbis')
