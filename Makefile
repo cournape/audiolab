@@ -1,4 +1,4 @@
-# Last Change: Fri Dec 05 11:00 AM 2008 J
+# Last Change: Sun Dec 07 02:00 AM 2008 J
 #
 # This makefile is used to do all the "tricky things" before a release,
 # including updating the doc, installing and testing the package, uploading the
@@ -87,19 +87,25 @@ run_examples:  $(TMPPATH)
 	#done;
 	# Why when using the above loop, Make does not stop when one script fails ?
 	@echo "---------- runing example quick1.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/quick1.py
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/obsolete/quick1.py
 	@echo "---------- runing example usage1.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/usage1.py
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/obsolete/usage1.py
 	@echo "---------- runing example usage2.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/usage2.py
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/obsolete/usage2.py
 	@echo "---------- runing example format1.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/format1.py
-	@echo "---------- runing example format2.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/format2.py
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/obsolete/format1.py
 	@echo "---------- runing example write1.py ----------";
-	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/write1.py
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/obsolete/write1.py
 	@echo "---------- runing example matlab1.py ----------";
 	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/matlab1.py
+	@echo "---------- runing example play.py ----------";
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/play.py
+	@echo "---------- runing example over1.py ----------";
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/over1.py
+	@echo "---------- runing example over2.py ----------";
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/over2.py
+	@echo "---------- runing example over3.py ----------";
+	cd $(DATAPATH) && $(PYTHONRUN) $(EXAMPATH)/over3.py
 
 #=====================
 # Code related to test
