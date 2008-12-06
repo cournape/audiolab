@@ -70,12 +70,9 @@ _SNDFILE_FILE_FORMAT = {
     'avr'   : SF_FORMAT_AVR,
     'wavex' : SF_FORMAT_WAVEX,
     'sd2'   : SF_FORMAT_SD2,
+    'flac'  : SF_FORMAT_FLAC,
     'caf'   : SF_FORMAT_CAF
 }
-# FLAC not available on 1.0.16:
-if hasattr(csndfile, 'SF_FORMAT_FLAC'):
-    _SNDFILE_FILE_FORMAT['flac'] = SF_FORMAT_FLAC,
-
 
 _SNDFILE_ENDIAN = {
     'file'      : SF_ENDIAN_FILE,
