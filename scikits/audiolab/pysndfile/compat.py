@@ -227,7 +227,7 @@ def supported_format():
           "scikits.audiolab.available_file_formats"
 
 def supported_endianness():
-    raise RuntimeError,
+    raise RuntimeError, \
           "This function is broken - and does not even make sense."
 
 def supported_encoding():
