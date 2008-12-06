@@ -57,6 +57,12 @@ class formatinfo:
     def __deepcopy__(self):
         return self.__copy__()
 
+    def __repr__(self):
+        return self._format.__repr__()
+
+    def __str__(self):
+        return self._format.__str__()
+
 class sndfile:
     """Main class to open, read and write audio files"""
     def __init__(self, filename, mode='read', format=None, channels=0,
