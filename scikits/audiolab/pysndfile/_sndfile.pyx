@@ -47,7 +47,9 @@ _SNDFILE_ENCODING    = {
     'dwwN'  : SF_FORMAT_DWVW_N,
 
     'dpcm8' : SF_FORMAT_DPCM_8,
-    'dpcm16': SF_FORMAT_DPCM_16
+    'dpcm16': SF_FORMAT_DPCM_16,
+
+    'vorbis': SF_FORMAT_VORBIS
 }
 
 _SNDFILE_FILE_FORMAT = {
@@ -71,7 +73,11 @@ _SNDFILE_FILE_FORMAT = {
     'wavex' : SF_FORMAT_WAVEX,
     'sd2'   : SF_FORMAT_SD2,
     'flac'  : SF_FORMAT_FLAC,
-    'caf'   : SF_FORMAT_CAF
+    'caf'   : SF_FORMAT_CAF,
+    'wve'   : SF_FORMAT_WVE,
+    'ogg'   : SF_FORMAT_OGG,
+    'mpc2k' : SF_FORMAT_MPC2K,
+    'rf64'  : SF_FORMAT_RF64,
 }
 
 _SNDFILE_ENDIAN = {
