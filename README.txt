@@ -14,8 +14,9 @@ See the docs directory for more details
 
 LICENSE:
 
-audiolab itself is licensed under the LGPL license
-(see COPYING.txt in main source directory)
+audiolab itself is licensed under the LGPL license (see COPYING.txt in main
+source directory), except for the code in scikits/audiolab/soundio, which is
+licensed under the BSD.
 
 audiolab depends on libsndfile to work; libsndfile is licensed under LGPL.
 
