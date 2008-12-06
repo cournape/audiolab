@@ -211,6 +211,14 @@ cdef class Format:
         def __get__(self):
             return self._endianness
 
+    property file_format_description:
+        def __get__(self):
+            return self._format_str
+
+    property encoding_description:
+        def __get__(self):
+            return self._encoding_str
+
     cdef int format_int(self):
         """Return the full format integer (binary OR of file format, encoding
         and endianness)."""
