@@ -37,6 +37,9 @@ cimport numpy as cnp
 cdef extern from "Python.h":
     object PyString_FromStringAndSize(char *v, int len)
     cdef usleep(int)
+    
+cdef struct SoundData:
+    int remaining
 
 def yo():
     cdef UInt32 sz, ndevices, i
@@ -86,8 +89,7 @@ def play(cnp.ndarray input):
     cdef AudioDeviceID odevice
     cdef OSStatus st
     cdef AudioStreamBasicDescription ostreamdesc
-    cdef int a, b, c, d
-    cdef int done
+    cdef SoundData data
 
     # Get default output device
     sz = sizeof(AudioDeviceID)
@@ -124,9 +126,9 @@ def play(cnp.ndarray input):
         raise RuntimeError("Not linear pcm")
 
     done = 0
-    st = AudioDeviceAddIOProc (odevice, callback, <void*>(&done))
+    st = AudioDeviceAddIOProc (odevice, callback, <void*>(&data))
     if st:
-        raise RuntimeError("error setting cllback")
+        raise RuntimeError("error setting callback")
 
     st = AudioDeviceStart (odevice, callback)
     if st:
