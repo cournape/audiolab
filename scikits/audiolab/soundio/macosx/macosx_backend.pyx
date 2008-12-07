@@ -36,7 +36,10 @@ cimport numpy as cnp
 
 cdef extern from "Python.h":
     object PyString_FromStringAndSize(char *v, int len)
-    cdef usleep(int)
+    int usleep(int)
+    void printf(char*, ...)
+    int RAND_MAX = 2147483647
+    int random()
     
 cdef struct SoundData:
     int remaining
@@ -73,14 +76,35 @@ def yo():
     return res
 
 cdef OSStatus callback(AudioDeviceID device, AudioTimeStamp* current_time,
-	AudioBufferList* data_in, AudioTimeStamp* time_in,
-	AudioBufferList* data_out, AudioTimeStamp* time_out,
-	void* client_data):
-    cdef int sz, sample_count, read_count, k
+        AudioBufferList* data_in, AudioTimeStamp* time_in,
+        AudioBufferList* data_out, AudioTimeStamp* time_out,
+        void* client_data):
     cdef OSStatus st = 0
+    cdef int remaining
+    cdef int sz, nsamples, i
+    cdef float* data
 
-    sz = (data_out[0]).mBuffers[0].mDataByteSize
-    print sz, (<int*>client_data)[0]
+    remaining = (<SoundData*>client_data)[0].remaining
+    (<SoundData*>client_data)[0].remaining -= 1
+    printf("callback: %d\n", remaining)
+
+    sz = (data_out[0].mBuffers)[0].mDataByteSize
+    nsamples = sz / sizeof (float) ;
+    data = <float*>((data_out[0].mBuffers)[0].mData)
+
+    printf("%ld samples\n", nsamples)
+    for i in range(nsamples - 1, -1, -1):
+        data[i] = 2 * random() / (<float>RAND_MAX) - 1
+    #((user_data*)client_data)->remaining -= 1;
+    return st
+
+cdef OSStatus yoyoyo(SoundData *data):
+    cdef OSStatus st
+
+    st = 0
+    while (data[0].remaining > 0):
+        #printf("Main: %d\n", data[0].remaining)
+        usleep(10000)
 
     return st
 
@@ -125,8 +149,8 @@ def play(cnp.ndarray input):
     if ostreamdesc.mFormatID != kAudioFormatLinearPCM:
         raise RuntimeError("Not linear pcm")
 
-    done = 0
-    st = AudioDeviceAddIOProc (odevice, callback, <void*>(&data))
+    data.remaining = 100
+    st = AudioDeviceAddIOProc (odevice, callback, &data)
     if st:
         raise RuntimeError("error setting callback")
 
@@ -134,7 +158,6 @@ def play(cnp.ndarray input):
     if st:
         raise RuntimeError("error starting ")
 
-    done = 0
-    print done
-    usleep(10000)
-    print done
+    yoyoyo(&data)
+
+    return 0
