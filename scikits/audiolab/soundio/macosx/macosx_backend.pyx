@@ -161,3 +161,95 @@ def play(cnp.ndarray input):
     yoyoyo(&data)
 
     return 0
+
+cdef struct CallbackData:
+    int remaining
+
+cdef OSStatus class_callback(AudioDeviceID device, AudioTimeStamp* current_time,
+        AudioBufferList* data_in, AudioTimeStamp* time_in,
+        AudioBufferList* data_out, AudioTimeStamp* time_out,
+        void* client_data):
+    cdef OSStatus st = 0
+    cdef int remaining
+    cdef int sz, nsamples, i
+    cdef float* data
+
+    remaining = (<CallbackData*>client_data)[0].remaining
+    (<CallbackData*>client_data)[0].remaining -= 1
+    printf("callback: %d\n", remaining)
+
+    sz = (data_out[0].mBuffers)[0].mDataByteSize
+    nsamples = sz / sizeof (float) ;
+    data = <float*>((data_out[0].mBuffers)[0].mData)
+
+    printf("%ld samples\n", nsamples)
+    for i in range(nsamples - 1, -1, -1):
+        data[i] = 2 * random() / (<float>RAND_MAX) - 1
+
+    return st
+
+cdef class CoreAudioDevice:
+    cdef AudioDeviceID dev
+    cdef AudioStreamBasicDescription format
+    cdef AudioDeviceIOProc callback
+    cdef int proc_set, dev_started
+
+    def __init__(CoreAudioDevice self, Float64 fs=48000, int nchannels=1):
+        cdef UInt32 sz, buffer_size
+        cdef OSStatus st
+
+        self.proc_set = 0
+        self.dev_started = 0
+
+        self.callback = callback
+
+        # Get default output
+        sz = sizeof(AudioDeviceID)
+        st = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &sz,
+                &self.dev)
+        if st:
+            raise RuntimeError("Error while getting default output properties.")
+
+        # Get default output stream format
+        sz = sizeof(self.format)
+        st = AudioDeviceGetProperty(self.device, 0, False,
+                kAudioDevicePropertyStreamFormat, &sz,
+                &self.format)
+        if st:
+            raise RuntimeError("Error while getting stream format.")
+
+        # Set sampling rate and number of channels
+        self.format.mSampleRate = fs
+        self.format.mChannelsPerFrame = nchannels
+
+        # XXX: how to make sure we have 32 bits native float here ?
+        if self.format.mFormatID != kAudioFormatLinearPCM:
+            raise ValueError("Not linear pcm")
+
+    def play(CoreAudioDevice self):
+        cdef OSStatus st
+        cdef CallbackData data
+
+        # Add callback, and starts the device
+        data.remaining = 100
+        st = AudioDeviceAddIOProc(self.dev, self.callback, &data)
+        if st:
+            raise RuntimeError("error setting callback")
+
+        st = AudioDeviceStart (self.dev, self.callback)
+        if st:
+            raise RuntimeError("error starting ")
+
+        while (data.remaining > 0):
+            printf("Main: %d\n", data.remaining)
+            usleep(10000)
+
+        if self.dev_started:
+            st = AudioDeviceStop(self.device, self.callback)
+            if st:
+                print "AudioDeviceStop failed"
+
+        if self.proc_set:
+            st = AudioDeviceRemoveIOProc(self.device, self.callback)
+            if st:
+                print "AudioDeviceRemoveIO failed"
