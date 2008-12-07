@@ -44,26 +44,25 @@ def yo():
 	AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &sz, NULL)
 	ndevices = sz / sizeof(AudioDeviceID)
 
-	print "Number of detected devices:", ndevices
-	devices = stdlib.malloc(sizeof(*devices) * ndevices)
+	devices = <AudioDeviceID*>stdlib.malloc(sizeof(AudioDeviceID) * ndevices)
 	res = []
 	try:
 		AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &sz,
 				devices)
 
 		for i in range(ndevices):
-			AudioDeviceGetPropertyInfo(devices[i], 0, false,
+			AudioDeviceGetPropertyInfo(devices[i], 0, False,
 						   kAudioDevicePropertyDeviceName, &sz,
 						   NULL)
-			name = malloc(sz + 1)
-			AudioDeviceGetProperty(devices[i], 0, false,
+			name = <char*>stdlib.malloc(sz + 1)
+			AudioDeviceGetProperty(devices[i], 0, False,
 					kAudioDevicePropertyDeviceName, &sz,
 					name)
 			devicename = PyString_FromStringAndSize(name, sz+1)
-			free(name)
+			stdlib.free(name)
 			res.append(devicename)
 
 	finally:
 		stdlib.free(devices)
 
-	return devicename
+	return res
