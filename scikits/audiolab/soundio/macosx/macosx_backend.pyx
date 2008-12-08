@@ -67,11 +67,9 @@ cdef OSStatus class_callback(AudioDeviceID device, AudioTimeStamp* current_time,
     obuffsz = sz / sizeof (float) ;
     obuffer = <float*>((data_out[0].mBuffers)[0].mData)
 
-    printf("callback: %d - %d\n", 
-            (<CallbackData*>client_data)[0].nframes, obuffsz)
-
     if nframes < obuffsz:
         wcount = nframes
+        (<CallbackData*>client_data)[0].remaining = 0
     else:
         wcount = obuffsz
 
@@ -80,19 +78,15 @@ cdef OSStatus class_callback(AudioDeviceID device, AudioTimeStamp* current_time,
         for i in range(wcount):
             obuffer[2 * i] = data[i]
             obuffer[2 * i + 1] = data[i]
+        # Fill with 0 if output buffer biffer than remaining data to be read
+        for i in range(2 * wcount, obuffsz):
+            obuffer[i] = 0.0
     else:
         for i in range(wcount):
             obuffer[i] = data[i]
-
-    if nframes < obuffsz:
-        if fake_stereo:
-            for i in range(2 * wcount, obuffsz):
-                obuffer[i] = 0.0
-        else:
-            for i in range(wcount, obuffsz):
-                obuffer[i] = 0.0
-
-        (<CallbackData*>client_data)[0].remaining = 0
+        # Fill with 0 if output buffer biffer than remaining data to be read
+        for i in range(wcount, obuffsz):
+            obuffer[i] = 0.0
 
     (<CallbackData*>client_data)[0].nframes -= wcount
     (<CallbackData*>client_data)[0].idata += wcount
