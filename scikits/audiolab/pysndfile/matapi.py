@@ -143,7 +143,7 @@ def _missing_function(format):
     def foo(*args, **kw):
         raise NotImplementedError, \
               "Matlab API for %s is disabled: format %s is not supported by "\
-              "your version of libsndfile is %s" % (format, 
+              "your version of libsndfile (%s)" % (format, 
                                                     format,
                                                     _SNDFILE_VER)
     foo.__doc__ = "This function is not supported with your version " \
