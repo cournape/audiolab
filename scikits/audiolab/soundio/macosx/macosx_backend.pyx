@@ -34,157 +34,68 @@ from AudioHardware cimport *
 cimport stdlib
 cimport numpy as cnp
 
+import numpy as np
+
 cdef extern from "Python.h":
     object PyString_FromStringAndSize(char *v, int len)
     int usleep(int)
     void printf(char*, ...)
-    int RAND_MAX = 2147483647
-    int random()
     
-cdef struct SoundData:
-    int remaining
-
-def yo():
-    cdef UInt32 sz, ndevices, i
-    cdef AudioDeviceID *devices
-    cdef char *name
-
-    AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &sz, NULL)
-    ndevices = sz / sizeof(AudioDeviceID)
-
-    devices = <AudioDeviceID*>stdlib.malloc(sizeof(AudioDeviceID) * ndevices)
-    res = []
-    try:
-        AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &sz,
-                devices)
-
-        for i in range(ndevices):
-            AudioDeviceGetPropertyInfo(devices[i], 0, False,
-                           kAudioDevicePropertyDeviceName, &sz,
-                           NULL)
-            name = <char*>stdlib.malloc(sz + 1)
-            AudioDeviceGetProperty(devices[i], 0, False,
-                    kAudioDevicePropertyDeviceName, &sz,
-                    name)
-            devicename = PyString_FromStringAndSize(name, sz+1)
-            stdlib.free(name)
-            res.append(devicename)
-
-    finally:
-        stdlib.free(devices)
-
-    return res
-
-cdef OSStatus callback(AudioDeviceID device, AudioTimeStamp* current_time,
-        AudioBufferList* data_in, AudioTimeStamp* time_in,
-        AudioBufferList* data_out, AudioTimeStamp* time_out,
-        void* client_data):
-    cdef OSStatus st = 0
-    cdef int remaining
-    cdef int sz, nsamples, i
-    cdef float* data
-
-    remaining = (<SoundData*>client_data)[0].remaining
-    (<SoundData*>client_data)[0].remaining -= 1
-    printf("callback: %d\n", remaining)
-
-    sz = (data_out[0].mBuffers)[0].mDataByteSize
-    nsamples = sz / sizeof (float) ;
-    data = <float*>((data_out[0].mBuffers)[0].mData)
-
-    printf("%ld samples\n", nsamples)
-    for i in range(nsamples - 1, -1, -1):
-        data[i] = 2 * random() / (<float>RAND_MAX) - 1
-    #((user_data*)client_data)->remaining -= 1;
-    return st
-
-cdef OSStatus yoyoyo(SoundData *data):
-    cdef OSStatus st
-
-    st = 0
-    while (data[0].remaining > 0):
-        #printf("Main: %d\n", data[0].remaining)
-        usleep(10000)
-
-    return st
-
-def play(cnp.ndarray input):
-    cdef UInt32 sz, buffer_size
-    cdef AudioDeviceID odevice
-    cdef OSStatus st
-    cdef AudioStreamBasicDescription ostreamdesc
-    cdef SoundData data
-
-    # Get default output device
-    sz = sizeof(AudioDeviceID)
-    st = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &sz,
-                                  &odevice)
-    if st:
-        raise RuntimeError("Error getting default output properties")
-
-    # get the buffersize that the default device uses for IO
-    sz = sizeof (UInt32)
-    st = AudioDeviceGetProperty(odevice, 0, False,
-            kAudioDevicePropertyBufferSize,
-            &sz, &buffer_size)
-    if st:
-        raise RuntimeError("Error getting buffer size of default output")
-
-    # Get default output stream format
-    sz = sizeof(ostreamdesc)
-    st = AudioDeviceGetProperty(odevice, 0, False,
-        kAudioDevicePropertyStreamFormat, &sz,
-        &ostreamdesc)
-
-    print "=================="
-    print "sampling rate:", ostreamdesc.mSampleRate
-    print "channels:", ostreamdesc.mChannelsPerFrame
-
-    a = (<int>(ostreamdesc.mFormatID & 0xff000000) >> 24)
-    b = (<int>(ostreamdesc.mFormatID & 0x00ff0000) >> 16)
-    c = (<int>(ostreamdesc.mFormatID & 0x0000ff00) >> 8)
-    d = (<int>(ostreamdesc.mFormatID & 0x000000ff) >> 0)
-    print "format ID: %c%c%c%c" % (a, b, c, d)
-
-    if ostreamdesc.mFormatID != kAudioFormatLinearPCM:
-        raise RuntimeError("Not linear pcm")
-
-    data.remaining = 100
-    st = AudioDeviceAddIOProc (odevice, callback, &data)
-    if st:
-        raise RuntimeError("error setting callback")
-
-    st = AudioDeviceStart (odevice, callback)
-    if st:
-        raise RuntimeError("error starting ")
-
-    yoyoyo(&data)
-
-    return 0
+cdef extern from "Python.h":
+    cdef struct PyArrayObject:
+        pass
 
 cdef struct CallbackData:
     int remaining
+    int nframes
+    int fake_stereo
+    float* idata
 
 cdef OSStatus class_callback(AudioDeviceID device, AudioTimeStamp* current_time,
         AudioBufferList* data_in, AudioTimeStamp* time_in,
         AudioBufferList* data_out, AudioTimeStamp* time_out,
         void* client_data):
     cdef OSStatus st = 0
-    cdef int remaining
-    cdef int sz, nsamples, i
-    cdef float* data
+    cdef int sz, obuffsz, i, nframes, fake_stereo, wcount
+    cdef float *data, *obuffer
 
-    remaining = (<CallbackData*>client_data)[0].remaining
-    (<CallbackData*>client_data)[0].remaining -= 1
-    printf("callback: %d\n", remaining)
+    data = (<CallbackData*>client_data)[0].idata
+    nframes = (<CallbackData*>client_data)[0].nframes
+    fake_stereo = (<CallbackData*>client_data)[0].fake_stereo
 
     sz = (data_out[0].mBuffers)[0].mDataByteSize
-    nsamples = sz / sizeof (float) ;
-    data = <float*>((data_out[0].mBuffers)[0].mData)
+    obuffsz = sz / sizeof (float) ;
+    obuffer = <float*>((data_out[0].mBuffers)[0].mData)
 
-    printf("%ld samples\n", nsamples)
-    for i in range(nsamples - 1, -1, -1):
-        data[i] = 2 * random() / (<float>RAND_MAX) - 1
+    printf("callback: %d - %d\n", 
+            (<CallbackData*>client_data)[0].nframes, obuffsz)
+
+    if nframes < obuffsz:
+        wcount = nframes
+    else:
+        wcount = obuffsz
+
+    if fake_stereo:
+        wcount /= 2
+        for i in range(wcount):
+            obuffer[2 * i] = data[i]
+            obuffer[2 * i + 1] = data[i]
+    else:
+        for i in range(wcount):
+            obuffer[i] = data[i]
+
+    if nframes < obuffsz:
+        if fake_stereo:
+            for i in range(2 * wcount, obuffsz):
+                obuffer[i] = 0.0
+        else:
+            for i in range(wcount, obuffsz):
+                obuffer[i] = 0.0
+
+        (<CallbackData*>client_data)[0].remaining = 0
+
+    (<CallbackData*>client_data)[0].nframes -= wcount
+    (<CallbackData*>client_data)[0].idata += wcount
 
     return st
 
@@ -193,6 +104,7 @@ cdef class CoreAudioDevice:
     cdef AudioStreamBasicDescription format
     cdef AudioDeviceIOProc callback
     cdef int proc_set, dev_started
+    cdef int nchannels
 
     def __init__(CoreAudioDevice self, Float64 fs=48000, int nchannels=1):
         cdef UInt32 sz, buffer_size
@@ -201,7 +113,7 @@ cdef class CoreAudioDevice:
         self.proc_set = 0
         self.dev_started = 0
 
-        self.callback = callback
+        self.callback = class_callback
 
         # Get default output
         sz = sizeof(AudioDeviceID)
@@ -220,18 +132,58 @@ cdef class CoreAudioDevice:
 
         # Set sampling rate and number of channels
         self.format.mSampleRate = fs
-        self.format.mChannelsPerFrame = nchannels
+
+        # CoreAudio can't mono ?
+        self.nchannels = nchannels
+        if nchannels == 1:
+            self.format.mChannelsPerFrame = 2
+        else:
+            self.format.mChannelsPerFrame = nchannels
 
         # XXX: how to make sure we have 32 bits native float here ?
         if self.format.mFormatID != kAudioFormatLinearPCM:
             raise ValueError("Not linear pcm")
 
-    def play(CoreAudioDevice self):
+        st = AudioDeviceSetProperty(self.dev, NULL, 0, False,
+                kAudioDevicePropertyStreamFormat,
+                sizeof(self.format), &self.format)
+        if st:
+            raise RuntimeError("Error while setting stream format.")
+
+    def play(CoreAudioDevice self, cnp.ndarray input):
+        cdef int nc
+        cdef cnp.ndarray[cnp.float32_t, ndim=2] cinput
+
+        if not input.ndim == 2:
+            raise ValueError("Expect rank 2 array")
+
+        if not input.dtype == np.float64:
+            raise NotImplementedError("Only float64 supported for now")
+
+        nc = input.shape[0]
+        if not nc == self.nchannels:
+            raise ValueError(
+                    "CoreAudioDevice configured for %d channels, "\
+                    "signal has %d channels" % \
+                    (self.channels, nc))
+
+        cinput = np.asfortranarray(input, np.float32)
+        self._play(cinput)
+
+    cdef int _play(CoreAudioDevice self, cnp.ndarray input) except -1:
         cdef OSStatus st
         cdef CallbackData data
+        cdef int bufsize, nframes
+
+        data.idata = <float*>input.data
+        data.nframes = input.size / input.shape[0]
+        if self.nchannels == 1:
+            data.fake_stereo = 1
+        else:
+            data.fake_stereo = 0
+        data.remaining = 1
 
         # Add callback, and starts the device
-        data.remaining = 100
         st = AudioDeviceAddIOProc(self.dev, self.callback, &data)
         if st:
             raise RuntimeError("error setting callback")
@@ -240,16 +192,16 @@ cdef class CoreAudioDevice:
         if st:
             raise RuntimeError("error starting ")
 
-        while (data.remaining > 0):
-            printf("Main: %d\n", data.remaining)
+        while (data.remaining == 1):
+            #printf("Main: %d\n", data.nframes)
             usleep(10000)
 
-        if self.dev_started:
-            st = AudioDeviceStop(self.device, self.callback)
-            if st:
-                print "AudioDeviceStop failed"
+        #if self.dev_started:
+        st = AudioDeviceStop(self.dev, self.callback)
+        if st:
+            print "AudioDeviceStop failed"
 
-        if self.proc_set:
-            st = AudioDeviceRemoveIOProc(self.device, self.callback)
-            if st:
-                print "AudioDeviceRemoveIO failed"
+        #if self.proc_set:
+        st = AudioDeviceRemoveIOProc(self.dev, self.callback)
+        if st:
+            print "AudioDeviceRemoveIO failed"
