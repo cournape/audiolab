@@ -60,6 +60,13 @@ cdef OSStatus class_callback(AudioDeviceID device, AudioTimeStamp* current_time,
     cdef int sz, obuffsz, i, nframes, fake_stereo, wcount
     cdef float *data, *obuffer
 
+    # Prevent compilation warnings
+    device = device
+    current_time = current_time
+    data_in = data_in
+    time_in = time_in
+    time_out = time_out
+
     data = (<CallbackData*>client_data)[0].idata
     nframes = (<CallbackData*>client_data)[0].nframes
     fake_stereo = (<CallbackData*>client_data)[0].fake_stereo
