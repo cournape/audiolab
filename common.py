@@ -16,9 +16,9 @@ COPYING.txt for details.  """
 DISTNAME            = 'scikits.audiolab'
 DESCRIPTION         = 'A python module to make noise from numpy arrays'
 LONG_DESCRIPTION    = descr
-MAINTAINER          = 'David Cournapeau',
-MAINTAINER_EMAIL    = 'david@ar.media.kyoto-u.ac.jp',
-URL                 = 'http://www.ar.media.kyoto-u.ac.jp/members/david/softwares/audiolab',
+MAINTAINER          = 'David Cournapeau'
+MAINTAINER_EMAIL    = 'david@ar.media.kyoto-u.ac.jp'
+URL                 = 'http://www.ar.media.kyoto-u.ac.jp/members/david/softwares/audiolab'
 LICENSE             = 'LGPL'
 DOWNLOAD_URL        = URL
 
