@@ -40,8 +40,8 @@ def info_factory(name, libnames, headers, frameworks=None,
 
         def calc_info(self):
             """ Compute the informations of the library """
-            libs = self.get_libs('libraries', '')
-            if libs:
+            if libnames:
+                libs = self.get_libs('libraries', '')
                 # Look for the shared library
                 lib_dirs = self.get_lib_dirs()
                 tmp = None
