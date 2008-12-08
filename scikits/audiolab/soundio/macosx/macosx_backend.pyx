@@ -212,7 +212,7 @@ cdef class CoreAudioDevice:
 
         # Get default output stream format
         sz = sizeof(self.format)
-        st = AudioDeviceGetProperty(self.device, 0, False,
+        st = AudioDeviceGetProperty(self.dev, 0, False,
                 kAudioDevicePropertyStreamFormat, &sz,
                 &self.format)
         if st:
