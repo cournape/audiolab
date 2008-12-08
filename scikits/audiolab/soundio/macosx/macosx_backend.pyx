@@ -135,7 +135,7 @@ cdef class CoreAudioDevice:
         # Set sampling rate and number of channels
         self.format.mSampleRate = fs
 
-        # CoreAudio can't mono ?
+        # CoreAudio can't do mono ? Fake stereo in that case for now
         self.nchannels = nchannels
         if nchannels == 1:
             self.format.mChannelsPerFrame = 2
