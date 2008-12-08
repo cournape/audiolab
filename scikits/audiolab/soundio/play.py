@@ -31,6 +31,7 @@
 
 import sys
 import warnings
+import os
 
 import numpy as np
 
