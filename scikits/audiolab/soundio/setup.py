@@ -20,6 +20,16 @@ def configuration(parent_package='', top_path=None, package_name='soundio'):
     except NotFoundError:
         warnings.warn("Alsa not found - alsa backend not build")
 
+    core_audio_info = info_factory('CoreAudio', [], [],
+                             frameworks=["CoreAudio"],
+                             classname='CoreAudioInfo')()
+    try:
+        core_audio_config = core_audio_info.get_info(2)
+        config.add_extension("maxosx_backend", sources=["macosx/macosx_backend.c"],
+                             extra_info=core_audio_config)
+    except NotFoundError:
+        warnings.warn("CoreAudio not found - CoreAudio backend not build")
+
     return config
 
 if __name__ == "__main__":
