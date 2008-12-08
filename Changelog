@@ -1,3 +1,7 @@
+audiolab (0.10dev) Mon, 08 Dec 2008 13:23:04 +0900
+	* CoreAudio device implemented, with play capabilities (not reliable
+	yet)
+
 audiolab (0.10dev) Sat, 06 Dec 2008 20:05:04 +0900
 	* Add compat module for sndfile/formatinfo classes which are based on
 	our cython wrapper around sndfile
