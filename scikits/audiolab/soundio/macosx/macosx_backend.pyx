@@ -32,6 +32,7 @@
 cimport AudioHardware
 from AudioHardware cimport *
 cimport stdlib
+cimport python_exc
 cimport numpy as cnp
 
 import numpy as np
@@ -168,6 +169,7 @@ cdef class CoreAudioDevice:
         cdef OSStatus st
         cdef CallbackData data
         cdef int bufsize, nframes
+        cdef int gotsig = 0
 
         data.idata = <float*>input.data
         data.nframes = input.size / input.shape[0]
@@ -187,6 +189,10 @@ cdef class CoreAudioDevice:
             raise RuntimeError("error starting ")
 
         while (data.remaining == 1):
+            st = python_exc.PyErr_CheckSignals()
+            if st != 0:
+                    gotsig = 1
+                    break
             #printf("Main: %d\n", data.nframes)
             usleep(10000)
 
@@ -199,3 +205,8 @@ cdef class CoreAudioDevice:
         st = AudioDeviceRemoveIOProc(self.dev, self.callback)
         if st:
             print "AudioDeviceRemoveIO failed"
+
+        if gotsig:
+            return -1
+
+        return 0
