@@ -60,8 +60,9 @@ if BACKEND == 'ALSA':
         dev.play(input)
 else:
     def _play(input, fs):
-        raise NotImplementedError("No Backend implemented for you platform %s"
-                                  % os.name)
+        raise NotImplementedError, \
+              "No Backend implemented for you platform " \
+              "(detected platform is: %s)" % os.name
 
 def play(input, fs=44100):
     """Play the signal in vector input to the default output device.
