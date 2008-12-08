@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 11:00 PM 2008 J
+# Last Change: Mon Dec 08 02:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -19,7 +19,7 @@
 """This module implements functions to read and write to audio files easily
 (ala matlab: wavread, etc...)."""
 
-import numpy as N
+import numpy as np
 
 from _sndfile import Format, Sndfile, available_file_formats, \
                      available_encodings, sndfile_version
@@ -35,10 +35,10 @@ def _writer_factory(name, format, def_fs, descr):
     sampling rate def_fs, and docstring descr."""
     def basic_writer(data, filename, fs = def_fs, enc = format.encoding):
         """Common "template" to all write functions."""
-        if N.ndim(data) <= 1:
+        if np.ndim(data) <= 1:
             nc      = 1
-            nframes = N.size(data)
-        elif N.ndim(data) == 2:
+            nframes = np.size(data)
+        elif np.ndim(data) == 2:
             nc      = data.shape[1]
             nframes = data.shape[0]
         else:
