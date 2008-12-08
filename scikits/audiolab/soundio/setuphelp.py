@@ -46,7 +46,7 @@ def info_factory(name, libnames, headers, frameworks=None,
                 lib_dirs = self.get_lib_dirs()
                 tmp = None
                 for d in lib_dirs:
-                    tmp = self.check_libs(d, libnames)
+                    tmp = self.check_libs(d, libs)
                     if tmp is not None:
                         info    = tmp
                         break
