@@ -6,13 +6,10 @@ Things to do before a release
       exceptions launched are pretty random...
     - add inout argument in read method to avoid recreating a buffer.
     - more tests
-    - add an audio player for at windows/mac os x
+    - add an audio player for at windows
 
 Pending issues
 --------------
-    - There is no check for supported format, the way get_supported_format is
-      implemented now it totally broken. Instead of using values from the
-      header, should use sf_command
     - removing most warning from pylint
     - handling in audiolab when first is not 0 (now, we have seek :))
 
