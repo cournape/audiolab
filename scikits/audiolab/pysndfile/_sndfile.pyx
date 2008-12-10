@@ -315,6 +315,7 @@ cdef _sub_formats_int(int format):
     subs = []
     # Not used, but necessary to pass sfinfo to sf_format_check
     sfinfo.channels = 1
+    sfinfo.samplerate = 8000
     for i in range(nsub):
         info.format = i
         sf_command (NULL, SFC_GET_FORMAT_SUBTYPE, &info, sizeof (info))
