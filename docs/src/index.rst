@@ -182,6 +182,67 @@ libsndfile):
 
 .. literalinclude:: examples/over_available.py
 
+Sound output
+~~~~~~~~~~~~
+
+audiolab now has some facilities to output sound from numpy arrays:
+
+.. literalinclude:: examples/over_play.py
+
+Full API
+========
+
+Audio file IO
+-------------
+
+.. currentmodule:: scikits.audiolab
+
+The Format class is used to control meta-data specific to one type of audio
+file (file format, encoding and endianness). It is mainly useful when writing
+files or reading raw (header-less) audio files.
+
+.. autoclass:: Format
+
+The following two functions can be used to query the available formats and
+encodings.
+
+.. autofunction:: available_file_formats
+.. autofunction:: available_encodings
+
+Sndfile is the main class for audio file IO.
+
+.. autoclass:: Sndfile
+
+Read methods
+~~~~~~~~~~~~
+
+.. automethod:: Sndfile.read_frames
+
+Write methods
+~~~~~~~~~~~~~
+
+.. automethod:: Sndfile.write_frames
+.. automethod:: Sndfile.sync
+
+Meta-data
+~~~~~~~~~
+
+.. attribute:: Sndfile.samplerate
+
+        Returns the sampling rate of the file
+
+.. attribute:: Sndfile.channels
+
+        Returns the number of channels
+
+.. attribute:: Sndfile.frames
+
+        Returns the number of frames in the file
+
+.. attribute:: Sndfile.format
+
+        Returns the Format instance attached to the file.
+
 Encoding and array dtype
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -209,17 +270,15 @@ in the range [-1.0, 1.0] will be written to an integer PCM file so that a data
 value of 1.0 will be the largest allowable integer for the given bit width.
 
 Sound output
-~~~~~~~~~~~~
+------------
 
-audiolab also have some facilities to output sound from numpy arrays:
+audiolab now has some facilities to output sound from numpy arrays: the
+function play is a wrapper around a platform-specific audio backend. For now,
+only ALSA backend (Linux) and Core Audio backend (Mac OS X) are implemented.
+Other backends (for windows, OSS for Solaris/BSD) may be added later, although
+it is not a priority for me. Patchs are welcomed, particularly for windows.
 
-.. literalinclude:: examples/over_play.py
-
-The function play is a wrapper around a platform-specific audio backend. For
-now, only ALSA backend (Linux) and Core Audio backend (Mac OS X) are
-implemented. Other backends (for windows, OSS for Solaris/BSD) may be added
-later, although it is not a priority for me. Patchs are welcomed, particularly
-for windows.
+.. autofunction:: play
 
 Obsolete API
 ============
