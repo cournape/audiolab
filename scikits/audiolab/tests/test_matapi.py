@@ -122,7 +122,8 @@ class test_audiolab(TestCase):
             # Write same data with wavwrite
             func(noise, cfilename2, fs)
 
-            # Compare if both files have same hash
+            # Compare if both files have both same audio data and same
+            # meta-data
             f1  = Sndfile(cfilename1)
             f2  = Sndfile(cfilename2)
 
