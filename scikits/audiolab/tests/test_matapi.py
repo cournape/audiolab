@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sat Dec 06 11:00 PM 2008 J
+# Last Change: Sun Dec 14 04:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -123,20 +123,15 @@ class test_audiolab(TestCase):
             func(noise, cfilename2, fs)
 
             # Compare if both files have same hash
-            f1  = open(cfilename1)
-            f2  = open(cfilename2)
+            f1  = Sndfile(cfilename1)
+            f2  = Sndfile(cfilename2)
 
-            import md5
-
-            m1  = md5.new()
-            m2  = md5.new()
-
-            m1.update(f1.read())
-            m2.update(f2.read())
-
+            assert_array_equal(f1.read_frames(f1.nframes), f2.read_frames(f2.nframes))
+            assert_equal(f1.format, f2.format)
+            assert_equal(f1.samplerate, f2.samplerate)
+            assert_equal(f1.channels, f2.channels)
             f1.close()
             f2.close()
-            assert m1.hexdigest() == m2.hexdigest()
         finally:
             close_tmp_file(rfd1, cfilename1)
             close_tmp_file(rfd2, cfilename2)
