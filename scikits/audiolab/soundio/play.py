@@ -45,7 +45,8 @@ if BACKEND == 'ALSA':
     try:
         from scikits.audiolab.soundio._alsa_backend import AlsaDevice
     except ImportError, e:
-        warnings.warn("Could not import alsa backend; most probably, you did not have alsa headers when building audiolab")
+        warnings.warn("Could not import alsa backend; most probably, "
+                      "you did not have alsa headers when building audiolab")
 
     def _play(input, fs):
         if input.ndim == 1:
@@ -64,7 +65,8 @@ elif BACKEND == 'CoreAudio':
         from scikits.audiolab.soundio.macosx_backend import CoreAudioDevice
     except ImportError, e:
         print e
-        warnings.warn("Could not import CoreAudio backend; most probably, you did not have CoreAudio headers when building audiolab")
+        warnings.warn("Could not import CoreAudio backend; most probably, "
+                      "you did not have CoreAudio headers when building audiolab")
 
     def _play(input, fs):
         if input.ndim == 1:
@@ -87,15 +89,21 @@ else:
 def play(input, fs=44100):
     """Play the signal in vector input to the default output device.
 
-    Only floating point input are supported for now: input is assumed to be in
-    the -1..1 range. Any values outside this range will be clipped by the
-    device.
+    Only floating point input are supported: input is assumed to be in the
+    -1..1 range. Any values outside this range will be clipped by the device.
 
     Parameters
     ----------
-        input: array
-            input signal of rank 2. Each row is assumed to be one channel.
-        fs: int
-            sampling rate (in Hz)
+    input: array
+        input signal of rank 2. Each row is assumed to be one channel.
+    fs: int
+        sampling rate (in Hz)
+
+    Notes
+    -----
+    It will fail if the sampling rate is not supported by your device. In
+    particular, no automatic resampling is done. Mono signals are doubled for
+    fake stereo for the CoreAudio framework, as it seemse CoreAudio does not
+    handle mono on its own.
     """
     return _play(input, fs)
