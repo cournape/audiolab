@@ -61,7 +61,7 @@ if paver.doctools.has_sphinx:
         def build_latex():
             subprocess.call(["make", "all-pdf"], cwd=paths.latexdir)
         dry("Build pdf doc", build_latex)
-        destdir = path("scikits") / "audiolab" / "docs" / "pdf"
+        destdir = path("docs") / "pdf"
         destdir.rmtree()
         destdir.makedirs()
         pdf = paths.latexdir / "audiolab.pdf"
@@ -79,7 +79,7 @@ if paver.doctools.has_sphinx:
         """Build Audiolab's documentation and install it into
         scikits/audiolab/docs"""
         builtdocs = path("docs") / options.sphinx.builddir / "html"
-        destdir = path("scikits") / "audiolab" / "docs" / "html"
+        destdir = path("docs") / "html"
         destdir.rmtree()
         builtdocs.move(destdir)
 
