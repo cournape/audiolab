@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sun Dec 14 04:00 PM 2008 J
+# Last Change: Sun Dec 14 07:00 PM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
@@ -51,17 +51,14 @@ class test_pysndfile(TestCase):
         finally:
             close_tmp_file(rfd, cfilename)
 
-
+    @dec.skipif(sys.platform=='win32', 
+                "Not testing opening by fd because does not work on win32")
     def test_basic_io_fd(self):
         """ Check open from fd works"""
-        # dirty !
-        if sys.platform == 'win32':
-            print "Not testing opening by fd because does not work on win32"
-        else:
-            ofilename = join(TEST_DATA_DIR, 'test.wav')
-            fd = os.open(ofilename, os.O_RDONLY)
-            hdl = sndfile(fd, 'read')
-            hdl.close()
+        ofilename = join(TEST_DATA_DIR, 'test.wav')
+        fd = os.open(ofilename, os.O_RDONLY)
+        hdl = sndfile(fd, 'read')
+        hdl.close()
 
     def test_raw(self):
         rawname = join(TEST_DATA_DIR, 'test.raw')
