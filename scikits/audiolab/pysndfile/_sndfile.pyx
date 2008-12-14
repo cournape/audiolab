@@ -312,7 +312,7 @@ def available_file_formats():
         # Handle the case where libsndfile supports a format we don't
         if not _ENUM_TO_STR_FILE_FORMAT.has_key(i & SF_FORMAT_TYPEMASK):
             warnings.warn("Format %#10x supported by libsndfile but not "
-                          "yet supported by audiolab" % 
+                          "yet supported by audiolab" %
                           (i & SF_FORMAT_TYPEMASK))
         else:
             ret.append(_ENUM_TO_STR_FILE_FORMAT[i & SF_FORMAT_TYPEMASK])
@@ -328,7 +328,7 @@ def available_encodings(major):
         # Handle the case where libsndfile supports an encoding we don't
         if not _ENUM_TO_STR_ENCODING.has_key(i & SF_FORMAT_SUBMASK):
             warnings.warn("Encoding %#10x supported by libsndfile but not "
-                          "yet supported by audiolab" % 
+                          "yet supported by audiolab" %
                           (i & SF_FORMAT_SUBMASK))
         else:
             ret.append(_ENUM_TO_STR_ENCODING[i & SF_FORMAT_SUBMASK])
@@ -611,7 +611,7 @@ broken)"""
         if float are requested when the file contains integer data, you will
         get normalized data (that is the max possible integer will be 1.0, and
         the minimal possible value -1.0).
-    
+
         if integers are requested when the file contains floating point data,
         it may give wrong results because there is an ambiguity: if the
         floating data are normalized, you can get a file with only 0 ! Getting
@@ -704,7 +704,7 @@ broken)"""
         Notes
         -----
         One column per channel.
-        
+
         updates the write pointer.
 
         if the input type is float, and the file encoding is an integer type,
