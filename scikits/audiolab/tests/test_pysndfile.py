@@ -1,12 +1,12 @@
 #! /usr/bin/env python
-# Last Change: Fri Dec 05 03:00 PM 2008 J
+# Last Change: Sun Dec 14 04:00 PM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
 import sys
 
 from numpy.testing import TestCase, assert_array_equal, dec
-import numpy as N
+import numpy as np
 
 from scikits.audiolab import PyaudioException, PyaudioIOError
 from scikits.audiolab import sndfile, formatinfo as audio_format
@@ -24,22 +24,22 @@ class test_pysndfile(TestCase):
             nbuff = 22050
 
             # Open the test file for reading
-            a       = sndfile(ofilename, 'read')
+            a = sndfile(ofilename, 'read')
             nframes = a.get_nframes()
 
             # Open the copy file for writing
-            format  = audio_format('wav', 'pcm16')
+            format = audio_format('wav', 'pcm16')
             b = sndfile(fd, 'write', format, a.get_channels(),
                     a.get_samplerate())
 
             # Copy the data
             for i in range(nframes / nbuff):
-                tmpa    = a.read_frames(nbuff)
-                assert tmpa.dtype == N.float
+                tmpa = a.read_frames(nbuff)
+                assert tmpa.dtype == np.float
                 b.write_frames(tmpa, nbuff)
-            nrem    = nframes % nbuff
-            tmpa    = a.read_frames(nrem)
-            assert tmpa.dtype == N.float
+            nrem = nframes % nbuff
+            tmpa = a.read_frames(nrem)
+            assert tmpa.dtype == np.float
             b.write_frames(tmpa, nrem)
 
             a.close()
@@ -61,8 +61,8 @@ class test_pysndfile(TestCase):
 
     def test_raw(self):
         rawname = join(TEST_DATA_DIR, 'test.raw')
-        format  = audio_format('raw', 'pcm16', 'little')
-        a       = sndfile(rawname, 'read', format, 1, 11025)
+        format = audio_format('raw', 'pcm16', 'little')
+        a = sndfile(rawname, 'read', format, 1, 11025)
         assert a.get_nframes() == 11290
         a.close()
 
@@ -70,26 +70,26 @@ class test_pysndfile(TestCase):
         """Check float64 write/read works"""
         # dirty !
         ofilename = join(TEST_DATA_DIR, 'test.wav')
-        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
+        rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
-            nbuff           = 22050
+            nbuff = 22050
 
             # Open the test file for reading
-            a       = sndfile(ofilename, 'read')
+            a = sndfile(ofilename, 'read')
             nframes = a.get_nframes()
 
             # Open the copy file for writing
-            format  = audio_format('wav', 'float64')
-            b       = sndfile(fd, 'write', format, a.get_channels(), 
+            format = audio_format('wav', 'float64')
+            b = sndfile(fd, 'write', format, a.get_channels(), 
                     a.get_samplerate())
 
             # Copy the data in the wav file
             for i in range(nframes / nbuff):
-                tmpa    = a.read_frames(nbuff, dtype = N.float64)
-                assert tmpa.dtype == N.float64
+                tmpa = a.read_frames(nbuff, dtype = np.float64)
+                assert tmpa.dtype == np.float64
                 b.write_frames(tmpa, nbuff)
-            nrem    = nframes % nbuff
-            tmpa    = a.read_frames(nrem)
+            nrem = nframes % nbuff
+            tmpa = a.read_frames(nrem)
             b.write_frames(tmpa, nrem)
 
             a.close()
@@ -97,11 +97,11 @@ class test_pysndfile(TestCase):
 
             # Now, reopen both files in for reading, and check data are
             # the same
-            a       = sndfile(ofilename, 'read')
-            b       = sndfile(cfilename, 'read')
+            a = sndfile(ofilename, 'read')
+            b = sndfile(cfilename, 'read')
             for i in range(nframes / nbuff):
-                tmpa    = a.read_frames(nbuff, dtype = N.float64)
-                tmpb    = b.read_frames(nbuff, dtype = N.float64)
+                tmpa = a.read_frames(nbuff, dtype = np.float64)
+                tmpb = b.read_frames(nbuff, dtype = np.float64)
                 assert_array_equal(tmpa, tmpb)
             
             a.close()
@@ -116,24 +116,24 @@ class test_pysndfile(TestCase):
         ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
-            nbuff           = 22050
+            nbuff = 22050
 
             # Open the test file for reading
-            a       = sndfile(ofilename, 'read')
+            a = sndfile(ofilename, 'read')
             nframes = a.get_nframes()
 
             # Open the copy file for writing
-            format  = audio_format('wav', 'float32')
-            b       = sndfile(fd, 'write', format, a.get_channels(), 
+            format = audio_format('wav', 'float32')
+            b = sndfile(fd, 'write', format, a.get_channels(), 
                     a.get_samplerate())
 
             # Copy the data in the wav file
             for i in range(nframes / nbuff):
-                tmpa    = a.read_frames(nbuff, dtype = N.float32)
-                assert tmpa.dtype == N.float32
+                tmpa = a.read_frames(nbuff, dtype = np.float32)
+                assert tmpa.dtype == np.float32
                 b.write_frames(tmpa, nbuff)
-            nrem    = nframes % nbuff
-            tmpa    = a.read_frames(nrem)
+            nrem = nframes % nbuff
+            tmpa = a.read_frames(nrem)
             b.write_frames(tmpa, nrem)
 
             a.close()
@@ -141,11 +141,11 @@ class test_pysndfile(TestCase):
 
             # Now, reopen both files in for reading, and check data are
             # the same
-            a       = sndfile(ofilename, 'read')
-            b       = sndfile(cfilename, 'read')
+            a = sndfile(ofilename, 'read')
+            b = sndfile(cfilename, 'read')
             for i in range(nframes / nbuff):
-                tmpa    = a.read_frames(nbuff, dtype = N.float32)
-                tmpb    = b.read_frames(nbuff, dtype = N.float32)
+                tmpa = a.read_frames(nbuff, dtype = np.float32)
+                tmpb = b.read_frames(nbuff, dtype = np.float32)
                 assert_array_equal(tmpa, tmpb)
             
             a.close()
@@ -170,24 +170,24 @@ class test_pysndfile(TestCase):
 
     def test_short_io(self):
         # TODO: check if neg or pos value is the highest in abs
-        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
+        rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
-            nb      = 2 ** 14
-            nbuff   = 22050
-            fs      = 22050
-            a       = N.random.random_integers(-nb, nb, nbuff)
-            a       = a.astype(N.short)
+            nb = 2 ** 14
+            nbuff = 22050
+            fs = 22050
+            a = np.random.random_integers(-nb, nb, nbuff)
+            a = a.astype(np.short)
 
             # Open the file for writing
-            format  = audio_format('wav', 'pcm16')
-            b       = sndfile(fd, 'write', format, 1, fs)
+            format = audio_format('wav', 'pcm16')
+            b = sndfile(fd, 'write', format, 1, fs)
 
             b.write_frames(a, nbuff)
             b.close()
 
-            b       = sndfile(cfilename, 'read')
+            b = sndfile(cfilename, 'read')
 
-            read_a  = b.read_frames(nbuff, dtype = N.short)
+            read_a = b.read_frames(nbuff, dtype = np.short)
             b.close()
 
             assert_array_equal(a, read_a)
@@ -197,24 +197,24 @@ class test_pysndfile(TestCase):
 
     def test_int_io(self):
         # TODO: check if neg or pos value is the highest in abs
-        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
+        rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
-            nb      = 2 ** 25
-            nbuff   = 22050
-            fs      = 22050
-            a       = N.random.random_integers(-nb, nb, nbuff)
-            a       = a.astype(N.int32)
+            nb = 2 ** 25
+            nbuff = 22050
+            fs = 22050
+            a = np.random.random_integers(-nb, nb, nbuff)
+            a = a.astype(np.int32)
 
             # Open the file for writing
-            format  = audio_format('wav', 'pcm32')
-            b       = sndfile(fd, 'write', format, 1, fs)
+            format = audio_format('wav', 'pcm32')
+            b = sndfile(fd, 'write', format, 1, fs)
 
             b.write_frames(a, nbuff)
             b.close()
 
-            b       = sndfile(cfilename, 'read')
+            b = sndfile(cfilename, 'read')
 
-            read_a  = b.read_frames(nbuff, dtype = N.int32)
+            read_a = b.read_frames(nbuff, dtype = np.int32)
             b.close()
 
             assert_array_equal(a, read_a)
@@ -228,7 +228,7 @@ class test_pysndfile(TestCase):
         rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
             # Open the file for writing
-            format  = audio_format('wav', 'pcm16')
+            format = audio_format('wav', 'pcm16')
             try:
                 b = sndfile(fd, 'write', \
                         format, channels = 22000, samplerate = 1)
@@ -244,7 +244,7 @@ class test_pysndfile(TestCase):
     def test_bigframes(self):
         """ Try to seek really far"""
         rawname = join(TEST_DATA_DIR, 'test.wav')
-        a       = sndfile(rawname, 'read')
+        a = sndfile(rawname, 'read')
         try:
             try:
                 a.seek(2 ** 60)
@@ -256,18 +256,18 @@ class test_pysndfile(TestCase):
 
     def test_float_frames(self):
         """ Check nframes can be a float"""
-        rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
+        rfd, fd, cfilename = open_tmp_file('pysndfiletest.wav')
         try:
             # Open the file for writing
             format = audio_format('wav', 'pcm16')
             a = sndfile(fd, 'rwrite', format, channels = 1, 
                     samplerate = 22050)
-            tmp = N.random.random_integers(-100, 100, 1000)
-            tmp = tmp.astype(N.short)
+            tmp = np.random.random_integers(-100, 100, 1000)
+            tmp = tmp.astype(np.short)
             a.write_frames(tmp, tmp.size)
             a.seek(0)
             a.sync()
-            ctmp    = a.read_frames(1e2, dtype = N.short)
+            ctmp = a.read_frames(1e2, dtype = np.short)
             a.close()
 
         finally:
@@ -287,59 +287,59 @@ class test_seek(TestCase):
     def test_simple(self):
         ofilename = join(TEST_DATA_DIR, 'test.wav')
         # Open the test file for reading
-        a       = sndfile(ofilename, 'read')
+        a = sndfile(ofilename, 'read')
         nframes = a.get_nframes()
 
-        buffsize    = 1024
-        buffsize    = min(nframes, buffsize)
+        buffsize = 1024
+        buffsize = min(nframes, buffsize)
 
         # First, read some frames, go back, and compare buffers
-        buff    = a.read_frames(buffsize)
+        buff = a.read_frames(buffsize)
         a.seek(0)
-        buff2   = a.read_frames(buffsize)
+        buff2 = a.read_frames(buffsize)
         assert_array_equal(buff, buff2)
 
         a.close()
 
         # Now, read some frames, go back, and compare buffers
         # (check whence == 1 == SEEK_CUR)
-        a       = sndfile(ofilename, 'read')
+        a = sndfile(ofilename, 'read')
         a.read_frames(buffsize)
-        buff    = a.read_frames(buffsize)
+        buff = a.read_frames(buffsize)
         a.seek(-buffsize, 1)
-        buff2   = a.read_frames(buffsize)
+        buff2 = a.read_frames(buffsize)
         assert_array_equal(buff, buff2)
 
         a.close()
 
         # Now, read some frames, go back, and compare buffers
         # (check whence == 2 == SEEK_END)
-        a       = sndfile(ofilename, 'read')
-        buff    = a.read_frames(nframes)
+        a = sndfile(ofilename, 'read')
+        buff = a.read_frames(nframes)
         a.seek(-buffsize, 2)
-        buff2   = a.read_frames(buffsize)
+        buff2 = a.read_frames(buffsize)
         assert_array_equal(buff[-buffsize:], buff2)
 
     def test_rw(self):
         """Test read/write pointers for seek."""
         ofilename = join(TEST_DATA_DIR, 'test.wav')
-        rfd, fd, cfilename   = open_tmp_file('rwseektest.wav')
+        rfd, fd, cfilename = open_tmp_file('rwseektest.wav')
         try:
             ref = sndfile(ofilename, 'read')
             test = sndfile(fd, 'rwrite', format = ref._format, channels =
                     ref.get_channels(), samplerate = ref.get_samplerate())
             n = 1024
 
-            rbuff = ref.read_frames(n, dtype = N.int16)
+            rbuff = ref.read_frames(n, dtype = np.int16)
             test.write_frames(rbuff)
-            tbuff = test.read_frames(n, dtype = N.int16)
+            tbuff = test.read_frames(n, dtype = np.int16)
 
             assert_array_equal(rbuff, tbuff)
 
             # Test seeking both read and write pointers
             test.seek(0, 0)
             test.write_frames(rbuff)
-            tbuff = test.read_frames(n, dtype = N.int16)
+            tbuff = test.read_frames(n, dtype = np.int16)
             assert_array_equal(rbuff, tbuff)
 
             # Test seeking only read pointer
@@ -348,9 +348,9 @@ class test_seek(TestCase):
             rbuff2.clip(-30000, 30000)
             test.seek(0, 0, 'r')
             test.write_frames(rbuff2)
-            tbuff1 = test.read_frames(n, dtype = N.int16)
+            tbuff1 = test.read_frames(n, dtype = np.int16)
             try:
-                tbuff2 = test.read_frames(n, dtype = N.int16)
+                tbuff2 = test.read_frames(n, dtype = np.int16)
             except IOError, e:
                 msg = "write pointer was updated in read seek !"
                 msg += "\n(msg is %s)" % e
@@ -358,7 +358,7 @@ class test_seek(TestCase):
 
             assert_array_equal(rbuff1, tbuff1)
             assert_array_equal(rbuff2, tbuff2)
-            if N.all(rbuff2 == tbuff1):
+            if np.all(rbuff2 == tbuff1):
                 raise AssertionError("write pointer was updated"\
                         " in read seek !") 
 
@@ -368,14 +368,14 @@ class test_seek(TestCase):
             test.seek(0, 0, 'rw')
             test.seek(n, 0, 'w')
             test.write_frames(rbuff3)
-            tbuff1 = test.read_frames(n, N.int16)
+            tbuff1 = test.read_frames(n, np.int16)
             try:
                 assert_array_equal(tbuff1, rbuff1)
             except AssertionError:
                 raise AssertionError("read pointer was updated in write seek !")
 
             try:
-                tbuff3 = test.read_frames(n, N.int16)
+                tbuff3 = test.read_frames(n, np.int16)
             except IOError, e:
                 msg = "read pointer was updated in write seek !"
                 msg += "\n(msg is %s)" % e
