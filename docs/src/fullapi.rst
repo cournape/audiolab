@@ -1,22 +1,59 @@
+========
 Full API
 ========
 
 Audio file IO
--------------
+=============
 
 .. currentmodule:: scikits.audiolab
 
+The :class:`~Format` class
+--------------------------
+
 The Format class is used to control meta-data specific to one type of audio
 file (file format, encoding and endianness). It is mainly useful when writing
-files or reading raw (header-less) audio files.
+files or reading raw (header-less) audio files. A Format instance can be
+queried for its related meta-data:
+
+        >>> from scikits.audiolab import Format
+        >>> a = Format() # By default, 16 bits PCM wav file
+        >>> print a # Will print a detail description of the format
 
 .. autoclass:: Format
 
+.. attribute:: Format.file_format
+
+        Returns the file format.
+
+.. attribute:: Sndfile.file_format_description
+
+        Returns the full description of the file format.
+
+.. attribute:: Sndfile.encoding
+
+        Returns the encoding.
+
+.. attribute:: Sndfile.encoding_description
+
+        Returns the full description of the encoding.
+
+.. attribute:: Sndfile.endianness
+
+        Returns the endianness.
+
 The following two functions can be used to query the available formats and
-encodings.
+encodings. The exact list of formats depend on the libsndfile audiolab was
+built against.
+
+        >>> from scikits.audiolab import available_encodings
+        >>> # List encodings supported for the wav format
+        >>> print available_encodings('wav')
 
 .. autofunction:: available_file_formats
 .. autofunction:: available_encodings
+
+The :class:`~Sndfile` class
+---------------------------
 
 Sndfile is the main class for audio file IO.
 

@@ -1,8 +1,9 @@
+=========================
 Download and installation
 =========================
 
 Supported platforms
--------------------
+===================
 
 Audiolab has been run succesfully on the following platforms:
 
@@ -14,7 +15,7 @@ I would be interested to hear anyone who succeesfully used it on other
 platforms.
 
 Download
---------
+========
 
 audiolab is part of scikits: its source can be downloaded directly from the
 scikits svn repository::
@@ -22,7 +23,7 @@ scikits svn repository::
 	svn co http://svn.scipy.org/svn/scikits/trunk/audiolab
 
 Requirements
-------------
+============
 
 audiolab requires the following softwares:
 
@@ -36,7 +37,7 @@ On Ubuntu, you can install the dependencies as follow::
         sudo apt-get install python-dev python-numpy python-setuptools libsndfile-dev
 
 Optional
---------
+========
 
 Audiolab can optionally install audio backends. For now, only alsa is
 supported, for linux audio support. You need alsa headers for this to work; on
@@ -45,7 +46,7 @@ Ubuntu, you can install them with the following command::
         sudo apt-get install libasound2-dev
 
 Installation
-------------
+============
 
 For unix users, if libsndfile is installed in standart location (eg /usr/lib,
 /usr/local/lib), the installer should be able to find them automatically, and
@@ -55,7 +56,7 @@ are site.cfg examples which should give you an idea how to use them on your
 platform).
 
 License
--------
+=======
 
 audiolab is released under the LGPL, which forces you to release back the
 modifications you may make in the version of audiolab you are distributing, but

@@ -1,3 +1,4 @@
+========
 Overview
 ========
 
@@ -12,7 +13,7 @@ formats: wav, aiff, au, ircam, ogg and flac formats are supported through this
 simple API.
 
 Sndfile class
--------------
+=============
 
 For more control (for example writing with a non default encoding, controling
 output array dtype), the Sndfile class should be used. Internally, the simple
@@ -53,7 +54,7 @@ libsndfile):
 .. literalinclude:: examples/over_available.py
 
 Sound output
-------------
+============
 
 audiolab now has some facilities to output sound from numpy arrays:
 
