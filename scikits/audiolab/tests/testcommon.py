@@ -11,7 +11,7 @@ def open_tmp_file(name):
     """On any sane platforms, return a fd on a tmp file. On windows, returns
     the filename, and as such, is not secure (someone else can reopen the file
     in between)."""
-    fd, cfilename = mkstemp('pysndfiletest.wav')
+    fd, cfilename = mkstemp(name)
     if sys.platform == 'win32':
         return fd, cfilename, cfilename
     else:
