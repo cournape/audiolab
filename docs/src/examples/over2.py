@@ -10,9 +10,9 @@ data = np.random.randn(48000, 2)
 format = Format('wav')
 f = Sndfile(filename, 'w', format, 2, 48000)
 
-# Write the first 500 frames of the signal Note that the write_frames method
+# Write the first 500 frames of the signal. Note that the write_frames method
 # uses tmp's numpy dtype to determine how to write to the file; sndfile also
 # converts the data on the fly if necessary
-f.write_frames(data, 500)
+f.write_frames(data[:500])
 
 f.close()
