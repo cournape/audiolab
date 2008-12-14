@@ -271,12 +271,29 @@ cdef class Format:
         """Return the endianness part of the format int."""
         return self._format_raw_int & SF_FORMAT_ENDMASK
 
+    cdef int _is_equal(self, Format other):
+        return self._format_raw_int == other._format_raw_int
+
     def __copy__(self):
         typ, enc, endian = int_to_format(self._format_raw_int)
         return Format(typ, enc, endian)
 
     def __deepcopy__(self):
         return self.__copy__()
+
+    def __richcmp__(self, other, int op):
+        if not other.__class__ == self.__class__:
+            raise NotImplementedError()
+        if Format._is_equal(self, other):
+            eq = True
+        else:
+            eq = False
+        if op == 2:
+            return eq
+        elif op == 3:
+            return not eq
+        else:
+            raise TypeError()
 
     # Syntactic sugar
     def __str__(self):
