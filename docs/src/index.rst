@@ -31,3 +31,8 @@ Audiolab, a python package to make noise with numpy arrays
         fullapi
         obsolete
         future
+
+.. htmlonly::
+
+        * :ref:`genindex`
+        * :ref:`search`
