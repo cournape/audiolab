@@ -78,18 +78,18 @@ class test_audiolab(TestCase):
         # and check it can not be opened by wavread
         rfd, fd, cfilename   = open_tmp_file('pysndfiletest.wav')
         try:
-            nbuff   = 22050
-            noise   = 0.1 * N.random.randn(nbuff)
+            nbuff = 22050
+            noise = 0.1 * N.random.randn(nbuff)
 
             # Open the copy file for writing
-            format  = audio_format('aiff', 'pcm16')
-            b       = Sndfile(cfilename, 'w', format, 1, nbuff)
+            format = audio_format('aiff', 'pcm16')
+            b = Sndfile(cfilename, 'w', format, 1, nbuff)
 
             b.write_frames(noise, nbuff)
 
             b.close()
 
-            b   = Sndfile(cfilename, 'r')
+            b = Sndfile(cfilename, 'r')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -108,12 +108,12 @@ class test_audiolab(TestCase):
         rfd1, fd1, cfilename1  = open_tmp_file('matapi_test.' + filext)
         rfd2, fd2, cfilename2  = open_tmp_file('matapi_test.' + filext)
         try:
-            nbuff   = 22050
-            fs      = nbuff
-            noise   = 0.1 * N.random.randn(nbuff)
+            nbuff = 22050
+            fs = nbuff
+            noise = 0.1 * N.random.randn(nbuff)
 
             # Open the first file for writing with Sndfile
-            b       = Sndfile(cfilename1, 'w', format, 1, fs)
+            b = Sndfile(cfilename1, 'w', format, 1, fs)
 
             b.write_frames(noise, nbuff)
 
