@@ -4,6 +4,7 @@
 from os.path import join, dirname
 import os
 import sys
+import warnings
 
 from numpy.testing import TestCase, assert_array_equal, dec
 import numpy as np
@@ -13,6 +14,9 @@ from scikits.audiolab import sndfile, formatinfo as audio_format
 
 from testcommon import open_tmp_file, close_tmp_file, TEST_DATA_DIR
 
+# We filter deprecation warnings here because the features it tests will be
+# deprecated themselves
+warnings.filterwarnings('ignore', category=DeprecationWarning)#, module=scikits.audiolab)
 # XXX: there is a lot to refactor here
 class test_pysndfile(TestCase):
     def test_basic_io(self):
