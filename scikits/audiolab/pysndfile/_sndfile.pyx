@@ -690,7 +690,7 @@ broken)"""
             raise RuntimeError("Asked %d frames, read %d" % (nframes, res))
         return ty
 
-    def write_frames(self, cnp.ndarray input, sf_count_t nframes = -1):
+    def write_frames(self, cnp.ndarray input):
         """\
         write given number frames into file.
 
@@ -698,8 +698,6 @@ broken)"""
         ----------
         input : ndarray
             array containing data to write.
-        nframes : int
-            number of frames to write.
 
         Notes
         -----
@@ -712,18 +710,18 @@ broken)"""
         (that is in the range [-1..1] - which will corresponds to the maximum
         range allowed by the integer bitwidth)."""
         cdef int nc
+        cdef sf_count_t nframes
 
         # First, get the number of channels and frames from input
         if input.ndim == 2:
             nc = input.shape[1]
+            nframes = input.size / nc
         elif input.ndim == 1:
             nc = 1
             input = input[:, None]
+            nframes = input.size
         else:
             raise ValueError("Expect array of rank 2, got %d" % input.ndim)
-
-        if nframes == -1:
-            nframes = np.size(input)
 
         # Number of channels should be the one expected
         if not nc == self._sfinfo.channels:
@@ -749,25 +747,25 @@ broken)"""
                           % res, nframes)
 
     cdef sf_count_t write_frames_double(self, cnp.ndarray input,
-                                        sf_count_t nframes=-1):
+                                        sf_count_t nframes):
         cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
 
         return sf_writef_double(self.hdl, <double*>input.data, nframes)
 
     cdef sf_count_t write_frames_float(self, cnp.ndarray input,
-                                       sf_count_t nframes=-1):
+                                       sf_count_t nframes):
         cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
 
         return sf_writef_float(self.hdl, <float*>input.data, nframes)
 
     cdef sf_count_t write_frames_int(self, cnp.ndarray input,
-                                     sf_count_t nframes=-1):
+                                     sf_count_t nframes):
         cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
 
         return sf_writef_int(self.hdl, <int*>input.data, nframes)
 
     cdef sf_count_t write_frames_short(self, cnp.ndarray input,
-                                       sf_count_t nframes=-1):
+                                       sf_count_t nframes):
         cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
 
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
