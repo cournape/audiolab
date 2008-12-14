@@ -1,3 +1,5 @@
+# cython: embedsignature=True
+
 import numpy as np
 import warnings
 import copy
@@ -126,22 +128,34 @@ def sndfile_version():
     return int(major), int(minor), int(micro), prerelease
 
 cdef class Format:
+    """\
+    This class represents an audio file format. It knows about audio file
+    format (wav, aiff, etc...), encoding (pcm, etc...) and endianness.
+
+    Parameters
+    ----------
+    type : str
+        the major file format (wav, etc...).
+    encoding : str
+        the encoding (pcm16, etc..).
+    endianness : str
+        the endianess.
+
+    Notes
+    -----
+    The possible values for type, and encoding depend on your installed
+    libsndfile. You can query the possible values with the functions
+    available_file_formats and available_encodings.
+
+    See also
+    --------
+    Sndfile class.
+    """
     cdef SF_INFO _sf_info
     cdef int _format_raw_int
     cdef object _type, _encoding, _endianness
     cdef object _format_str, _encoding_str, _endian_str
     def __init__(self, type = 'wav', encoding = 'pcm16', endianness = 'file'):
-        """Build a valid format usable by the sndfile class when
-        opening an audio file for writing.
-
-        :Parameters:
-            type : str
-                represents the major file format (wav, etc...).
-            encoding : str
-                represents the encoding (pcm16, etc..).
-            endianness : str
-                represents the endianess.
-        """
         cdef int format, ctype, cencoding, cendian, st
         cdef SF_FORMAT_INFO format_info
 
@@ -216,22 +230,27 @@ cdef class Format:
         self._format_raw_int = format
 
     property file_format:
+        """File format (wav, etc...)."""
         def __get__(self):
             return self._type
 
     property encoding:
+        """File encoding (pcm16, etc...)."""
         def __get__(self):
             return self._encoding
 
     property endianness:
+        """File endianness (file, little, etc...)."""
         def __get__(self):
             return self._endianness
 
     property file_format_description:
+        """File format description: the full description from sndfile."""
         def __get__(self):
             return self._format_str
 
     property encoding_description:
+        """File encoding description: the full description from sndfile."""
         def __get__(self):
             return self._encoding_str
 
@@ -270,7 +289,7 @@ cdef class Format:
         return self.__str__()
 
 def available_file_formats():
-    """Return lists of available major formats."""
+    """Return lists of available file formats supported by audiolab."""
     ret = []
     for i in _major_formats_int():
         # Handle the case where libsndfile supports a format we don't
@@ -346,6 +365,34 @@ cdef _major_formats_int():
     return majors
 
 cdef class Sndfile:
+    """\
+    Sndfile is the core class to read/write audio files. Once an instance is
+    created, it can be used to read and/or writes data from numpy arrays, query
+    the audio file meta-data, etc...
+
+    Parameters
+    ----------
+    filename : string or int
+        name of the file to open (string), or file descriptor (integer)
+    mode : string
+        'read' for read, 'write' for write, or 'rwrite' for read and
+        write.
+    format : Format
+        Required when opening a new file for writing, or to read raw audio
+        files (without header).
+    channels : int
+        number of channels.
+    samplerate : int
+        sampling rate.
+
+    Returns
+    -------
+        sndfile: as Sndfile instance.
+
+    Notes
+    -----
+    format, channels and samplerate need to be given only in the write modes
+    and for raw files."""
     cdef SNDFILE *hdl
     cdef object filename
     cdef int fd
@@ -354,30 +401,6 @@ cdef class Sndfile:
     cdef SF_INFO _sfinfo
     def __init__(Sndfile self, filename, mode='read', Format format=None,
                  int channels=0, int samplerate=0):
-        """Create an instance of sndfile.
-
-        :Parameters:
-            filename : string or int
-                name of the file to open (string), or file descriptor (integer)
-            mode : string
-                'read' for read, 'write' for write, or 'rwrite' for read and
-                write.
-            format : Format
-                when opening a new file for writing, give the format to write
-                in.
-            channels : int
-                number of channels.
-            samplerate : int
-                sampling rate.
-
-        :Returns:
-            sndfile: a valid sndfile object
-
-        Notes
-        -----
-
-        format, channels and samplerate need to be given only in the write
-        modes and for raw files.  """
         cdef int sfmode
         # -1 will indicate that the file has been open from filename, not from
         # file descriptor
@@ -468,7 +491,8 @@ broken)"""
         self._close()
 
     def sync(Sndfile self):
-        """call the operating system's function to force the writing of all
+        """\
+        call the operating system's function to force the writing of all
         file cache buffers to disk the file.
 
         No effect if file is open as read"""
@@ -492,20 +516,22 @@ broken)"""
                 "frames in write modes is not supported yet")
 
     property nframes:
+        """Number of frames of the file."""
         def __get__(self):
             return self._get_nframes()
 
     property samplerate:
+        """Sampling rate (in Hz)."""
         def __get__(self):
-            """ Return the samplerate (sampling frequency) of the file in Hz"""
             return self._sfinfo.samplerate
 
     property channels:
+        """Number of channels."""
         def __get__(self):
-            """ Return the number of channels of the file"""
             return self._sfinfo.channels
 
     property format:
+        """Format instance attached to the Sndfile instance."""
         def __get__(self):
             return copy.copy(self._format)
 
@@ -546,29 +572,34 @@ broken)"""
         return "\n".join(repstr)
 
     def read_frames(self, sf_count_t nframes, dtype=np.float64):
-        """Read nframes frames of the file.
+        """\
+        Read the given number of frames and put the data into a numpy array of
+        the requested dtype.
 
         Parameters
         ----------
-            nframes : int
-                number of frames to read.
-            dtype : numpy dtype
-                dtype of the returned array containing read data (see note).
+        nframes : int
+            number of frames to read.
+        dtype : numpy dtype
+            dtype of the returned array containing read data (see note).
 
-        Note
-        ----
+        Notes
+        -----
+        One column per channel.
 
-        - One column per channel.
-        - if float are requested when the file contains integer data, you will
-          get normalized data (that is the max possible integer will be 1.0,
-          and the minimal possible value -1.0).
-        - updates the write pointer.
-        - if integers are requested when the file contains floating point data,
-          it may give wrong results because there is an ambiguity: if the
-          floating data are normalized, you can get a file with only 0 !
-          Getting integer data from files encoded in normalized floating point
-          is not supported (this is an audiolab limitation: sndfile supports
-          it)."""
+        Updates the read pointer.
+
+        Notes
+        -----
+        if float are requested when the file contains integer data, you will
+        get normalized data (that is the max possible integer will be 1.0, and
+        the minimal possible value -1.0).
+    
+        if integers are requested when the file contains floating point data,
+        it may give wrong results because there is an ambiguity: if the
+        floating data are normalized, you can get a file with only 0 ! Getting
+        integer data from files encoded in normalized floating point is not
+        supported (this is an audiolab limitation: sndfile supports it)."""
         if nframes < 0:
             raise ValueError("number of frames has to be >= 0 (was %d)" %
                              nframes)
@@ -643,23 +674,26 @@ broken)"""
         return ty
 
     def write_frames(self, cnp.ndarray input, sf_count_t nframes = -1):
-        """write data to file.
+        """\
+        write given number frames into file.
 
         Parameters
         ----------
-            input : ndarray
-                array containing data to write.
-            nframes : int
-                number of frames to write.
+        input : ndarray
+            array containing data to write.
+        nframes : int
+            number of frames to write.
 
         Notes
         -----
+        One column per channel.
+        
+        updates the write pointer.
 
-        - One column per channel.
-        - updates the write pointer.
-        - if float are given when the file contains integer data, you should
-          put normalized data (that is the range [-1..1] will be written as the
-          maximum range allowed by the integer bitwidth)."""
+        if the input type is float, and the file encoding is an integer type,
+        you should make sure the input data are normalized normalized data
+        (that is in the range [-1..1] - which will corresponds to the maximum
+        range allowed by the integer bitwidth)."""
         cdef int nc
 
         # First, get the number of channels and frames from input
@@ -722,34 +756,37 @@ broken)"""
         return sf_writef_short(self.hdl, <short*>input.data, nframes)
 
     def seek(Sndfile self, sf_count_t offset, int whence=0, mode='rw'):
-        """similar to python seek function, taking only in account audio data.
+        """\
+        Seek into audio file: similar to python seek function, taking only in
+        account audio data.
 
         Parameters
         ----------
-            offset : int
-                the number of frames (eg two samples for stereo files) to move
-                relatively to position set by whence.
-            whence : int
-                only 0 (beginning), 1 (current) and 2 (end of the file) are
-                valid.
-            mode : string
-                If set to 'rw', both read and write pointers are updated. If
-                'r' is given, only read pointer is updated, if 'w', only the
-                write one is (this may of course make sense only if you open
-                the file in a certain mode).
+        offset : int
+            the number of frames (eg two samples for stereo files) to move
+            relatively to position set by whence.
+        whence : int
+            only 0 (beginning), 1 (current) and 2 (end of the file) are
+            valid.
+        mode : string
+            If set to 'rw', both read and write pointers are updated. If
+            'r' is given, only read pointer is updated, if 'w', only the
+            write one is (this may of course make sense only if you open
+            the file in a certain mode).
 
         Returns
         -------
-            offset : int
-                the number of frames from the beginning of the file
+        offset : int
+            the number of frames from the beginning of the file
 
         Notes
         -----
 
-        - one only takes into account audio data.
-        - if an invalid seek is given (beyond or before the file), an IOError
-          is launched; note that this is different from the seek method of a
-          File object."""
+        Offset relative to audio data: meta-data are ignored.
+
+        if an invalid seek is given (beyond or before the file), an IOError is
+        launched; note that this is different from the seek method of a File
+        object."""
         cdef sf_count_t st
         if mode == 'rw':
             # Update both read and write pointers
