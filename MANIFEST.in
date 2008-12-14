@@ -1,4 +1,5 @@
 include site.cfg.win32
+include site.cfg.bdist_wininst
 include COPYING.txt
 include common.py
 include scikits/audiolab/test_data/original.aif
