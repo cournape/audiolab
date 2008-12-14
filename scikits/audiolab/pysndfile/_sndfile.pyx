@@ -122,7 +122,7 @@ def sndfile_version():
     try:
         micro = int(micro)
     except ValueError,e:
-        print "micro is " + str(micro)
+        #print "micro is " + str(micro)
         micro, prerelease = micro.split('pre')
 
     return int(major), int(minor), int(micro), prerelease
