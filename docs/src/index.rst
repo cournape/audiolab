@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Sun Dec 14 05:00 PM 2008 J
+.. Last Change: Sun Dec 14 06:00 PM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -176,7 +176,9 @@ endianness of the written file:
 Not all file formats and encodings combinations are possible. Also, the exact
 number of file formats and encodings available depend on your version of
 libsndfile. Both can be queried at runtime with the functions
-available_file_formats and available_encodings:
+available_file_formats and available_encodings. The following example print all
+available file formats and encodings (the output depends on your installed
+libsndfile):
 
 .. literalinclude:: examples/over_available.py
 
