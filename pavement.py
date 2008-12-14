@@ -1,9 +1,12 @@
 import os
 import subprocess
+import sys
+import shutil
 
 import sphinx
 
 import setuptools
+import distutils
 import numpy.distutils
 
 import paver
@@ -28,6 +31,46 @@ options(
 
         )
 
+def macosx_version():
+    st = subprocess.Popen(["sw_vers"], stdout=subprocess.PIPE)
+    out = st.stdout.readlines()
+    import re
+    ver = re.compile("ProductVersion:\s+([0-9]+)\.([0-9]+)\.([0-9]+)")
+    for i in out:
+        m = ver.match(i)
+        if m:
+            return m.groups()
+    
+def mpkg_name():
+    maj, min = macosx_version()[:2]
+    pyver = ".".join([str(i) for i in sys.version_info[:2]])
+    return "scikits.audiolab-%s-py%s-macosx%s.%s.mpkg" % (common.build_fverstring(),
+                            pyver, maj, min)
+@task
+#@needs(['latex', 'html'])
+def dmg():
+    builddir = path("build") / "dmg"
+    builddir.rmtree()
+    builddir.mkdir()
+
+    # Copy mpkg into image source
+    mpkg_n = mpkg_name()
+    mpkg = path("dist") / mpkg_n
+    mpkg.copytree(builddir / mpkg_n)
+
+    # Copy docs into image source
+    doc_root = path(builddir) / "docs"
+    html_docs = path("docs") / "html"
+    pdf_docs = path("docs") / "pdf" / "audiolab.pdf"
+    html_docs.copytree(doc_root / "html")
+    pdf_docs.copy(doc_root / "audiolab.pdf")
+
+    # Build the dmg
+    image_name = "audiolab-%s.dmg" % common.build_fverstring()
+    image = path(image_name)
+    image.remove()
+    cmd = ["hdiutil", "create", image_name, "-srcdir", str(builddir)]
+    subprocess.Popen(cmd)
 #options.setup.package_data = 
 #    setuputils.find_package_data("scikits/audiolab", 
 #                                 package="scikits/audiolab",
