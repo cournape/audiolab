@@ -29,7 +29,7 @@ DOWNLOAD_URL        = URL
 MAJOR = 0
 MINOR = 10
 MICRO = 0
-DEV = True
+DEV = False
 
 CLASSIFIERS = ['Development Status :: 4 - Beta',
         'Environment :: Console',
