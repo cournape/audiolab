@@ -1,6 +1,8 @@
 include site.cfg.win32
 include site.cfg.bdist_wininst
 include COPYING.txt
+include NEWS
+include Changelog
 include common.py
 include scikits/audiolab/test_data/original.aif
 include scikits/audiolab/test_data/test.aiff
@@ -11,3 +13,10 @@ include scikits/audiolab/test_data/test.sdif
 include scikits/audiolab/test_data/test.wav
 recursive-include docs/pdf *
 recursive-include docs/html *
+# Cython files
+include scikits/audiolab/pysndfile/_sndfile.pyx
+include scikits/audiolab/soundio/macosx/macosx_backend.pyx
+include scikits/audiolab/soundio/alsa/_alsa_backend.pyx
+include scikits/audiolab/pysndfile/_sndfile.c
+include scikits/audiolab/soundio/macosx/macosx_backend.c
+include scikits/audiolab/soundio/alsa/_alsa_backend.c
