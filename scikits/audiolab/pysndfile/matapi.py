@@ -115,18 +115,18 @@ def _reader_factory(name, filetype, descr):
 
     Parameters
     ----------
-    filename: str
+    filename : str
         Name of the file to read
     last : int
         Last frame to read. If None, this is equal to the number of frames in
         the file.
-    first: int
+    first : int
         First frame to read. If 0, means starting from the beginning of the
         file.
 
     Returns
     -------
-    data: array
+    data : array
         the read data (one column per channel)
     fs : int
         the sampling rate
