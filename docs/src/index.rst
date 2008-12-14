@@ -17,7 +17,7 @@
     /restindex
 
 .. vim:syntax=rest
-.. Last Change: Sun Dec 07 01:00 AM 2008 J
+.. Last Change: Sun Dec 14 05:00 PM 2008 J
 
 ==========================================================
 Audiolab, a python package to make noise with numpy arrays
@@ -41,17 +41,17 @@ license issues); see `here <http://www.mega-nerd.com/libsndfile/#Features">`_
 for a complete list.
 
 The main features of audiolab are:
-        - reading all formats supported by sndfile, and put the data into numpy
-          arrays. The array dtype can be selected
-        - writing all formats supported by sndfile from data in numpy arrays.
-          The array dtype can be selected
-        - A matlab-like API for some file formats, like wavread. Wav, aiff,
+        - reading all formats supported by sndfile directly into numpy arrays.
+        - writing all formats supported by sndfile directly from numpy arrays.
+        - A matlab-like API (ala wavread) for some file formats. Wav, aiff,
           flac, au, and ogg formats are supported.
         - A play function to output data from numpy array into the sound device
-          of your computer (Only ALSA for linux is implemented ATM).
+          of your computer (Only ALSA for linux and CoreAudio for Mac OS X is
+          implemented ATM).
 
     **Note**: The library is still in flux: the API can still change before the
-    1.0 version.
+    1.0 version. That baing said, the version 0.10 was a major change, and I
+    don't expect any more major changes.
 
     **Note**: The online version of this document is not always up to date. The
     pdf included in the package is the reference, and always in sync with the
@@ -158,7 +158,7 @@ meta-data about the file, like the sampling rate or the number of channels.
 The read_frames method can optionally take a dtype argument like many numpy
 functions, to select the dtype of the output array. The exact semantics are
 more complicated than with numpy though, because of audio encoding
-specificities (see encoding section). 
+specificities (see encoding section).
 
 Writing audio file from data in numpy arrays is a bit more complicated, because
 you need to tell the Sndfile class about the file type, encoding and
@@ -173,6 +173,39 @@ endianness of the written file:
 
 .. literalinclude:: examples/over3.py
 
+Not all file formats and encodings combinations are possible. Also, the exact
+number of file formats and encodings available depend on your version of
+libsndfile. Both can be queried at runtime with the functions
+available_file_formats and available_encodings:
+
+.. literalinclude:: examples/over_available.py
+
+Encoding and array dtype
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The most common encoding for common audio files like wav of aiff is signed 16
+bits integers. Sndfile and hence audiolab enables many more encodings like
+unsigned 8 bits, floating point. Generally, when using the data for processing,
+the encoding of choice is floating point; the exact type is controled through
+the array dtype. When the array dtype and the file encoding don't match, there
+has to be some conversion.
+
+When converting between integer PCM formats of differing size (ie both file
+encoding and input/output array dtype is an integer type), the Sndfile class
+obeys one simple rule:
+
+        * Whenever integer data is moved from one sized container to another
+          sized container, the most significant bit in the source container
+          will become the most significant bit in the destination container.
+
+When either the encoding is an integer but the numpy array dtype is a float
+type, different rules apply. The default behaviour when reading floating point
+data (array dtype is float) from a file with integer data is normalisation.
+Regardless of whether data in the file is 8, 16, 24 or 32 bit wide, the data
+will be read as floating point data in the range [-1.0, 1.0].  Similarly, data
+in the range [-1.0, 1.0] will be written to an integer PCM file so that a data
+value of 1.0 will be the largest allowable integer for the given bit width.
+
 Sound output
 ~~~~~~~~~~~~
 
@@ -181,38 +214,10 @@ audiolab also have some facilities to output sound from numpy arrays:
 .. literalinclude:: examples/over_play.py
 
 The function play is a wrapper around a platform-specific audio backend. For
-now, only ALSA backend (Linux) is implemented. Core Audio backend for support
-on Mac OS X will be soon available. Other backends (for windows, OSS for
-Solaris/BSD) may be added later.
-
-.. Encoding and array dtype
-.. ------------------------
-.. 
-.. Common audio files are encoded in fixed point (integers): for example, the
-.. usual wav files are encoded in 16 bits, and a sample can take any value in the
-.. [-32768, 32768] range. Some audio files also support floating point encoding,
-.. in which case the data are conventionally normalized in the [-1..1] range. 
-..        
-.. There is a difference though: depending on the dtype, the values in the array
-.. can be vastly different: if the dtype is a floating point type, all values are
-.. between -1 and 1, if the dtype It is becuase audiolab follows the same
-.. convention as libsndfile - which is the most used convention for pcm audio data
-.. representation
-.. 
-.. Matlab-like API
-.. ---------------
-.. 
-.. audiolab also have a matlab-like API for audio IO. Its usage is as similar as it
-.. can get using python:
-.. 
-.. .. literalinclude:: examples/matlab1.py
-.. 
-.. Sound output
-.. ------------
-.. 
-.. New feature in 0.9: only ALSA (Linux sound API) has been implemented so far.
-.. 
-.. .. literalinclude:: examples/play.py
+now, only ALSA backend (Linux) and Core Audio backend (Mac OS X) are
+implemented. Other backends (for windows, OSS for Solaris/BSD) may be added
+later, although it is not a priority for me. Patchs are welcomed, particularly
+for windows.
 
 Obsolete API
 ============
