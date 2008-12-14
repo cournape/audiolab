@@ -50,21 +50,35 @@ def _writer_factory(name, format, def_fs, descr):
         finally:
             hdl.close()
     doc = \
-    """ wrapper around pySndfile to write %s file,
-    in a similar manner to matlab's wavwrite/auwrite and the likes.
+    """Simple writer for %(format)s audio files.
 
+    Parameters
+    ----------
+    data: array
+        a rank 1 (mono) or 2 (one channel per col) numpy array
+    filename: str
+        audio file name
+    fs : scalar
+        sampling rate in Hz (%(def_fs)s by default)
+    enc: str
+        The encoding such as 'pcm16', etc...(%(def_enc)s by default). A
+        list of supported encodings can be queried through the function
+        available_encodings.
+
+    Notes
+    -----
     OVERWRITES EXISTING FILE !
 
-    Args:
-        - data: a rank 0, 1 (mono) or 2 (one channel per col) numpy array
-        - filename: a string for the audio file name
-        - fs: the sampling rate in Hz (%d Hz by default).
-        - enc: a string for the encoding such as 'pcm16', etc...(%s by
-          default).
+    Those functions are similar manner to matlab's wavwrite/auwrite and the
+    likes.  For a total control over options, such as endianness, append data
+    to an existing file, etc...  you should use Sndfile class instances
+    instead
 
-    For a total control over options, such as endianness, append data to an
-    existing file, etc...  you should use Sndfile class instances instead""" \
-            % (str(descr), def_fs, format.encoding)
+    See also
+    --------
+    available_encodings, Sndfile, Format""" \
+            % {'format' : str(descr), 'def_fs': def_fs,
+               'def_enc': format.encoding}
     basic_writer.__doc__    = doc
     basic_writer.__name__   = name
     return basic_writer
@@ -97,17 +111,32 @@ def _reader_factory(name, filetype, descr):
 
         return data, fs, enc
     doc = \
-    """ wrapper around pySndfile to read a %s file in float64,
-    in a similar manner to matlab wavread/auread/etc...
+    """Simple reader for %(format)s audio files.
 
-    Returns a tuple (data, fs, enc), where :
-        - data are the read data (one column per channel)
-        - fs, the sampling rate
-        - enc, a string which is the encoding of the file, such as 'pcm16',
-        'float32', etc...
+    Parameters
+    ----------
+    filename: str
+        Name of the file to read
+    last : int
+        Last frame to read. If None, this is equal to the number of frames in
+        the file.
+    first: int
+        First frame to read. If 0, means starting from the beginning of the
+        file.
 
+    Returns
+    -------
+    data: array
+        the read data (one column per channel)
+    fs : int
+        the sampling rate
+    enc : str
+        the encoding of the file, such as 'pcm16', 'float32', etc...
+
+    Notes
+    -----
     For a total control over options, such as output's dtype, etc...,
-    you should use Sndfile class instances instead""" % (str(descr),)
+    you should use Sndfile class instances instead""" % {'format': str(descr)}
     basic_reader.__doc__    = doc
     basic_reader.__name__   = name
     return basic_reader
