@@ -1,17 +1,21 @@
-descr   = """ audiolab is a small python package to import data from audio
-files to numpy arrays and export data from numpy arrays to audio files. It uses
-libsndfile from Erik Castro de Lopo for the underlying IO, which supports many
-different audio formats: http://www.mega-nerd.com/libsndfile/
+descr   = """\
+Audiolab is a python package for audio file IO using numpy arrays. It supports
+many different audio formats, including wav, aiff, au, flac, ogg, htk. It also
+supports output to audio device (Mac OS X and Linux only).
 
-For now, the python api for audio IO should be stable; a matlab-like API is
-also available for quick read/write (ala wavread, wavwrite, etc...). For 1.0
-release, I hope to add support for simple read/write to soundcard, to be able
-to record and listen to data in numpy arrays.
+For simplicity, a matlab-like API is provided for simple import/export; a more
+complete API is also available.
 
-2006-2007, David Cournapeau
+Audiolab is essentially a wrapper around Erik Castro de Lopo's excellent
+libsndfile:
+
+http://www.mega-nerd.com/libsndfile/
 
 LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself. See
-COPYING.txt for details.  """
+COPYING.txt for details.  
+
+2006-2008, David Cournapeau
+"""
 
 DISTNAME            = 'scikits.audiolab'
 DESCRIPTION         = 'A python module to make noise from numpy arrays'

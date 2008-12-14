@@ -1,23 +1,16 @@
-audiolab: a small toolbox to read, write and play audio to and from
-numpy arrays.
+Audiolab is a python package for audio file IO using numpy arrays. It
+supports many different audio formats, including wav, aiff, au, flac,
+ogg, htk. It can also be used for sound output to audio device (Mac OS
+X and Linux only).
 
-audiolab provides two API:
-    - one similar to matlab: this gives you wavread/wavwrite/auread/auwrite
-      functions similar to matlab's ones.
-    - a more complete API, which can be used to read, write to many audio files
-      (including wav, aiff, flac, au, IRCAM, htk, etc...), with IO capabilities
-      not available to matlab (seek, append data, etc...)
+A matlab-like API is provided for simple import/export; a more
+complete API is available for more advanced usage. Audiolab is
+essentially a wrapper around Erik Castro de Lopo's excellent
+libsndfile:
 
-It is a thin wrapper around libsndfile from Erik Castro Lopo.
+http://www.mega-nerd.com/libsndfile/
 
-See the docs directory for more details
+LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself.
+See COPYING.txt for details.  
 
-LICENSE:
-
-audiolab itself is licensed under the LGPL license (see COPYING.txt in main
-source directory), except for the code in scikits/audiolab/soundio, which is
-licensed under the BSD.
-
-audiolab depends on libsndfile to work; libsndfile is licensed under LGPL.
-
-See http://www.mega-nerd.com/libsndfile/ for details.
+2006-2008, David Cournapeau
