@@ -105,8 +105,8 @@ class test_audiolab(TestCase):
 
     def _test_write(self, func, format, filext):
         """ Check *write functions from matpi """
-        rfd1, fd1, cfilename1  = open_tmp_file('pysndfiletest.' + filext)
-        rfd2, fd2, cfilename2  = open_tmp_file('pysndfiletest.' + filext)
+        rfd1, fd1, cfilename1  = open_tmp_file('matapi_test.' + filext)
+        rfd2, fd2, cfilename2  = open_tmp_file('matapi_test.' + filext)
         try:
             nbuff   = 22050
             fs      = nbuff
