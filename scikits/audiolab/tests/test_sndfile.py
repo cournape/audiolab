@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Fri Dec 05 03:00 PM 2008 J
+# Last Change: Sun Dec 14 05:00 PM 2008 J
 """Test for the sndfile class."""
 from os.path import join, dirname
 import os
@@ -37,11 +37,11 @@ class TestSndfile(TestCase):
             for i in range(nframes / nbuff):
                 tmpa    = a.read_frames(nbuff)
                 assert tmpa.dtype == np.float
-                b.write_frames(tmpa, nbuff)
+                b.write_frames(tmpa)
             nrem    = nframes % nbuff
             tmpa    = a.read_frames(nrem)
             assert tmpa.dtype == np.float
-            b.write_frames(tmpa, nrem)
+            b.write_frames(tmpa)
 
             a.close()
             b.close()
@@ -101,10 +101,10 @@ class TestSndfile(TestCase):
             for i in range(nframes / nbuff):
                 tmpa    = a.read_frames(nbuff, dtype=dtype)
                 assert tmpa.dtype == dtype
-                b.write_frames(tmpa, nbuff)
+                b.write_frames(tmpa)
             nrem = nframes % nbuff
             tmpa = a.read_frames(nrem)
-            b.write_frames(tmpa, nrem)
+            b.write_frames(tmpa)
 
             a.close()
             b.close()
@@ -151,7 +151,7 @@ class TestSndfile(TestCase):
             format = Format('wav', _DTYPE_TO_ENC[dt])
             b = Sndfile(fd, 'w', format, 1, fs)
 
-            b.write_frames(a, nbuff)
+            b.write_frames(a)
             b.close()
 
             b = Sndfile(cfilename, 'r')
@@ -205,7 +205,7 @@ class TestSndfile(TestCase):
             a = Sndfile(fd, 'rw', format, channels=1, samplerate=22050)
             tmp = np.random.random_integers(-100, 100, 1000)
             tmp = tmp.astype(np.short)
-            a.write_frames(tmp, tmp.size)
+            a.write_frames(tmp)
             a.seek(0)
             a.sync()
             ctmp = a.read_frames(1e2, dtype=np.short)

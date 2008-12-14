@@ -222,7 +222,15 @@ class sndfile:
         - if float are given when the file contains integer data, you should
           put normalized data (that is the range [-1..1] will be written as the
           maximum range allowed by the integer bitwidth)."""
-        return self._sndfile.write_frames(input, nframes)
+        if nframes == -1:
+            if input.ndim == 1:
+                nframes = input.size
+            elif input.ndim == 2:
+                nframes = input.shape[0]
+            else:
+                raise ValueError("Input has to be rank 1 (mono) or rank 2 "\
+                                 "(multi-channels)")
+        return self._sndfile.write_frames(input[:nframes,...])
 
     # Syntactic sugar
     def __repr__(self):

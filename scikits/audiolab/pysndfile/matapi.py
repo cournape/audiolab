@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Mon Dec 08 02:00 PM 2008 J
+# Last Change: Sun Dec 14 05:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -37,10 +37,8 @@ def _writer_factory(name, format, def_fs, descr):
         """Common "template" to all write functions."""
         if np.ndim(data) <= 1:
             nc      = 1
-            nframes = np.size(data)
         elif np.ndim(data) == 2:
             nc      = data.shape[1]
-            nframes = data.shape[0]
         else:
             RuntimeError("Only rank 0, 1, and 2 arrays supported as audio data")
 
@@ -48,7 +46,7 @@ def _writer_factory(name, format, def_fs, descr):
                              endianness=format.endianness)
         hdl = Sndfile(filename, 'w', uformat, nc, fs)
         try:
-            hdl.write_frames(data, nframes)
+            hdl.write_frames(data)
         finally:
             hdl.close()
     doc = \

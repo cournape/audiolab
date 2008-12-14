@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sun Dec 14 04:00 PM 2008 J
+# Last Change: Sun Dec 14 05:00 PM 2008 J
 from os.path import join, dirname
 from os import remove
 from tempfile import mkstemp
@@ -30,7 +30,7 @@ class test_audiolab(TestCase):
 
             # Open the copy file for writing
             b = Sndfile(cfilename, 'w', format, 1, nbuff)
-            b.write_frames(noise, nbuff)
+            b.write_frames(noise)
             b.close()
 
             # Reread the data
@@ -85,7 +85,7 @@ class test_audiolab(TestCase):
             format = audio_format('aiff', 'pcm16')
             b = Sndfile(cfilename, 'w', format, 1, nbuff)
 
-            b.write_frames(noise, nbuff)
+            b.write_frames(noise)
 
             b.close()
 
@@ -115,7 +115,7 @@ class test_audiolab(TestCase):
             # Open the first file for writing with Sndfile
             b = Sndfile(cfilename1, 'w', format, 1, fs)
 
-            b.write_frames(noise, nbuff)
+            b.write_frames(noise)
 
             b.close()
 
