@@ -116,7 +116,7 @@ in the range [-1.0, 1.0] will be written to an integer PCM file so that a data
 value of 1.0 will be the largest allowable integer for the given bit width.
 
 Sound output
-------------
+============
 
 audiolab now has some facilities to output sound from numpy arrays: the
 function play is a wrapper around a platform-specific audio backend. For now,
