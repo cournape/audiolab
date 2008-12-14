@@ -1,3 +1,9 @@
+audiolab (0.10dev) Sun, 14 Dec 2008 19:28:20 +0900
+	* Sndfile mode is now a single/double character for consitency with
+	python open function
+	* Documentation revamped. Full API is described, the pdf looks OK now
+	* pdf and html docs automatically added to the sdist tarball by paver
+
 audiolab (0.10dev) Mon, 08 Dec 2008 20:50:39 +0900
 	* CoreAudio backend can play data, and can be stopped reliably with
 	Ctrl+C
