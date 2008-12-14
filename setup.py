@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Dec 04 08:00 PM 2008 J
+# Last Change: Sun Dec 14 06:00 PM 2008 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -38,9 +38,8 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
 
     write_version(os.path.join("scikits", "audiolab", "version.py"))
     # XXX: find a way to include the doc in sdist
-    if os.path.exists(os.path.join("scikits", "audiolab", "docs", "src")):
-        write_version(os.path.join("scikits", "audiolab", "docs", "src",
-                                   "audiolab_version.py"))
+    if os.path.exists(os.path.join("docs", "src")):
+        write_version(os.path.join("docs", "src", "audiolab_version.py"))
     pkg_prefix_dir = os.path.join('scikits', 'audiolab')
 
     from numpy.distutils.misc_util import Configuration
