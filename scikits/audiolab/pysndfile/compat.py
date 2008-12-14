@@ -63,6 +63,8 @@ class formatinfo:
     def __str__(self):
         return self._format.__str__()
 
+_COMPAT_MODES = {"read": 'r', "write": 'w', "rwrite": 'rw'}
+
 class sndfile:
     """Main class to open, read and write audio files"""
     def __init__(self, filename, mode='read', format=None, channels=0,
@@ -100,7 +102,9 @@ class sndfile:
             f = None
         else:
             f = format._format
-        self._sndfile = Sndfile(filename, mode, f, channels, samplerate)
+        
+        self._sndfile = Sndfile(filename, _COMPAT_MODES[mode], f, channels,
+                                samplerate)
 
         # We create a formatinfo instance from a Format info
         self._format = formatinfo()

@@ -375,7 +375,7 @@ cdef class Sndfile:
     filename : string or int
         name of the file to open (string), or file descriptor (integer)
     mode : string
-        'read' for read, 'write' for write, or 'rwrite' for read and
+        'r' for read, 'w' for write, or 'rw' for read and
         write.
     format : Format
         Required when opening a new file for writing, or to read raw audio
@@ -399,7 +399,7 @@ cdef class Sndfile:
     cdef Format _format
     cdef int _mode
     cdef SF_INFO _sfinfo
-    def __init__(Sndfile self, filename, mode='read', Format format=None,
+    def __init__(Sndfile self, filename, mode='r', Format format=None,
                  int channels=0, int samplerate=0):
         cdef int sfmode
         # -1 will indicate that the file has been open from filename, not from
@@ -409,15 +409,15 @@ cdef class Sndfile:
         self.hdl = NULL
 
         # Check the mode is one of the expected values
-        if mode == 'read':
+        if mode == 'r':
             sfmode = SFM_READ
-        elif mode == 'write':
+        elif mode == 'w':
             sfmode = SFM_WRITE
             if format is None:
                 raise ValueError, \
                       "For write mode, you should provide"\
                       "a format argument !"
-        elif mode == 'rwrite':
+        elif mode == 'rw':
             sfmode  = SFM_RDWR
             if format is None:
                 raise ValueError, \
@@ -433,7 +433,7 @@ cdef class Sndfile:
 
         self._sfinfo.sections = 0
         self._sfinfo.seekable = SF_FALSE
-        if mode == 'read' and format is None:
+        if mode == 'r' and format is None:
             self._sfinfo.format = 0
         else:
             # XXX: do this correctly, by using sf_check
@@ -464,13 +464,13 @@ cdef class Sndfile:
             if not self.fd == -1:
                 msg += """
 (Check that the mode argument passed to sndfile is the same than the one used
-when getting the file descriptor, eg do not pass 'read' to sndfile if you
+when getting the file descriptor, eg do not pass 'r' to sndfile if you
 passed 'write' to the method you used to get the file descriptor. If you are on
 win32, you are out of luck, because its implementation of POSIX open is
 broken)"""
             raise IOError("error while opening %s\n\t->%s" % (filename, msg))
 
-        if mode == 'read':
+        if mode == 'r':
             type, enc, endian = int_to_format(self._sfinfo.format)
             self._format = Format(type, enc, endian)
         else:

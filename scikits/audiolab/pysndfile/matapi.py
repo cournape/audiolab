@@ -46,7 +46,7 @@ def _writer_factory(name, format, def_fs, descr):
 
         uformat = Format(format.file_format, encoding=enc,
                              endianness=format.endianness)
-        hdl = Sndfile(filename, 'write', uformat, nc, fs)
+        hdl = Sndfile(filename, 'w', uformat, nc, fs)
         try:
             hdl.write_frames(data, nframes)
         finally:
@@ -76,7 +76,7 @@ def _reader_factory(name, filetype, descr):
     """Factory for reader functions ala matlab."""
     def basic_reader(filename, last = None, first = 0):
         """Common "template" to all read functions."""
-        hdl = Sndfile(filename, 'read')
+        hdl = Sndfile(filename, 'r')
         try:
             if not hdl.format.file_format == filetype:
                 raise ValueError, "%s is not a %s file (is %s)" \

@@ -26,12 +26,12 @@ class TestSndfile(TestCase):
             nbuff = 22050
 
             # Open the test file for reading
-            a = Sndfile(ofilename, 'read')
+            a = Sndfile(ofilename, 'r')
             nframes = a.nframes
 
             # Open the copy file for writing
             format = Format('wav', 'pcm16')
-            b = Sndfile(fd, 'write', format, a.channels, a.samplerate)
+            b = Sndfile(fd, 'w', format, a.channels, a.samplerate)
 
             # Copy the data
             for i in range(nframes / nbuff):
@@ -56,13 +56,13 @@ class TestSndfile(TestCase):
         else:
             ofilename = join(TEST_DATA_DIR, 'test.wav')
             fd = os.open(ofilename, os.O_RDONLY)
-            hdl = Sndfile(fd, 'read')
+            hdl = Sndfile(fd, 'r')
             hdl.close()
 
     def test_raw(self):
         rawname = join(TEST_DATA_DIR, 'test.raw')
         format = Format('raw', 'pcm16', 'little')
-        a = Sndfile(rawname, 'read', format, 1, 11025)
+        a = Sndfile(rawname, 'r', format, 1, 11025)
         assert a.nframes == 11290
         a.close()
 
@@ -90,12 +90,12 @@ class TestSndfile(TestCase):
             nbuff = 22050
 
             # Open the test file for reading
-            a = Sndfile(ofilename, 'read')
+            a = Sndfile(ofilename, 'r')
             nframes = a.nframes
 
             # Open the copy file for writing
             format = Format('wav', _DTYPE_TO_ENC[dtype])
-            b = Sndfile(fd, 'write', format, a.channels, a.samplerate)
+            b = Sndfile(fd, 'w', format, a.channels, a.samplerate)
 
             # Copy the data in the wav file
             for i in range(nframes / nbuff):
@@ -111,8 +111,8 @@ class TestSndfile(TestCase):
 
             # Now, reopen both files in for reading, and check data are
             # the same
-            a = Sndfile(ofilename, 'read')
-            b = Sndfile(cfilename, 'read')
+            a = Sndfile(ofilename, 'r')
+            b = Sndfile(cfilename, 'r')
             for i in range(nframes / nbuff):
                 tmpa = a.read_frames(nbuff, dtype=dtype)
                 tmpb = b.read_frames(nbuff, dtype=dtype)
@@ -149,12 +149,12 @@ class TestSndfile(TestCase):
 
             # Open the file for writing
             format = Format('wav', _DTYPE_TO_ENC[dt])
-            b = Sndfile(fd, 'write', format, 1, fs)
+            b = Sndfile(fd, 'w', format, 1, fs)
 
             b.write_frames(a, nbuff)
             b.close()
 
-            b = Sndfile(cfilename, 'read')
+            b = Sndfile(cfilename, 'r')
 
             read_a  = b.read_frames(nbuff, dtype=dt)
             b.close()
@@ -173,7 +173,7 @@ class TestSndfile(TestCase):
             # Open the file for writing
             format = Format('wav', 'pcm16')
             try:
-                b = Sndfile(fd, 'write', format, channels=22000, samplerate=1)
+                b = Sndfile(fd, 'w', format, channels=22000, samplerate=1)
                 raise AssertionError("Try to open a file with more than 256 "\
                                      "channels, this should not succeed !")
             except ValueError, e:
@@ -185,7 +185,7 @@ class TestSndfile(TestCase):
     def test_bigframes(self):
         """ Try to seek really far."""
         rawname = join(TEST_DATA_DIR, 'test.wav')
-        a = Sndfile(rawname, 'read')
+        a = Sndfile(rawname, 'r')
         try:
             try:
                 a.seek(2 ** 60)
@@ -202,7 +202,7 @@ class TestSndfile(TestCase):
         try:
             # Open the file for writing
             format = Format('wav', 'pcm16')
-            a = Sndfile(fd, 'rwrite', format, channels=1, samplerate=22050)
+            a = Sndfile(fd, 'rw', format, channels=1, samplerate=22050)
             tmp = np.random.random_integers(-100, 100, 1000)
             tmp = tmp.astype(np.short)
             a.write_frames(tmp, tmp.size)
@@ -217,7 +217,7 @@ class TestSndfile(TestCase):
     def test_nofile(self):
         """ Check the failure when opening a non existing file."""
         try:
-            f = Sndfile("floupi.wav", "read")
+            f = Sndfile("floupi.wav", "r")
             raise AssertionError("call to non existing file should not succeed")
         except IOError:
             pass
@@ -230,7 +230,7 @@ class TestSeek(TestCase):
     def test_simple(self):
         ofilename = join(TEST_DATA_DIR, 'test.wav')
         # Open the test file for reading
-        a = Sndfile(ofilename, 'read')
+        a = Sndfile(ofilename, 'r')
         nframes = a.nframes
 
         buffsize = 1024
@@ -246,7 +246,7 @@ class TestSeek(TestCase):
 
         # Now, read some frames, go back, and compare buffers
         # (check whence == 1 == SEEK_CUR)
-        a = Sndfile(ofilename, 'read')
+        a = Sndfile(ofilename, 'r')
         a.read_frames(buffsize)
         buff = a.read_frames(buffsize)
         a.seek(-buffsize, 1)
@@ -257,7 +257,7 @@ class TestSeek(TestCase):
 
         # Now, read some frames, go back, and compare buffers
         # (check whence == 2 == SEEK_END)
-        a = Sndfile(ofilename, 'read')
+        a = Sndfile(ofilename, 'r')
         buff = a.read_frames(nframes)
         a.seek(-buffsize, 2)
         buff2 = a.read_frames(buffsize)
@@ -268,8 +268,8 @@ class TestSeek(TestCase):
         ofilename = join(TEST_DATA_DIR, 'test.wav')
         rfd, fd, cfilename   = open_tmp_file('rwseektest.wav')
         try:
-            ref = Sndfile(ofilename, 'read')
-            test = Sndfile(fd, 'rwrite', format=ref.format,
+            ref = Sndfile(ofilename, 'r')
+            test = Sndfile(fd, 'rw', format=ref.format,
                            channels=ref.channels, samplerate=ref.samplerate)
             n = 1024
 

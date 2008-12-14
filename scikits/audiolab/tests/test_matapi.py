@@ -29,12 +29,12 @@ class test_audiolab(TestCase):
             noise = 0.1 * N.random.randn(nbuff)
 
             # Open the copy file for writing
-            b = Sndfile(cfilename, 'write', format, 1, nbuff)
+            b = Sndfile(cfilename, 'w', format, 1, nbuff)
             b.write_frames(noise, nbuff)
             b.close()
 
             # Reread the data
-            b = Sndfile(cfilename, 'read')
+            b = Sndfile(cfilename, 'r')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -83,13 +83,13 @@ class test_audiolab(TestCase):
 
             # Open the copy file for writing
             format  = audio_format('aiff', 'pcm16')
-            b       = Sndfile(cfilename, 'write', format, 1, nbuff)
+            b       = Sndfile(cfilename, 'w', format, 1, nbuff)
 
             b.write_frames(noise, nbuff)
 
             b.close()
 
-            b   = Sndfile(cfilename, 'read')
+            b   = Sndfile(cfilename, 'r')
             rcnoise = b.read_frames(nbuff)
             b.close()
 
@@ -113,7 +113,7 @@ class test_audiolab(TestCase):
             noise   = 0.1 * N.random.randn(nbuff)
 
             # Open the first file for writing with Sndfile
-            b       = Sndfile(cfilename1, 'write', format, 1, fs)
+            b       = Sndfile(cfilename1, 'w', format, 1, fs)
 
             b.write_frames(noise, nbuff)
 
