@@ -1,0 +1,33 @@
+----------------------
+Audiolab Release Notes
+----------------------
+
+.. contents::
+
+audiolab 0.10 2008-12-14
+------------------------
+
+Audiolab 0.10 has seen a relatively big internal code change (from ctypes to
+cython). It should be faster and more reliable, especially against various
+sndfile versions. 
+
+  NEW FEATURES:
+   
+   * CoreAudio backend for play function: this means mac ox X users can now
+     output numpy array data directly on their output device
+
+   * Sndfile and Format class: both sndfile and formatinfo are obsoleted by
+     those classes. They are more complient with python conventions, and should
+     be easier to use. The old sndfile and formatinfo are still available for
+     convenience, but they are thin wrappers around Sndfile and Format classes.
+     You are advised to switch.
+
+   * available_file_formats and available_encodings: those functions can be
+     used to query the supported file formats and encodings. The old functions
+     were fundamentally broken and never worked: those should work whatever
+     sndfile version you are using.
+
+   * New formats supported by the dev version of sndfile (1.0.18) are supported
+     if built against those recent versions: ogg in particular, is fully
+     supported, both through the Sndfile class and the matlab API (oggread and
+     oggwrite)
