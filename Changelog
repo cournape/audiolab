@@ -1,3 +1,9 @@
+audiolab (0.10.1) Tue, 16 Dec 2008 13:12:30 +0900
+	* Fix makefiles tests target to use paver instead of
+	setuptools-generated source tarball
+	* Add setup.py to MANIFEST.in because paver does not catch it
+	* Release 0.10.1 (source only)
+
 audiolab (0.10) Sun, 14 Dec 2008 20:25:56 +0900
 	* release 0.10.0
 
