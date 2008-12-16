@@ -40,7 +40,7 @@ def macosx_version():
         m = ver.match(i)
         if m:
             return m.groups()
-    
+
 def mpkg_name():
     maj, min = macosx_version()[:2]
     pyver = ".".join([str(i) for i in sys.version_info[:2]])
@@ -71,8 +71,8 @@ def dmg():
     image.remove()
     cmd = ["hdiutil", "create", image_name, "-srcdir", str(builddir)]
     subprocess.Popen(cmd)
-#options.setup.package_data = 
-#    setuputils.find_package_data("scikits/audiolab", 
+#options.setup.package_data =
+#    setuputils.find_package_data("scikits/audiolab",
 #                                 package="scikits/audiolab",
 #                                 only_in_packages=False)
 
@@ -88,7 +88,7 @@ if paver.doctools.has_sphinx:
         builddir.mkdir()
         srcdir = docroot / opts.get("sourcedir", "")
         if not srcdir.exists():
-            raise BuildFailure("Sphinx source file dir (%s) does not exist" 
+            raise BuildFailure("Sphinx source file dir (%s) does not exist"
                     % srcdir)
         latexdir = builddir / "latex"
         latexdir.mkdir()
@@ -132,7 +132,13 @@ if paver.doctools.has_sphinx:
         pass
 
     @task
-    @needs(['doc', 'setuptools.command.sdist'])
+    @needs(['setuptools.command.sdist'])
     def sdist():
+        """Build tarball."""
+        pass
+
+    @task
+    @needs(['doc', 'sdist'])
+    def release_sdist():
         """Build doc + tarball."""
         pass
