@@ -27,9 +27,9 @@ LICENSE             = 'LGPL'
 DOWNLOAD_URL        = URL
 
 MAJOR = 0
-MINOR = 11
-MICRO = 0
-DEV = True
+MINOR = 10
+MICRO = 1
+DEV = False
 
 CLASSIFIERS = ['Development Status :: 4 - Beta',
         'Environment :: Console',
