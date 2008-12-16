@@ -56,14 +56,14 @@ dist/audiolab-$(PKG_VER).tar.bz2: doc
 # Building audiolab in a tmp directory
 #=====================================
 build_sdist:
-	python setup.py sdist --format=bztar
+	paver sdist
 
 $(TMPPATH):
 	mkdir -p $(TMPPATH)
 
 extract_sdist: $(TMPPATH) build_sdist
-	cp dist/scikits.audiolab-$(PKG_VER).tar.bz2 $(TMPPATH)
-	(cd $(TMPPATH) && tar -xjf scikits.audiolab-$(PKG_VER).tar.bz2)
+	cp dist/scikits.audiolab-$(PKG_VER).tar.gz $(TMPPATH)
+	(cd $(TMPPATH) && tar -xzf scikits.audiolab-$(PKG_VER).tar.gz)
 
 build_test: extract_sdist
 	(cd $(TMPPATH)/scikits.audiolab-$(PKG_VER) && $(PYTHONRUN) setup.py \
