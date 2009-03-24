@@ -28,7 +28,7 @@ the audiolab package, in the test_data directory):
 
 .. literalinclude:: examples/obsolete/usage1.py
 
-Prints you the informations related to the file, like its sampling rate, the
+Prints you the information related to the file, like its sampling rate, the
 number of frames, etc... You can of course get each parameter individually by
 using the corresponding sndfile.get* accessors.
 
@@ -66,8 +66,8 @@ Writing data to a file
 
 Opening a file for writing is a bit more complicated than reading; you need to
 say which format you are requesting, the number of channels and the sampling
-rate (in Hz) you are requesting; all thoses information are mandatory !  The
-class format is used to build a format understable by libsndfile from
+rate (in Hz) you are requesting; all those information are mandatory !  The
+class format is used to build a format understandable by libsndfile from
 'user-friendly' values. Let's see how it works.
 
 .. literalinclude:: examples/obsolete/write1.py
