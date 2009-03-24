@@ -23,6 +23,11 @@ sys.path.extend([
 
 import audiolab_version
 
+# Check Sphinx version
+import sphinx
+if sphinx.__version__ < "0.5":
+    raise RuntimeError("Sphinx 0.5.dev or newer required")
+
 # General configuration
 # ---------------------
 
