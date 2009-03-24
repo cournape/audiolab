@@ -11,25 +11,23 @@ import numpy.distutils
 
 import paver
 import paver.doctools
+from paver.easy import Bunch, options, task, needs, dry
+from paver.setuputils import setup
 
 import common
-from setup import configuration
+
+setup(
+    name=common.DISTNAME,
+    namespace_packages=['scikits'],
+    packages=setuptools.find_packages(),
+    install_requires=common.INSTALL_REQUIRE,
+    version=common.VERSION,
+    include_package_data=True,
+)
 
 options(
-        setup=Bunch(
-            name=common.DISTNAME,
-            namespace_packages=['scikits'],
-            packages=setuptools.find_packages(),
-            install_requires=common.INSTALL_REQUIRE,
-            version=common.VERSION,
-            include_package_data=True,
-            ),
-        sphinx=Bunch(
-            builddir="build",
-            sourcedir="src"
-            ),
-
-        )
+        sphinx=Bunch(builddir="build", sourcedir="src")
+)
 
 def macosx_version():
     st = subprocess.Popen(["sw_vers"], stdout=subprocess.PIPE)
@@ -80,7 +78,7 @@ if paver.doctools.has_sphinx:
     def _latex_paths():
         """look up the options that determine where all of the files are."""
         opts = options
-        docroot = path(opts.get('docroot', 'docs'))
+        docroot = paver.path.path(opts.get('docroot', 'docs'))
         if not docroot.exists():
             raise BuildFailure("Sphinx documentation root (%s) does not exist."
                     % docroot)
@@ -104,7 +102,7 @@ if paver.doctools.has_sphinx:
         def build_latex():
             subprocess.call(["make", "all-pdf"], cwd=paths.latexdir)
         dry("Build pdf doc", build_latex)
-        destdir = path("docs") / "pdf"
+        destdir = paver.path.path("docs") / "pdf"
         destdir.rmtree()
         destdir.makedirs()
         pdf = paths.latexdir / "audiolab.pdf"
@@ -121,8 +119,8 @@ if paver.doctools.has_sphinx:
     def html():
         """Build Audiolab's documentation and install it into
         scikits/audiolab/docs"""
-        builtdocs = path("docs") / options.sphinx.builddir / "html"
-        destdir = path("docs") / "html"
+        builtdocs = paver.path.path("docs") / options.sphinx.builddir / "html"
+        destdir = paver.path.path("docs") / "html"
         destdir.rmtree()
         builtdocs.move(destdir)
 
@@ -132,13 +130,13 @@ if paver.doctools.has_sphinx:
         pass
 
     @task
-    @needs(['setuptools.command.sdist'])
-    def sdist():
+    @needs('setuptools.command.sdist')
+    def sdist(options):
         """Build tarball."""
         pass
 
     @task
-    @needs(['doc', 'sdist'])
-    def release_sdist():
+    @needs(['doc', 'pavement.sdist'])
+    def release_sdist(options):
         """Build doc + tarball."""
         pass
