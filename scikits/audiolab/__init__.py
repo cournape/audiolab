@@ -1,10 +1,11 @@
 #! /usr/bin/env python
-# Last Change: Fri Dec 05 02:00 PM 2008 J
+# Last Change: Tue Mar 24 08:00 PM 2009 J
 """
 audiolab: a small toolbox to read, write and play audio to and from
 numpy arrays.
 
 audiolab provides two API:
+
     - one similar to matlab: this gives you wavread, wavwrite functions really
       similar to matlab's functions.
     - a more complete API, which can be used to read, write to many audio file
@@ -12,7 +13,7 @@ audiolab provides two API:
       not available to matlab (seek, append data, etc...)
 
 It is a thin wrapper around libsndfile from Erik Castro Lopo.
-     
+
 Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 
 LICENSE: audiolab is licensed under the LGPL, as is libsndfile itself. See
