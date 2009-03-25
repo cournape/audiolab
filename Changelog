@@ -1,3 +1,6 @@
+audiolab (0.10.2dev) Wed, 25 Mar 2009 20:28:23 +0900
+	* Update the documentation (spell check)
+
 audiolab (0.10.1) Tue, 16 Dec 2008 13:12:30 +0900
 	* Fix makefiles tests target to use paver instead of
 	setuptools-generated source tarball
