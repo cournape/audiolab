@@ -22,10 +22,8 @@ Releases are available on Pypi:
 
         http://pypi.python.org/pypi/scikits.audiolab/
 
-audiolab is part of scikits, and its source can be downloaded directly from the
-scikits svn repository::
-
-	svn co http://svn.scipy.org/svn/scikits/trunk/audiolab
+Audiolab is part of scikits, and its source are kept on `github
+<http://github.com/cournape/audiolab>`_.
 
 Install from binaries
 =====================
