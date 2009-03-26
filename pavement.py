@@ -70,6 +70,13 @@ def test_install():
     sh('%s setup.py install' % VPYEXEC)
 
 @task
+def build_version_files(options):
+    from common import write_version
+    write_version(os.path.join("scikits", "audiolab", "version.py"))
+    if os.path.exists(os.path.join("docs", "src")):
+        write_version(os.path.join("docs", "src", "audiolab_version.py"))
+
+@task
 #@needs(['latex', 'html'])
 def dmg():
     builddir = path("build") / "dmg"
@@ -118,6 +125,7 @@ if paver.doctools.has_sphinx:
         return Bunch(locals())
 
     @task
+    @needs('build_version_files')
     def latex():
         """Build Audiolab's documentation and install it into
         scikits/audiolab/docs"""
@@ -134,7 +142,7 @@ if paver.doctools.has_sphinx:
         pdf.move(destdir)
 
     @task
-    @needs(['paver.doctools.html'])
+    @needs('build_version_files', 'paver.doctools.html')
     def html_build():
         """Build Audiolab's html documentation."""
         pass
