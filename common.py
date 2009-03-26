@@ -44,15 +44,19 @@ def build_verstring():
 
 def build_fverstring():
     if DEV:
-        return build_verstring() + 'dev'
+        return build_verstring() + '.dev'
     else:
         return build_verstring()
 
 def write_version(fname):
     f = open(fname, "w")
-    f.writelines("version = '%s'\n" % build_verstring())
-    f.writelines("dev =%s\n" % DEV)
-    f.writelines("full_version = '%s'\n" % build_fverstring())
+    f.write("""
+short_version='%s'
+version=short_version
+dev=%s
+if dev:
+    version += '.dev'
+""" % (build_verstring(), DEV))
     f.close()
 
 VERSION = build_fverstring()
