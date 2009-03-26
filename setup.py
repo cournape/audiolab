@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Sun Dec 14 06:00 PM 2008 J
+# Last Change: Thu Mar 26 05:00 PM 2009 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -80,5 +80,5 @@ if __name__ == "__main__":
           packages=setuptools.find_packages(),
           include_package_data = True,
           test_suite="tester",
-          zip_safe=True,
+          zip_safe=False,
           classifiers=CLASSIFIERS)
