@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Last Change: Thu Mar 26 05:00 PM 2009 J
+# Last Change: Fri Mar 27 05:00 PM 2009 J
 
 # Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 #
@@ -36,6 +36,7 @@ from common import *
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
+    write_info(os.path.join("scikits", "audiolab", "info.py"))
     write_version(os.path.join("scikits", "audiolab", "version.py"))
     # XXX: find a way to include the doc in sdist
     if os.path.exists(os.path.join("docs", "src")):
