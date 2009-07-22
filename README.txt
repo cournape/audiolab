@@ -4,7 +4,7 @@ also be used for sound output to audio device (Mac OS X and Linux only).
 
 A matlab-like API is provided for simple import/export; a more complete API is
 available for more advanced usage. Audiolab is essentially a wrapper around
-Erik Castro de Lopo's excellent libsndfile:
+Erik de Castro Lopo's excellent libsndfile:
 
 http://www.mega-nerd.com/libsndfile/
 

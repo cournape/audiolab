@@ -8,7 +8,7 @@ Introduction
 Audiolab is a python package to read/write audio files from numpy arrays.
 Matlab have functions such as wavread, wavwrite, soundsc, etc... The goal of
 audiolab is to give those capabilities to the `scipy`_ environment by wrapping
-the excellent library `libsndfile`_ from Erik Castro de Lopo. Audiolab supports
+the excellent library `libsndfile`_ from Erik de Castro Lopo. Audiolab supports
 all format supported by libsndfile, including wav, aiff, ircam, flac (an
 open source lossless compressed format) and ogg vorbis (an open source
 compressed format - similar to MP3 without the license issues); see `here

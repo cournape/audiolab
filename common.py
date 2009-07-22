@@ -6,7 +6,7 @@ supports output to audio device (Mac OS X and Linux only).
 For simplicity, a matlab-like API is provided for simple import/export; a more
 complete API is also available.
 
-Audiolab is essentially a wrapper around Erik Castro de Lopo's excellent
+Audiolab is essentially a wrapper around Erik de Castro Lopo's excellent
 libsndfile:
 
 http://www.mega-nerd.com/libsndfile/

@@ -12,7 +12,7 @@ audiolab provides two API:
       (including wav, aiff, flac, au, IRCAM, htk, etc...), with IO capabilities
       not available to matlab (seek, append data, etc...)
 
-It is a thin wrapper around libsndfile from Erik Castro Lopo.
+It is a thin wrapper around libsndfile from Erik de Castro Lopo.
 
 Copyright (C) 2006-2007 Cournapeau David <cournape@gmail.com>
 
