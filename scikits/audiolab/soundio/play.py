@@ -45,8 +45,10 @@ if BACKEND == 'ALSA':
     try:
         from scikits.audiolab.soundio._alsa_backend import AlsaDevice
     except ImportError, e:
-        warnings.warn("Could not import alsa backend; most probably, "
-                      "you did not have alsa headers when building audiolab")
+        msg = """\
+Could not import alsa backend; most probably, you did not have alsa headers
+when building audiolab (import error is %s)""" % str(e)
+        warnings.warn(msg)
 
     def _play(input, fs):
         if input.ndim == 1:
