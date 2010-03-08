@@ -23,7 +23,8 @@ Releases are available on Pypi:
         http://pypi.python.org/pypi/scikits.audiolab/
 
 Audiolab is part of scikits, and its source are kept on `github
-<http://github.com/cournape/audiolab>`_.
+<http://github.com/cournape/audiolab>`_. Docs for the development version of
+audiolab can be found on `gh-pages <http://cournape.github.com/audiolab>`_.
 
 Install from binaries
 =====================
