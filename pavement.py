@@ -46,7 +46,33 @@ setup(name=common.DISTNAME,
         include_package_data=True)
 
 options(sphinx=Bunch(builddir="build", sourcedir="src"),
-        virtualenv=Bunch(script_name="install/bootstrap.py"))
+        bootstrap=Bunch(bootstrap_dir="bootstrap"),
+        virtualenv=Bunch(packages_to_install=["sphinx", "numpydoc"],
+                         no_site_packages=False))
+
+#----------------
+# Bootstrap stuff
+#----------------
+@task
+def bootstrap(options):
+    """create virtualenv in ./bootstrap"""
+    try:
+        import virtualenv
+    except ImportError, e:
+        raise RuntimeError("virtualenv is needed for bootstrap")
+
+    bdir = options.bootstrap_dir
+    if not os.path.exists(bdir):
+        os.makedirs(bdir)
+    bscript = "boostrap.py"
+
+    options.virtualenv.script_name = os.path.join(options.bootstrap_dir,
+                                                  bscript)
+    options.virtualenv.no_site_packages = True
+    options.bootstrap.no_site_packages = True
+    print options.virtualenv.script_name
+    call_task('paver.virtual.bootstrap')
+    sh('cd %s; %s %s' % (bdir, sys.executable, bscript))
 
 def macosx_version():
     st = subprocess.Popen(["sw_vers"], stdout=subprocess.PIPE)
@@ -64,22 +90,7 @@ def mpkg_name():
     return "scikits.audiolab-%s-py%s-macosx%s.%s.mpkg" % (common.build_fverstring(),
                             pyver, maj, min)
 
-VPYEXEC = "install/bin/python"
-
-@task
-def bootstrap():
-    """create virtualenv in ./install"""
-    install = paver.path.path('install')
-    if not install.exists():
-        install.mkdir()
-    call_task('paver.virtual.bootstrap')
-    sh('cd install; %s bootstrap.py' % sys.executable)
-
-@task
-@needs('bootstrap')
-def test_install():
-    """Install the package into the venv."""
-    sh('%s setup.py install' % VPYEXEC)
+VPYEXEC = "bootstrap/bin/python"
 
 @task
 def clean():
@@ -93,7 +104,7 @@ def clean():
 
 @task
 def clean_bootstrap():
-    paver.path.path('install').rmtree()
+    paver.path.path('bootstrap').rmtree()
 
 @task
 @needs("setuptools.bdist_mpkg", "doc")
