@@ -14,6 +14,11 @@ include scikits/audiolab/test_data/test.sdif
 include scikits/audiolab/test_data/test.wav
 recursive-include docs/pdf *
 recursive-include docs/html *
+recursive-include docs/src *rst
+include docs/src/conf.py
+recursive-include docs/src/_static
+recursive-include docs/src/_templates
+recursive-include docs/src/examples *py
 # Cython files
 include scikits/audiolab/pysndfile/_sndfile.pyx
 include scikits/audiolab/soundio/macosx/macosx_backend.pyx
