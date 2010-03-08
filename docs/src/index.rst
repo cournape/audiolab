@@ -24,13 +24,14 @@ Audiolab, a python package to make noise with numpy arrays
 ##########################################################
 
 .. toctree::
+   :maxdepth: 2
 
-        intro
-        installing
-        overview
-        fullapi
-        obsolete
-        future
+   intro
+   installing
+   overview
+   fullapi
+   obsolete
+   future
 
 .. htmlonly::
 
