@@ -1,0 +1,20 @@
+# Sphinx inventory version 1
+# Project: audiolab
+# Version: 0.11.0
+scikits.audiolab.Sndfile.endianness attribute fullapi.html
+scikits.audiolab.Sndfile.sync method fullapi.html
+scikits.audiolab.Sndfile.encoding_description attribute fullapi.html
+scikits.audiolab.Format.file_format attribute fullapi.html
+scikits.audiolab.available_encodings function fullapi.html
+scikits.audiolab.Sndfile.file_format_description attribute fullapi.html
+scikits.audiolab.Format class fullapi.html
+scikits.audiolab.Sndfile.frames attribute fullapi.html
+scikits.audiolab.Sndfile.format attribute fullapi.html
+scikits.audiolab.Sndfile.samplerate attribute fullapi.html
+scikits.audiolab.Sndfile.encoding attribute fullapi.html
+scikits.audiolab.available_file_formats function fullapi.html
+scikits.audiolab.Sndfile.read_frames method fullapi.html
+scikits.audiolab.Sndfile class fullapi.html
+scikits.audiolab.Sndfile.channels attribute fullapi.html
+scikits.audiolab.play function fullapi.html
+scikits.audiolab.Sndfile.write_frames method fullapi.html

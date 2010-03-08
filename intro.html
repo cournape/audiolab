@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; audiolab v0.11.0.dev documentation</title>
+    <link rel="stylesheet" href="static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.11.0.dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="audiolab v0.11.0.dev documentation" href="index.html" />
+    <link rel="next" title="Download and installation" href="installing.html" />
+    <link rel="prev" title="Audiolab, a python package to make noise with numpy arrays" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installing.html" title="Download and installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Audiolab, a python package to make noise with numpy arrays"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Audiolab, a python package to make noise with numpy arrays</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="next chapter">Download and installation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/intro.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Audiolab is a python package to read/write audio files from numpy arrays.
+Matlab have functions such as wavread, wavwrite, soundsc, etc... The goal of
+audiolab is to give those capabilities to the <a class="reference external" href="http://www.scipy.org">scipy</a> environment by wrapping
+the excellent library <a class="reference external" href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> from Erik de Castro Lopo. Audiolab supports
+all format supported by libsndfile, including wav, aiff, ircam, flac (an
+open source lossless compressed format) and ogg vorbis (an open source
+compressed format - similar to MP3 without the license issues); see <a class="reference external" href="http://www.mega-nerd.com/libsndfile/#Features&quot;">here</a> for a complete list.</p>
+<p>The main features of audiolab are:</p>
+<blockquote>
+<ul class="simple">
+<li>reading all formats supported by sndfile directly into numpy arrays.</li>
+<li>writing all formats supported by sndfile directly from numpy arrays.</li>
+<li>A matlab-like API (e.g. wavread) for some file formats. Wav, aiff,
+flac, au, and ogg formats are supported.</li>
+<li>A play function to output data from numpy array into the sound device
+of your computer (Only ALSA for linux and CoreAudio for Mac OS X is
+implemented ATM).</li>
+</ul>
+</blockquote>
+<p><strong>Note</strong>: The exact features and supported file format depend on your
+installed version of libsndfile and your platform. Audio playback is only
+implemented for Linux and Mac OS X.</p>
+<p><strong>Note</strong>: The library is still in flux: the API can still change before the
+1.0 version. That being said, the version 0.10 was a major change, and I
+don&#8217;t expect any more major changes from now on.</p>
+<p><strong>Note</strong>: The online version of this document is not always up to date. The
+pdf included in the package is the reference, and always in sync with the
+package. If something does not work, please refer first to the pdf included in
+the package.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installing.html" title="Download and installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Audiolab, a python package to make noise with numpy arrays"
+             >previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, David Cournapeau.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Full API &mdash; audiolab v0.11.0.dev documentation</title>
+    <link rel="stylesheet" href="static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.11.0.dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="audiolab v0.11.0.dev documentation" href="index.html" />
+    <link rel="next" title="Obsolete API" href="obsolete.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="obsolete.html" title="Obsolete API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Full API</a><ul>
+<li><a class="reference external" href="#audio-file-io">Audio file IO</a><ul>
+<li><a class="reference external" href="#the-format-class">The <tt class="docutils literal"><span class="pre">Format</span></tt> class</a></li>
+<li><a class="reference external" href="#the-sndfile-class">The <tt class="docutils literal"><span class="pre">Sndfile</span></tt> class</a><ul>
+<li><a class="reference external" href="#read-methods">Read methods</a></li>
+<li><a class="reference external" href="#write-methods">Write methods</a></li>
+<li><a class="reference external" href="#meta-data">Meta-data</a></li>
+<li><a class="reference external" href="#encoding-and-array-dtype">Encoding and array dtype</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference external" href="#sound-output">Sound output</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="overview.html"
+                                  title="previous chapter">Overview</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="obsolete.html"
+                                  title="next chapter">Obsolete API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fullapi.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="full-api">
+<h1>Full API<a class="headerlink" href="#full-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="audio-file-io">
+<h2>Audio file IO<a class="headerlink" href="#audio-file-io" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-format-class">
+<h3>The <a title="scikits.audiolab.Format" class="reference internal" href="#scikits.audiolab.Format"><tt class="xref docutils literal"><span class="pre">Format</span></tt></a> class<a class="headerlink" href="#the-format-class" title="Permalink to this headline">¶</a></h3>
+<p>The Format class is used to control meta-data specific to one type of audio
+file (file format, encoding and endianness). It is mainly useful when writing
+files or reading raw (header-less) audio files. A Format instance can be
+queried for its related meta-data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">Format</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">Format</span><span class="p">()</span> <span class="c"># By default, 16 bits PCM wav file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span> <span class="c"># Will print a detail description of the format</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="scikits.audiolab.Format">
+<em class="property">
+class </em><tt class="descclassname">scikits.audiolab.</tt><tt class="descname">Format</tt><a class="headerlink" href="#scikits.audiolab.Format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format(type=wav, encoding=pcm16, endianness=file)
+This class represents an audio file format. It knows about audio file
+format (wav, aiff, etc...), encoding (pcm, etc...) and endianness.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>type</strong> : str</p>
+<blockquote>
+<p>the major file format (wav, etc...).</p>
+</blockquote>
+<p><strong>encoding</strong> : str</p>
+<blockquote>
+<p>the encoding (pcm16, etc..).</p>
+</blockquote>
+<p><strong>endianness</strong> : str</p>
+<blockquote class="last">
+<p>the endianess.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="scikits.audiolab.Sndfile" class="reference internal" href="#scikits.audiolab.Sndfile"><tt class="xref docutils literal"><span class="pre">Sndfile</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The possible values for type, and encoding depend on your installed
+libsndfile. You can query the possible values with the functions
+available_file_formats and available_encodings.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Format.file_format">
+<tt class="descclassname">Format.</tt><tt class="descname">file_format</tt><a class="headerlink" href="#scikits.audiolab.Format.file_format" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the file format.</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.file_format_description">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">file_format_description</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.file_format_description" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the full description of the file format.</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.encoding">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">encoding</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.encoding" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the encoding.</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.encoding_description">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">encoding_description</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.encoding_description" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the full description of the encoding.</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.endianness">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">endianness</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.endianness" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the endianness.</dd></dl>
+
+<p>The following two functions can be used to query the available formats and
+encodings. The exact list of formats depend on the libsndfile audiolab was
+built against.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">available_encodings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># List encodings supported for the wav format</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">available_encodings</span><span class="p">(</span><span class="s">&#39;wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="scikits.audiolab.available_file_formats">
+<tt class="descclassname">scikits.audiolab.</tt><tt class="descname">available_file_formats</tt><big>(</big><big>)</big><a class="headerlink" href="#scikits.audiolab.available_file_formats" title="Permalink to this definition">¶</a></dt>
+<dd>available_file_formats()
+Return lists of available file formats supported by audiolab.</dd></dl>
+
+<dl class="function">
+<dt id="scikits.audiolab.available_encodings">
+<tt class="descclassname">scikits.audiolab.</tt><tt class="descname">available_encodings</tt><big>(</big><big>)</big><a class="headerlink" href="#scikits.audiolab.available_encodings" title="Permalink to this definition">¶</a></dt>
+<dd>available_encodings(major)
+Return lists of available encoding for the given major format.</dd></dl>
+
+</div>
+<div class="section" id="the-sndfile-class">
+<h3>The <a title="scikits.audiolab.Sndfile" class="reference internal" href="#scikits.audiolab.Sndfile"><tt class="xref docutils literal"><span class="pre">Sndfile</span></tt></a> class<a class="headerlink" href="#the-sndfile-class" title="Permalink to this headline">¶</a></h3>
+<p>Sndfile is the main class for audio file IO.</p>
+<dl class="class">
+<dt id="scikits.audiolab.Sndfile">
+<em class="property">
+class </em><tt class="descclassname">scikits.audiolab.</tt><tt class="descname">Sndfile</tt><a class="headerlink" href="#scikits.audiolab.Sndfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sndfile(filename, mode=r, Format format=None, int channels=0, int samplerate=0)
+Sndfile is the core class to read/write audio files. Once an instance is
+created, it can be used to read and/or writes data from numpy arrays, query
+the audio file meta-data, etc...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string or int</p>
+<blockquote>
+<p>name of the file to open (string), or file descriptor (integer)</p>
+</blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<p>&#8216;r&#8217; for read, &#8216;w&#8217; for write, or &#8216;rw&#8217; for read and
+write.</p>
+</blockquote>
+<p><strong>format</strong> : Format</p>
+<blockquote>
+<p>Required when opening a new file for writing, or to read raw audio
+files (without header).</p>
+</blockquote>
+<p><strong>channels</strong> : int</p>
+<blockquote>
+<p>number of channels.</p>
+</blockquote>
+<p><strong>samplerate</strong> : int</p>
+<blockquote>
+<p>sampling rate.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sndfile: as Sndfile instance.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>format, channels and samplerate need to be given only in the write modes
+and for raw files.</p>
+<p class="rubric">Methods</p>
+</dd></dl>
+
+<div class="section" id="read-methods">
+<h4>Read methods<a class="headerlink" href="#read-methods" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="scikits.audiolab.Sndfile.read_frames">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">read_frames</tt><big>(</big><big>)</big><a class="headerlink" href="#scikits.audiolab.Sndfile.read_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sndfile.read_frames(self, scikits.audiolab.pysndfile.sndfile.sf_count_t nframes, dtype=&lt;???&gt;)
+Read the given number of frames and put the data into a numpy array of
+the requested dtype.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nframes</strong> : int</p>
+<blockquote>
+<p>number of frames to read.</p>
+</blockquote>
+<p><strong>dtype</strong> : numpy dtype</p>
+<blockquote class="last">
+<p>dtype of the returned array containing read data (see note).</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>if float are requested when the file contains integer data, you will
+get normalized data (that is the max possible integer will be 1.0, and
+the minimal possible value -1.0).</p>
+<p>if integers are requested when the file contains floating point data,
+it may give wrong results because there is an ambiguity: if the
+floating data are normalized, you can get a file with only 0 ! Getting
+integer data from files encoded in normalized floating point is not
+supported (this is an audiolab limitation: sndfile supports it).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="write-methods">
+<h4>Write methods<a class="headerlink" href="#write-methods" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="scikits.audiolab.Sndfile.write_frames">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">write_frames</tt><big>(</big><big>)</big><a class="headerlink" href="#scikits.audiolab.Sndfile.write_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sndfile.write_frames(self, ndarray input)
+write given number frames into file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : ndarray</p>
+<blockquote class="last">
+<p>array containing data to write.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>One column per channel.</p>
+<p>updates the write pointer.</p>
+<p>if the input type is float, and the file encoding is an integer type,
+you should make sure the input data are normalized normalized data
+(that is in the range [-1..1] - which will corresponds to the maximum
+range allowed by the integer bitwidth).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scikits.audiolab.Sndfile.sync">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#scikits.audiolab.Sndfile.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sndfile.sync(self)
+call the operating system&#8217;s function to force the writing of all
+file cache buffers to disk the file.</p>
+<p>No effect if file is open as read</p>
+</dd></dl>
+
+</div>
+<div class="section" id="meta-data">
+<h4>Meta-data<a class="headerlink" href="#meta-data" title="Permalink to this headline">¶</a></h4>
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.samplerate">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">samplerate</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.samplerate" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the sampling rate of the file</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.channels">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">channels</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.channels" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the number of channels</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.frames">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">frames</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.frames" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the number of frames in the file</dd></dl>
+
+<dl class="attribute">
+<dt id="scikits.audiolab.Sndfile.format">
+<tt class="descclassname">Sndfile.</tt><tt class="descname">format</tt><a class="headerlink" href="#scikits.audiolab.Sndfile.format" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the Format instance attached to the file.</dd></dl>
+
+</div>
+<div class="section" id="encoding-and-array-dtype">
+<h4>Encoding and array dtype<a class="headerlink" href="#encoding-and-array-dtype" title="Permalink to this headline">¶</a></h4>
+<p>The most common encoding for common audio files like wav of aiff is signed 16
+bits integers. Sndfile and hence audiolab enables many more encodings like
+unsigned 8 bits, floating point. Generally, when using the data for processing,
+the encoding of choice is floating point; the exact type is controlled through
+the array dtype. When the array dtype and the file encoding don&#8217;t match, there
+has to be some conversion.</p>
+<p>When converting between integer PCM formats of differing size (i.e. both file
+encoding and input/output array dtype is an integer type), the Sndfile class
+obeys one simple rule:</p>
+<blockquote>
+<ul class="simple">
+<li>Whenever integer data is moved from one sized container to another
+sized container, the most significant bit in the source container
+will become the most significant bit in the destination container.</li>
+</ul>
+</blockquote>
+<p>When either the encoding is an integer but the numpy array dtype is a float
+type, different rules apply. The default behavior when reading floating point
+data (array dtype is float) from a file with integer data is normalization.
+Regardless of whether data in the file is 8, 16, 24 or 32 bit wide, the data
+will be read as floating point data in the range [-1.0, 1.0].  Similarly, data
+in the range [-1.0, 1.0] will be written to an integer PCM file so that a data
+value of 1.0 will be the largest allowable integer for the given bit width.</p>
+</div>
+</div>
+</div>
+<div class="section" id="sound-output">
+<h2>Sound output<a class="headerlink" href="#sound-output" title="Permalink to this headline">¶</a></h2>
+<p>audiolab now has some facilities to output sound from numpy arrays: the
+function play is a wrapper around a platform-specific audio backend. For now,
+only ALSA backend (Linux) and Core Audio backend (Mac OS X) are implemented.
+Other backends (for windows, OSS for Solaris/BSD) may be added later, although
+it is not a priority for me. Patches are welcomed, particularly for windows.</p>
+<dl class="function">
+<dt id="scikits.audiolab.play">
+<tt class="descclassname">scikits.audiolab.</tt><tt class="descname">play</tt><big>(</big><em>input</em>, <em>fs=44100</em><big>)</big><a class="headerlink" href="#scikits.audiolab.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the signal in vector input to the default output device.</p>
+<p>Only floating point input are supported: input is assumed to be in the
+-1..1 range. Any values outside this range will be clipped by the device.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input: array</strong> :</p>
+<blockquote>
+<p>input signal of rank 2. Each row is assumed to be one channel.</p>
+</blockquote>
+<p><strong>fs: int</strong> :</p>
+<blockquote class="last">
+<p>sampling rate (in Hz)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>It will fail if the sampling rate is not supported by your device. In
+particular, no automatic resampling is done. Mono signals are doubled for
+fake stereo for the CoreAudio framework, as it seemse CoreAudio does not
+handle mono on its own.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="obsolete.html" title="Obsolete API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, David Cournapeau.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

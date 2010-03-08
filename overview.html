@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; audiolab v0.11.0.dev documentation</title>
+    <link rel="stylesheet" href="static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.11.0.dev',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="audiolab v0.11.0.dev documentation" href="index.html" />
+    <link rel="next" title="Full API" href="fullapi.html" />
+    <link rel="prev" title="Download and installation" href="installing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fullapi.html" title="Full API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Download and installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Overview</a><ul>
+<li><a class="reference external" href="#sndfile-class">Sndfile class</a></li>
+<li><a class="reference external" href="#sound-output">Sound output</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="installing.html"
+                                  title="previous chapter">Download and installation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fullapi.html"
+                                  title="next chapter">Full API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/overview.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>For simple usage, the matlab-like API is the simplest to use. For example, if
+you want to read a wav file, you can do it in one function call</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">audiolab</span> <span class="kn">import</span> <span class="n">wavread</span>
+
+<span class="n">data</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">enc</span> <span class="o">=</span> <span class="n">wavread</span><span class="p">(</span><span class="s">&#39;test.wav&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This read the file test.wav, and returns the data, sampling rate as well as the
+encoding as a string. Similar function exists for writing, and for other
+formats: wav, aiff, au, ircam, ogg and flac formats are supported through this
+simple API.</p>
+<div class="section" id="sndfile-class">
+<h2>Sndfile class<a class="headerlink" href="#sndfile-class" title="Permalink to this headline">¶</a></h2>
+<p>For more control (for example writing with a non default encoding, controlling
+output array dtype), the Sndfile class should be used. Internally, the simple
+functions are just wrappers around this class. Let&#8217;s see a simple example on
+how to use the Sndfile class for reading:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">Sndfile</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Sndfile</span><span class="p">(</span><span class="s">&#39;test.wav&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+
+<span class="c"># Sndfile instances can be queried for the audio file meta-data</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">samplerate</span>
+<span class="n">nc</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">channels</span>
+<span class="n">enc</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">encoding</span>
+
+<span class="c"># Reading is straightfoward</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read_frames</span><span class="p">(</span><span class="mf">1000</span><span class="p">)</span>
+
+<span class="c"># This reads the next 1000 frames, e.g. from 1000 to 2000, but as single precision</span>
+<span class="n">data_float</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read_frames</span><span class="p">(</span><span class="mf">1000</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As you can see the usage for reading is straightforward. A Sndfile instance
+first created, and the instance is used for reading, as well as for querying
+meta-data about the file, like the sampling rate or the number of channels.</p>
+<p>The read_frames method can optionally take a dtype argument like many numpy
+functions, to select the dtype of the output array. The exact semantics are
+more complicated than with numpy though, because of audio encoding
+specifies (see encoding section).</p>
+<p>Writing audio file from data in numpy arrays is a bit more complicated, because
+you need to tell the Sndfile class about the file type, encoding and
+endianness, as well as the sampling rate and number of channels. For
+simplicity, the file format, encoding and endianness is controlled from an
+helper class, Format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">Format</span><span class="p">,</span> <span class="n">Sndfile</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;foo.wav&#39;</span>
+
+<span class="c"># Create some data to save as audio data: one second of stereo white noise</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mf">48000</span><span class="p">,</span> <span class="mf">2</span><span class="p">)</span>
+
+<span class="c"># Create a Sndfile instance for writing wav files @ 48000 Hz</span>
+<span class="n">format</span> <span class="o">=</span> <span class="n">Format</span><span class="p">(</span><span class="s">&#39;wav&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">Sndfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="mf">2</span><span class="p">,</span> <span class="mf">48000</span><span class="p">)</span>
+
+<span class="c"># Write the first 500 frames of the signal. Note that the write_frames method</span>
+<span class="c"># uses tmp&#39;s numpy dtype to determine how to write to the file; sndfile also</span>
+<span class="c"># converts the data on the fly if necessary</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write_frames</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="mf">500</span><span class="p">])</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The Format class can be used to control more precisely the encoding or the
+endianness of the written file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">Format</span><span class="p">,</span> <span class="n">Sndfile</span>
+
+<span class="c"># Use 24 bits encoding, big endian</span>
+<span class="n">format</span> <span class="o">=</span> <span class="n">Format</span><span class="p">(</span><span class="s">&#39;wav&#39;</span><span class="p">,</span> <span class="s">&#39;pcm24&#39;</span><span class="p">,</span> <span class="s">&#39;big&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">Sndfile</span><span class="p">(</span><span class="s">&#39;foo.wav&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="mf">2</span><span class="p">,</span> <span class="mf">48000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Not all file formats and encodings combinations are possible. Also, the exact
+number of file formats and encodings available depend on your version of
+libsndfile. Both can be queried at runtime with the functions
+available_file_formats and available_encodings. The following example print all
+available file formats and encodings (the output depends on your installed
+libsndfile):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">available_file_formats</span><span class="p">,</span> <span class="n">available_encodings</span>
+
+<span class="k">for</span> <span class="n">format</span> <span class="ow">in</span> <span class="n">available_file_formats</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;File format </span><span class="si">%s</span><span class="s"> is supported; available encodings are:&quot;</span> <span class="o">%</span> <span class="n">format</span>
+    <span class="k">for</span> <span class="n">enc</span> <span class="ow">in</span> <span class="n">available_encodings</span><span class="p">(</span><span class="n">format</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">enc</span>
+    <span class="k">print</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sound-output">
+<h2>Sound output<a class="headerlink" href="#sound-output" title="Permalink to this headline">¶</a></h2>
+<p>audiolab now has some facilities to output sound from numpy arrays:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scikits.audiolab</span> <span class="kn">import</span> <span class="n">play</span>
+
+<span class="c"># output one second of stereo gaussian white noise at 48000 hz</span>
+<span class="n">play</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mf">2</span><span class="p">,</span> <span class="mf">48000</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fullapi.html" title="Full API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installing.html" title="Download and installation"
+             >previous</a> |</li>
+        <li><a href="index.html">audiolab v0.11.0.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, David Cournapeau.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>
