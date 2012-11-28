@@ -86,7 +86,8 @@ class sndfile:
                 sampling rate.
 
         :Returns:
-            sndfile: a valid sndfile object
+            sndfile : Sndfile
+                a valid sndfile object
 
         Notes
         -----

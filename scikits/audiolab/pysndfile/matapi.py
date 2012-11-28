@@ -54,13 +54,13 @@ def _writer_factory(name, format, def_fs, descr):
 
     Parameters
     ----------
-    data: array
+    data : array
         a rank 1 (mono) or 2 (one channel per col) numpy array
-    filename: str
+    filename : str
         audio file name
     fs : scalar
         sampling rate in Hz (%(def_fs)s by default)
-    enc: str
+    enc : str
         The encoding such as 'pcm16', etc...(%(def_enc)s by default). A
         list of supported encodings can be queried through the function
         available_encodings.
@@ -69,8 +69,8 @@ def _writer_factory(name, format, def_fs, descr):
     -----
     OVERWRITES EXISTING FILE !
 
-    Those functions are similar manner to matlab's wavwrite/auwrite and the
-    likes.  For a total control over options, such as endianness, append data
+    These functions are similar to matlab's wavwrite/auwrite and the
+    like.  For total control over options, such as endianness, appending data
     to an existing file, etc...  you should use Sndfile class instances
     instead
 
@@ -135,7 +135,7 @@ def _reader_factory(name, filetype, descr):
 
     Notes
     -----
-    For a total control over options, such as output's dtype, etc...,
+    For total control over options, such as output's dtype, etc...,
     you should use Sndfile class instances instead""" % {'format': str(descr)}
     basic_reader.__doc__    = doc
     basic_reader.__name__   = name

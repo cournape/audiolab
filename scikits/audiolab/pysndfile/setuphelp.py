@@ -11,7 +11,7 @@ def info_factory(name, libnames, headers, frameworks=None,
     ----------
         name : str
             name of the library
-        libnames: seq
+        libnames : seq
             list of libraries to look for
         headers : seq
             list of headers to look for
