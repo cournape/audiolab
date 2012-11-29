@@ -81,7 +81,7 @@ Meta-data
 
         Returns the number of channels
 
-.. attribute:: Sndfile.frames
+.. attribute:: Sndfile.nframes
 
         Returns the number of frames in the file
 
