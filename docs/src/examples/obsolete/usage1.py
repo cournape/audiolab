@@ -1,4 +1,4 @@
-import scikits.audiolab as audiolab
+import audiolab as audiolab
 
 filename    = 'test.wav'
 a           = audiolab.sndfile(filename, 'read')

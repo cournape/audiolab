@@ -243,7 +243,7 @@ class sndfile:
 def supported_format():
     raise RuntimeError, \
           "This function is broken. Please see " \
-          "scikits.audiolab.available_file_formats"
+          "audiolab.available_file_formats"
 
 def supported_endianness():
     raise RuntimeError, \
@@ -252,4 +252,4 @@ def supported_endianness():
 def supported_encoding():
     raise RuntimeError, \
           "This function is broken. Please see " \
-          "scikits.audiolab.available_encodings"
+          "audiolab.available_encodings"

@@ -14,10 +14,10 @@ def configuration(parent_package='', top_path=None):
                            [join('test_data', i) for i in TEST_DATA_FILES]))
 
     #config.add_data_files(('misc', \
-    #        ['scikits/audiolab/misc/' + i
+    #        ['audiolab/misc/' + i
     #            for i in BAD_FLAC_FILES]))
 
-    #confgr.add_data_dir(('examples', 'scikits/audiolab/docs/examples'))
+    #confgr.add_data_dir(('examples', 'audiolab/docs/examples'))
 
     return confgr
 

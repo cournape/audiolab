@@ -1,4 +1,4 @@
-from scikits.audiolab import Format, Sndfile
+from audiolab import Format, Sndfile
 
 # Use 24 bits encoding, big endian
 format = Format('wav', 'pcm24', 'big')

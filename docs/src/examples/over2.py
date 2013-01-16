@@ -1,5 +1,5 @@
 import numpy as np
-from scikits.audiolab import Format, Sndfile
+from audiolab import Format, Sndfile
 
 filename = 'foo.wav'
 

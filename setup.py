@@ -21,39 +21,34 @@
 #   - check how to handle cmd line build options with distutils and use
 #   it in the building process
 
-from os.path import join
 import os
-import sys
 
 # The following is more or less random copy/paste from numpy.distutils ...
 import setuptools
 
-from distutils.errors import DistutilsError
 from numpy.distutils.core import setup
+from numpy.distutils.misc_util import Configuration
 
 from common import *
 
 def configuration(parent_package='',top_path=None, package_name=DISTNAME):
     if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-    write_info(os.path.join("scikits", "audiolab", "info.py"))
-    write_version(os.path.join("scikits", "audiolab", "version.py"))
+    write_info(os.path.join("audiolab", "info.py"))
+    write_version(os.path.join("audiolab", "version.py"))
     # XXX: find a way to include the doc in sdist
     if os.path.exists(os.path.join("docs", "src")):
         write_version(os.path.join("docs", "src", "audiolab_version.py"))
-    pkg_prefix_dir = os.path.join('scikits', 'audiolab')
 
-    from numpy.distutils.misc_util import Configuration
     config = Configuration(None,parent_package,top_path,
-        namespace_packages = ['scikits'],
-        version     = build_fverstring(),
-        maintainer  = MAINTAINER,
-        maintainer_email = MAINTAINER_EMAIL,
-        description = DESCRIPTION,
-        license = LICENSE,
-        url = URL,
-        download_url = DOWNLOAD_URL,
-        long_description = LONG_DESCRIPTION)
+        version=build_fverstring(),
+        maintainer=MAINTAINER,
+        maintainer_email=MAINTAINER_EMAIL,
+        description=DESCRIPTION,
+        license=LICENSE,
+        url=URL,
+        download_url=DOWNLOAD_URL,
+        long_description=LONG_DESCRIPTION)
 
     config.set_options(
             ignore_setup_xxx_py=True,
@@ -62,13 +57,7 @@ def configuration(parent_package='',top_path=None, package_name=DISTNAME):
             quiet=True,
             )
 
-    # XXX: once in SVN, should add svn version...
-    #print config.make_svn_version_py()
-
-    config.add_subpackage('scikits')
-    config.add_data_files('scikits/__init__.py')
-
-    config.add_subpackage(DISTNAME)
+    config.add_subpackage('audiolab')
 
     return config
 
@@ -77,7 +66,6 @@ if __name__ == "__main__":
     setup(configuration=configuration,
           name=DISTNAME,
           install_requires=INSTALL_REQUIRE,
-          namespace_packages=['scikits'],
           packages=setuptools.find_packages(),
           include_package_data = True,
           test_suite="tester",

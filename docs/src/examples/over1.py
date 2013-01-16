@@ -1,5 +1,5 @@
 import numpy as np
-from scikits.audiolab import Sndfile
+from audiolab import Sndfile
 
 f = Sndfile('test.wav', 'r')
 

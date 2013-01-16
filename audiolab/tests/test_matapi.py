@@ -7,13 +7,13 @@ from tempfile import mkstemp
 from numpy.testing import *
 import numpy as N
 
-from scikits.audiolab import wavread, auread, aiffread, sdifread, flacread, \
+from audiolab import wavread, auread, aiffread, sdifread, flacread, \
                              oggread
-from scikits.audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite, \
+from audiolab import wavwrite, auwrite, aiffwrite, sdifwrite, flacwrite, \
                              oggwrite
-from scikits.audiolab import PyaudioException
-from scikits.audiolab import Sndfile, Format as audio_format
-from scikits.audiolab import available_file_formats
+from audiolab import PyaudioException
+from audiolab import Sndfile, Format as audio_format
+from audiolab import available_file_formats
 
 from testcommon import open_tmp_file, close_tmp_file
 

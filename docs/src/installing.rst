@@ -20,9 +20,9 @@ Download
 
 Releases are available on PyPI:
 
-        http://pypi.python.org/pypi/scikits.audiolab/
+        http://pypi.python.org/pypi/audiolab/
 
-Audiolab is part of scikits, and its source are kept on `github
+Audiolab is part of  and its source are kept on `github
 <http://github.com/cournape/audiolab>`_. Docs for the development version of
 audiolab can be found on `gh-pages <http://cournape.github.com/audiolab>`_.
 

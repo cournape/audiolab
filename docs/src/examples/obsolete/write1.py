@@ -2,8 +2,8 @@ from tempfile import mkstemp
 from os import remove
 
 import numpy as N
-from scikits.audiolab import formatinfo as format
-import scikits.audiolab as audiolab
+from audiolab import formatinfo as format
+import audiolab as audiolab
 
 # Create a temp file in the system temporary dir, and always remove
 # it at the end

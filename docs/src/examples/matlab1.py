@@ -2,7 +2,7 @@ from tempfile import mkstemp
 from os.path import join, dirname
 from os import remove
 
-from scikits.audiolab import wavread, wavwrite
+from audiolab import wavread, wavwrite
 
 (tmp, fs, enc)  = wavread('test.wav')
 if tmp.ndim < 2:

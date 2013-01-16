@@ -2,9 +2,9 @@ import os
 from tempfile import mkstemp
 import sys
 
-import scikits.audiolab
+import audiolab
 
-TEST_DATA_DIR = os.path.join(os.path.dirname(scikits.audiolab.__file__),
+TEST_DATA_DIR = os.path.join(os.path.dirname(audiolab.__file__),
                              'test_data')
 
 def open_tmp_file(name):

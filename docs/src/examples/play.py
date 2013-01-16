@@ -1,4 +1,4 @@
-from scikits.audiolab import play, wavread
+from audiolab import play, wavread
 
 data, fs, enc = wavread('test.wav')
 # There is a discrepency between wavread (one column per channel) and play

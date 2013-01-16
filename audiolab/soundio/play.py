@@ -43,7 +43,7 @@ else:
 
 if BACKEND == 'ALSA':
     try:
-        from scikits.audiolab.soundio._alsa_backend import AlsaDevice
+        from audiolab.soundio._alsa_backend import AlsaDevice
     except ImportError, e:
         warnings.warn("Could not import alsa backend; most probably, "
                       "you did not have alsa headers when building audiolab")
@@ -62,7 +62,7 @@ if BACKEND == 'ALSA':
         dev.play(input)
 elif BACKEND == 'CoreAudio':
     try:
-        from scikits.audiolab.soundio.macosx_backend import CoreAudioDevice
+        from audiolab.soundio.macosx_backend import CoreAudioDevice
     except ImportError, e:
         print e
         warnings.warn("Could not import CoreAudio backend; most probably, "

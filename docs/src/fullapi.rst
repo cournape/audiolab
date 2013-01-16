@@ -5,7 +5,7 @@ Full API
 Audio file IO
 =============
 
-.. currentmodule:: scikits.audiolab
+.. currentmodule:: audiolab
 
 The :class:`~Format` class
 --------------------------
@@ -15,7 +15,7 @@ file (file format, encoding and endianness). It is mainly useful when writing
 files or reading raw (header-less) audio files. A Format instance can be
 queried for its related meta-data:
 
-        >>> from scikits.audiolab import Format
+        >>> from audiolab import Format
         >>> a = Format() # By default, 16 bits PCM wav file
         >>> print a # Will print a detail description of the format
 
@@ -45,7 +45,7 @@ The following two functions can be used to query the available formats and
 encodings. The exact list of formats depends on the libsndfile audiolab was
 built against.
 
-        >>> from scikits.audiolab import available_encodings
+        >>> from audiolab import available_encodings
         >>> # List encodings supported for the wav format
         >>> print available_encodings('wav')
 
