@@ -5,20 +5,20 @@ Download and installation
 Supported platforms
 ===================
 
-Audiolab has been run succesfully on the following platforms:
+Audiolab has been run successfully on the following platforms:
 
-    - linux ubuntu (32 and 64 bits) and RHEL 5 (32 and 64 bits)
-    - windows XP (32 bits)
+    - Linux Ubuntu (32 and 64 bits) and RHEL 5 (32 and 64 bits)
+    - Windows XP (32 bits)
     - Mac OS X (10.5, intel)
     - OpenSolaris (x86)
 
-I would be interested to hear anyone who succeesfully used it on other
+I would be interested to hear anyone who successfully used it on other
 platforms.
 
 Download
 ========
 
-Releases are available on Pypi:
+Releases are available on PyPI:
 
         http://pypi.python.org/pypi/scikits.audiolab/
 
@@ -40,7 +40,7 @@ To install the binaries, audiolab requires the following softwares:
 Binaries
 --------
 
-Binaries for Mac OS X and Windows are provided on Pypi - they are statically
+Binaries for Mac OS X and Windows are provided on PyPI - they are statically
 linked to libsndfile (so that you don't need to install your own version of
 libsndfile first). If you are not familiar with building from sources, you are
 strongly advised to use those.
@@ -76,7 +76,7 @@ For Mac OS X, you need the CoreAudio framework, available on the Apple website.
 Build
 -----
 
-For unix users, if libsndfile is installed in standart location (eg /usr/lib,
+For unix users, if libsndfile is installed in standard location (eg /usr/lib,
 /usr/local/lib), the installer should be able to find them automatically, and
 you only need to do a "python setup.py install". In other cases, you need to
 create a file site.cfg to set the location of libsndfile and its header (there
@@ -88,10 +88,10 @@ License
 
 Audiolab is released under the LGPL, which forces you to release back the
 modifications you may make in the version of audiolab you are distributing, but
-you can still use it in closed softwares, as long as you don't use a modified
+you can still use it in closed software, as long as you don't use a modified
 version of it. The soundio module to output data onto sound devices is under
-the BSD, though (so you can use it, modify it in close source software without
+the BSD, though (so you can use it, modify it in closed source software without
 publishing the sources).
 
-Audiolab is under the LGPL because libsndfile itself, and as such, a BSD
+Audiolab is under the LGPL because libsndfile itself is, and as such, a BSD
 audiolab is of little value.
