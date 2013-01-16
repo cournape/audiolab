@@ -83,27 +83,28 @@ elif BACKEND == 'CoreAudio':
 else:
     def _play(input, fs):
         raise NotImplementedError, \
-              "No Backend implemented for you platform " \
+              "No Backend implemented for your platform " \
               "(detected platform is: %s)" % sys.platform
 
 def play(input, fs=44100):
     """Play the signal in vector input to the default output device.
 
     Only floating point input are supported: input is assumed to be in the
-    -1..1 range. Any values outside this range will be clipped by the device.
+    range [-1.0, 1.0]. Any values outside this range will be clipped by the 
+    device.
 
     Parameters
     ----------
-    input: array
+    input : array
         input signal of rank 2. Each row is assumed to be one channel.
-    fs: int
+    fs : int
         sampling rate (in Hz)
 
     Notes
     -----
     It will fail if the sampling rate is not supported by your device. In
     particular, no automatic resampling is done. Mono signals are doubled for
-    fake stereo for the CoreAudio framework, as it seemse CoreAudio does not
+    fake stereo for the CoreAudio framework, as it seems CoreAudio does not
     handle mono on its own.
     """
     return _play(input, fs)

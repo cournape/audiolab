@@ -384,7 +384,7 @@ cdef _major_formats_int():
 cdef class Sndfile:
     """\
     Sndfile is the core class to read/write audio files. Once an instance is
-    created, it can be used to read and/or writes data from numpy arrays, query
+    created, it can be used to read and/or write data from numpy arrays, query
     the audio file meta-data, etc...
 
     Parameters
@@ -404,7 +404,8 @@ cdef class Sndfile:
 
     Returns
     -------
-        sndfile: as Sndfile instance.
+    sndfile : Sndfile
+        a Sndfile instance.
 
     Notes
     -----
@@ -480,7 +481,7 @@ cdef class Sndfile:
             msg += sf_strerror(self.hdl)
             if not self.fd == -1:
                 msg += """
-(Check that the mode argument passed to sndfile is the same than the one used
+(Check that the mode argument passed to sndfile is the same as the one used
 when getting the file descriptor, eg do not pass 'r' to sndfile if you
 passed 'write' to the method you used to get the file descriptor. If you are on
 win32, you are out of luck, because its implementation of POSIX open is

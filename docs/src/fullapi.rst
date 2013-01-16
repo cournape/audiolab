@@ -42,7 +42,7 @@ queried for its related meta-data:
         Returns the endianness.
 
 The following two functions can be used to query the available formats and
-encodings. The exact list of formats depend on the libsndfile audiolab was
+encodings. The exact list of formats depends on the libsndfile audiolab was
 built against.
 
         >>> from scikits.audiolab import available_encodings
@@ -92,8 +92,8 @@ Meta-data
 Encoding and array dtype
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The most common encoding for common audio files like wav of aiff is signed 16
-bits integers. Sndfile and hence audiolab enables many more encodings like
+The most common encoding for common audio files like wav or aiff is signed 16
+bit integers. Sndfile and hence audiolab enables many more encodings like
 unsigned 8 bits, floating point. Generally, when using the data for processing,
 the encoding of choice is floating point; the exact type is controlled through
 the array dtype. When the array dtype and the file encoding don't match, there
@@ -121,8 +121,8 @@ Sound output
 audiolab now has some facilities to output sound from numpy arrays: the
 function play is a wrapper around a platform-specific audio backend. For now,
 only ALSA backend (Linux) and Core Audio backend (Mac OS X) are implemented.
-Other backends (for windows, OSS for Solaris/BSD) may be added later, although
-it is not a priority for me. Patches are welcomed, particularly for windows.
+Other backends (for Windows, OSS for Solaris/BSD) may be added later, although
+it is not a priority for me. Patches are welcomed, particularly for Windows.
 
 .. autofunction:: play
 
