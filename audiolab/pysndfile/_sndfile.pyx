@@ -5,7 +5,7 @@ import warnings
 import copy
 
 cimport numpy as cnp
-cimport stdlib
+cimport libc.stdlib
 from sndfile cimport *
 cimport sndfile as csndfile
 
@@ -112,7 +112,7 @@ def sndfile_version():
     if st < 1:
         raise RuntimeError("Error while getting version of libsndfile")
 
-    ver = PyString_FromStringAndSize(buff, stdlib.strlen(buff))
+    ver = PyString_FromStringAndSize(buff, len(buff))
 
     # Get major, minor and micro from version
     # Template: libsndfile-X.X.XpreX with preX being optional
@@ -213,7 +213,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._format_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             len(format_info.name))
 
         # Get the sndfile string description of the encoding type
         format_info.format = cencoding
@@ -225,7 +225,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._encoding_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             len(format_info.name))
 
         self._format_raw_int = format
 
@@ -736,9 +736,11 @@ broken)"""
             res = self.write_frames_double(input, nframes)
         elif input.dtype == np.float32:
             res = self.write_frames_float(input, nframes)
-        elif input.dtype == np.int:
+        elif input.dtype == np.int32:
             res = self.write_frames_int(input, nframes)
-        elif input.dtype == np.short:
+        elif input.dtype == np.int64:
+            res = self.write_frames_int((input>>32).astype(np.int32), nframes)
+        elif input.dtype == np.int16:
             res = self.write_frames_short(input, nframes)
         else:
             raise Exception("type of input &s not understood" % str(input.dtype))
