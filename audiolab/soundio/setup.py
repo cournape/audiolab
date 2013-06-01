@@ -15,7 +15,7 @@ def configuration(parent_package='', top_path=None, package_name='soundio'):
                              classname='AlsaInfo')()
     try:
         alsa_config = alsa_info.get_info(2)
-        config.add_extension("_alsa_backend", sources = ["alsa/_alsa_backend.c"],
+        config.add_extension("_alsa_backend", sources = ["alsa/_alsa_backend.pyx"],
                              extra_info=alsa_config)
     except NotFoundError:
         warnings.warn("Alsa not found - alsa backend not build")

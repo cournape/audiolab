@@ -28,6 +28,7 @@ import setuptools
 
 from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
+from Cython.Distutils import build_ext
 
 from common import *
 
@@ -65,6 +66,7 @@ if __name__ == "__main__":
     # setuptools version of config script
     setup(configuration=configuration,
           name=DISTNAME,
+          cmdclass = {'build_ext': build_ext},
           install_requires=INSTALL_REQUIRE,
           packages=setuptools.find_packages(),
           include_package_data = True,
