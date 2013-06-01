@@ -31,8 +31,8 @@
 
 import numpy as np
 cimport numpy as cnp
-cimport stdlib
-cimport python_exc
+cimport libc.stdlib as stdlib
+cimport cpython
 from alsa cimport *
 
 cdef int BUFFER_TIME  = 500000
@@ -138,7 +138,7 @@ cdef class AlsaDevice:
                         raise AlsaException("Error while preparing the pcm device")
 
                 for i in range(nr):
-                        err = python_exc.PyErr_CheckSignals()
+                        err = cpython.PyErr_CheckSignals()
                         if err != 0:
                                 break
                         # We make sure the buffer is in fortran order to deal
