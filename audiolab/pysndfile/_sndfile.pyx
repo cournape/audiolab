@@ -645,6 +645,7 @@ broken)"""
         cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
         cdef sf_count_t res
 
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
                       dtype=np.float64, order='C')
 
@@ -657,9 +658,9 @@ broken)"""
         cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.float32, order='F')
+                      dtype=np.float32, order='C')
 
         res = sf_readf_float(self.hdl, <float*>ty.data, nframes)
         if not res == nframes:
@@ -670,9 +671,9 @@ broken)"""
         cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.int32, order='F')
+                      dtype=np.int32, order='C')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
         if not res == nframes:
@@ -683,9 +684,9 @@ broken)"""
         cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.short, order='F')
+                      dtype=np.short, order='C')
 
         res = sf_readf_short(self.hdl, <short*>ty.data, nframes)
         if not res == nframes:
