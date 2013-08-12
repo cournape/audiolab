@@ -5,7 +5,7 @@ import warnings
 import copy
 
 cimport numpy as cnp
-cimport stdlib
+cimport libc.stdlib
 from sndfile cimport *
 cimport sndfile as csndfile
 
@@ -112,7 +112,7 @@ def sndfile_version():
     if st < 1:
         raise RuntimeError("Error while getting version of libsndfile")
 
-    ver = PyString_FromStringAndSize(buff, stdlib.strlen(buff))
+    ver = PyString_FromStringAndSize(buff, len(buff))
 
     # Get major, minor and micro from version
     # Template: libsndfile-X.X.XpreX with preX being optional
@@ -213,7 +213,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._format_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             len(format_info.name))
 
         # Get the sndfile string description of the encoding type
         format_info.format = cencoding
@@ -225,7 +225,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._encoding_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             len(format_info.name))
 
         self._format_raw_int = format
 
@@ -634,6 +634,7 @@ broken)"""
         elif dtype == np.int16:
             y = self.read_frames_short(nframes)
         else:
+            print 'yeah'
             RuntimeError("Sorry, dtype %s not supported" % str(dtype))
 
         if y.shape[1] == 1:
@@ -644,6 +645,7 @@ broken)"""
         cdef cnp.ndarray[cnp.float64_t, ndim=2] ty
         cdef sf_count_t res
 
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
                       dtype=np.float64, order='C')
 
@@ -656,9 +658,9 @@ broken)"""
         cdef cnp.ndarray[cnp.float32_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.float32, order='F')
+                      dtype=np.float32, order='C')
 
         res = sf_readf_float(self.hdl, <float*>ty.data, nframes)
         if not res == nframes:
@@ -669,9 +671,9 @@ broken)"""
         cdef cnp.ndarray[cnp.int32_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.int, order='F')
+                      dtype=np.int32, order='C')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
         if not res == nframes:
@@ -682,9 +684,9 @@ broken)"""
         cdef cnp.ndarray[cnp.int16_t, ndim=2] ty
         cdef sf_count_t res
 
-        # Use Fortran order to cope with interleaving
+        # interleaving is correctly handled by C order
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.short, order='F')
+                      dtype=np.short, order='C')
 
         res = sf_readf_short(self.hdl, <short*>ty.data, nframes)
         if not res == nframes:
@@ -736,9 +738,11 @@ broken)"""
             res = self.write_frames_double(input, nframes)
         elif input.dtype == np.float32:
             res = self.write_frames_float(input, nframes)
-        elif input.dtype == np.int:
+        elif input.dtype == np.int32:
             res = self.write_frames_int(input, nframes)
-        elif input.dtype == np.short:
+        elif input.dtype == np.int64:
+            res = self.write_frames_int((input>>32).astype(np.int32), nframes)
+        elif input.dtype == np.int16:
             res = self.write_frames_short(input, nframes)
         else:
             raise Exception("type of input &s not understood" % str(input.dtype))

@@ -5,13 +5,13 @@ include NEWS
 include Changelog
 include common.py
 include setup.py
-include scikits/audiolab/test_data/original.aif
-include scikits/audiolab/test_data/test.aiff
-include scikits/audiolab/test_data/test.au
-include scikits/audiolab/test_data/test.flac
-include scikits/audiolab/test_data/test.raw
-include scikits/audiolab/test_data/test.sdif
-include scikits/audiolab/test_data/test.wav
+include audiolab/test_data/original.aif
+include audiolab/test_data/test.aiff
+include audiolab/test_data/test.au
+include audiolab/test_data/test.flac
+include audiolab/test_data/test.raw
+include audiolab/test_data/test.sdif
+include audiolab/test_data/test.wav
 recursive-include docs/pdf *
 recursive-include docs/html *
 recursive-include docs/src *rst
@@ -20,9 +20,9 @@ recursive-include docs/src/_static
 recursive-include docs/src/_templates
 recursive-include docs/src/examples *py
 # Cython files
-include scikits/audiolab/pysndfile/_sndfile.pyx
-include scikits/audiolab/soundio/macosx/macosx_backend.pyx
-include scikits/audiolab/soundio/alsa/_alsa_backend.pyx
-include scikits/audiolab/pysndfile/_sndfile.c
-include scikits/audiolab/soundio/macosx/macosx_backend.c
-include scikits/audiolab/soundio/alsa/_alsa_backend.c
+include audiolab/pysndfile/_sndfile.pyx
+include audiolab/soundio/macosx/macosx_backend.pyx
+include audiolab/soundio/alsa/_alsa_backend.pyx
+include audiolab/pysndfile/_sndfile.c
+include audiolab/soundio/macosx/macosx_backend.c
+include audiolab/soundio/alsa/_alsa_backend.c
