@@ -634,6 +634,7 @@ broken)"""
         elif dtype == np.int16:
             y = self.read_frames_short(nframes)
         else:
+            print 'yeah'
             RuntimeError("Sorry, dtype %s not supported" % str(dtype))
 
         if y.shape[1] == 1:
@@ -671,7 +672,7 @@ broken)"""
 
         # Use Fortran order to cope with interleaving
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.int, order='F')
+                      dtype=np.int32, order='F')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
         if not res == nframes:
