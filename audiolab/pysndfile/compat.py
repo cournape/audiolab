@@ -37,7 +37,7 @@ class formatinfo:
             encoding : string
                 represents the encoding (pcm16, etc..).
             endianness : string
-                represents the endianess.
+                represents the endianness.
 
         Notes
         -----

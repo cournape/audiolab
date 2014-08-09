@@ -139,7 +139,7 @@ cdef class Format:
     encoding : str
         the encoding (pcm16, etc..).
     endianness : str
-        the endianess.
+        the endianness.
 
     Notes
     -----
