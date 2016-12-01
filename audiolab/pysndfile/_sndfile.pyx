@@ -741,7 +741,7 @@ broken)"""
         elif input.dtype == np.short:
             res = self.write_frames_short(input, nframes)
         else:
-            raise Exception("type of input &s not understood" % str(input.dtype))
+            raise Exception("type of input %s not understood" % str(input.dtype))
 
         if not(res == nframes):
             raise IOError("write %d frames, expected to write %d"
