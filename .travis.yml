@@ -1,6 +1,10 @@
 language: python
 python:
   - "2.7"
+addons:
+  apt:
+    packages:
+    - libsndfile1-dev
 install:
   - pip install -e .
 script:
