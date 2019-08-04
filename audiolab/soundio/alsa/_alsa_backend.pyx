@@ -34,6 +34,7 @@ cimport numpy as cnp
 cimport libc.stdlib as stdlib
 cimport cpython
 from alsa cimport *
+cimport libc.string as string
 
 cdef int BUFFER_TIME  = 500000
 cdef int PERIOD_TIME  = 0
@@ -68,11 +69,11 @@ def enumerate_devices():
         card = 0
         while(hints[card] != NULL):
                 #name = snd_device_name_get_hint(hints[card], "NAME")
-                #names.append(PyString_FromStringAndSize(name, stdlib.strlen(name)))
+                #names.append(PyString_FromStringAndSize(name, string.strlen(name)))
                 #if name != NULL:
                 #        stdlib.free(name)
                 devices.append(PyString_FromStringAndSize(hints[card], 
-                        stdlib.strlen(hints[card])))
+                        string.strlen(hints[card])))
                 card += 1
         snd_device_name_free_hint(<void**>hints)
 
