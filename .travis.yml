@@ -1,10 +1,16 @@
 language: python
+os:
+  - linux
+  - osx
 python:
   - "2.7"
 addons:
   apt:
     packages:
     - libsndfile1-dev
+  homebrew:
+    packages:
+    - libsndfile
 install:
   - pip install -e .
 script:
