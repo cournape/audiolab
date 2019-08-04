@@ -18,12 +18,13 @@ cdef extern from "sndfile.h":
     ctypedef SF_FORMAT_INFO SF_FORMAT_INFO
 
 # FIXME: Hacky workaround. __quad_t is defined in sndfile.pxd,
-# but the compiler seems to not find it
-cdef extern from *:
-    """
-    typedef long long int __quad_t;
-    """
-    pass
+# but the compiler seems to not find it on Macs
+IF UNAME_SYSNAME == "Darwin":
+    cdef extern from *:
+        """
+        typedef long long int __quad_t;
+        """
+        pass
 
 cdef extern from "Python.h":
     object PyString_FromStringAndSize(char *v, int len)
