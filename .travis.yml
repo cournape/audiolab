@@ -9,6 +9,7 @@ matrix:
         apt:
           packages:
           - libsndfile1-dev
+          - libasound2-dev
     - name: "Python 2.7 on macOS"
       os: osx
       osx_image: xcode10.2
@@ -17,6 +18,8 @@ matrix:
         homebrew:
           packages:
           - libsndfile
+      before_script:
+        - pip install pytest
 
 install:
   - pip install -e .
