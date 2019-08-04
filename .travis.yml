@@ -1,16 +1,23 @@
 language: python
-os:
-  - linux
-  - osx
-python:
-  - "2.7"
-addons:
-  apt:
-    packages:
-    - libsndfile1-dev
-  homebrew:
-    packages:
-    - libsndfile
+
+matrix:
+  include:
+    - name: "Python 2.7 on Xenial"
+      python: 2.7
+      dist: xenial
+      addons:
+        apt:
+          packages:
+          - libsndfile1-dev
+    - name: "Python 2.7 on macOS"
+      os: osx
+      osx_image: xcode10.2
+      language: shell       # 'language: python' causes errors on Travis CI macOS
+      addons:
+        homebrew:
+          packages:
+          - libsndfile
+
 install:
   - pip install -e .
 script:
