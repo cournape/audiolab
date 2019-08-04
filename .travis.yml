@@ -6,7 +6,6 @@ addons:
     packages:
     - libsndfile1-dev
 install:
-  - pip install cython
   - pip install -e .
 script:
   - pytest

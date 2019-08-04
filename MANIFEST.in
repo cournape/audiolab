@@ -4,6 +4,7 @@ include COPYING.txt
 include NEWS
 include Changelog
 include common.py
+include pyproject.toml
 include setup.py
 include scikits/audiolab/test_data/original.aif
 include scikits/audiolab/test_data/test.aiff
@@ -23,6 +24,3 @@ recursive-include docs/src/examples *py
 include scikits/audiolab/pysndfile/_sndfile.pyx
 include scikits/audiolab/soundio/macosx/macosx_backend.pyx
 include scikits/audiolab/soundio/alsa/_alsa_backend.pyx
-include scikits/audiolab/pysndfile/_sndfile.c
-include scikits/audiolab/soundio/macosx/macosx_backend.c
-include scikits/audiolab/soundio/alsa/_alsa_backend.c
