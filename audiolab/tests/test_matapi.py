@@ -5,6 +5,7 @@ from os import remove
 from tempfile import mkstemp
 
 from numpy.testing import *
+from numpy.testing import dec
 import numpy as N
 
 from audiolab import wavread, auread, aiffread, sdifread, flacread, \

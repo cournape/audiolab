@@ -1,7 +1,6 @@
 import os
 import sys
 
-from numpy.distutils.core import setup, Extension
 from setuphelp import info_factory, NotFoundError
 
 SNDFILE_MAJ_VERSION = 1
@@ -24,7 +23,7 @@ sndfile (http://www.mega-nerd.com/libsndfile/) library not found.
 Directories to search for the libraries can be specified in the
 site.cfg file, in section [sndfile].""")
 
-    confgr.add_extension('_sndfile', ['_sndfile.c'], extra_info=sf_config)
+    confgr.add_extension('_sndfile', ['_sndfile.pyx'], extra_info=sf_config)
 
     return confgr
 

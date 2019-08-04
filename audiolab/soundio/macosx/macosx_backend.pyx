@@ -31,8 +31,8 @@
 
 cimport AudioHardware
 from AudioHardware cimport *
-cimport stdlib
-cimport python_exc
+cimport libc.stdlib as stdlib
+cimport cpython
 cimport numpy as cnp
 
 import numpy as np
@@ -196,7 +196,7 @@ cdef class CoreAudioDevice:
             raise RuntimeError("error starting ")
 
         while (data.remaining == 1):
-            st = python_exc.PyErr_CheckSignals()
+            st = cpython.PyErr_CheckSignals()
             if st != 0:
                     gotsig = 1
                     break

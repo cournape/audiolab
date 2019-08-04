@@ -5,9 +5,10 @@ import warnings
 import copy
 
 cimport numpy as cnp
-cimport stdlib
+cimport libc.stdlib as stdlib
 from sndfile cimport *
 cimport sndfile as csndfile
+cimport libc.string as string
 
 cdef extern from "sndfile.h":
     cdef struct SF_FORMAT_INFO:
@@ -15,6 +16,14 @@ cdef extern from "sndfile.h":
         char *name
         char *extension
     ctypedef SF_FORMAT_INFO SF_FORMAT_INFO
+
+# FIXME: Hacky workaround. __quad_t is defined in sndfile.pxd,
+# but the compiler seems to not find it
+cdef extern from *:
+    """
+    typedef long long int __quad_t;
+    """
+    pass
 
 cdef extern from "Python.h":
     object PyString_FromStringAndSize(char *v, int len)
@@ -112,7 +121,7 @@ def sndfile_version():
     if st < 1:
         raise RuntimeError("Error while getting version of libsndfile")
 
-    ver = PyString_FromStringAndSize(buff, stdlib.strlen(buff))
+    ver = PyString_FromStringAndSize(buff, string.strlen(buff))
 
     # Get major, minor and micro from version
     # Template: libsndfile-X.X.XpreX with preX being optional
@@ -213,7 +222,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._format_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             string.strlen(format_info.name))
 
         # Get the sndfile string description of the encoding type
         format_info.format = cencoding
@@ -225,7 +234,7 @@ cdef class Format:
                     "problem to the maintainer")
 
         self._encoding_str = PyString_FromStringAndSize(format_info.name,
-                                             stdlib.strlen(format_info.name))
+                                             string.strlen(format_info.name))
 
         self._format_raw_int = format
 
@@ -634,7 +643,7 @@ broken)"""
         elif dtype == np.int16:
             y = self.read_frames_short(nframes)
         else:
-            RuntimeError("Sorry, dtype %s not supported" % str(dtype))
+            raise RuntimeError("Sorry, dtype %s not supported" % str(dtype))
 
         if y.shape[1] == 1:
             return y[:, 0]
@@ -671,7 +680,7 @@ broken)"""
 
         # Use Fortran order to cope with interleaving
         ty = np.empty((nframes, self._sfinfo.channels),
-                      dtype=np.int, order='F')
+                      dtype=np.int32, order='F')
 
         res = sf_readf_int(self.hdl, <int*>ty.data, nframes)
         if not res == nframes:
@@ -736,12 +745,12 @@ broken)"""
             res = self.write_frames_double(input, nframes)
         elif input.dtype == np.float32:
             res = self.write_frames_float(input, nframes)
-        elif input.dtype == np.int:
+        elif input.dtype == np.int32:
             res = self.write_frames_int(input, nframes)
         elif input.dtype == np.short:
             res = self.write_frames_short(input, nframes)
         else:
-            raise Exception("type of input &s not understood" % str(input.dtype))
+            raise Exception("type of input %s not understood" % str(input.dtype))
 
         if not(res == nframes):
             raise IOError("write %d frames, expected to write %d"

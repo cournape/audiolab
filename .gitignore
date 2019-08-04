@@ -1,0 +1,3 @@
+build/
+ENV/
+scikits.audiolab.egg-info/

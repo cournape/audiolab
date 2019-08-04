@@ -28,7 +28,9 @@ import setuptools
 
 from numpy.distutils.core import setup
 from numpy.distutils.misc_util import Configuration
-from Cython.Distutils import build_ext
+from numpy.distutils.command.build_ext import build_ext
+
+import numpy_monkey
 
 from common import *
 
