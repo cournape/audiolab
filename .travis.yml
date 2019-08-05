@@ -1,5 +1,9 @@
 language: python
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 matrix:
   include:
     - name: "Python 2.7 on Xenial"
@@ -20,6 +24,12 @@ matrix:
           - libsndfile
       before_script:
         - pip install pytest
+      before_cache:
+        - brew cleanup
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+
 
 install:
   - pip install -e .
