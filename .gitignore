@@ -1,3 +1,4 @@
 build/
 ENV/
 scikits.audiolab.egg-info/
+pip-wheel-metadata/
