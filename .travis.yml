@@ -1,0 +1,37 @@
+language: python
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+matrix:
+  include:
+    - name: "Python 2.7 on Xenial"
+      python: 2.7
+      dist: xenial
+      addons:
+        apt:
+          packages:
+          - libsndfile1-dev
+          - libasound2-dev
+    - name: "Python 2.7 on macOS"
+      os: osx
+      osx_image: xcode10.2
+      language: shell       # 'language: python' causes errors on Travis CI macOS
+      addons:
+        homebrew:
+          packages:
+          - libsndfile
+      before_script:
+        - pip install pytest
+      before_cache:
+        - brew cleanup
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+
+
+install:
+  - pip install -e .
+script:
+  - pytest

@@ -71,4 +71,4 @@ ignore  = False""")
     f.close()
 
 VERSION = build_fverstring()
-INSTALL_REQUIRE = 'numpy'
+INSTALL_REQUIRE = ['numpy < 1.17.0']

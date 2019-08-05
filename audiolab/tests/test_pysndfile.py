@@ -176,7 +176,7 @@ class test_pysndfile(TestCase):
             nb = 2 ** 14
             nbuff = 22050
             fs = 22050
-            a = np.random.random_integers(-nb, nb, nbuff)
+            a = np.random.randint(-nb, nb, nbuff)
             a = a.astype(np.short)
 
             # Open the file for writing
@@ -203,7 +203,7 @@ class test_pysndfile(TestCase):
             nb = 2 ** 25
             nbuff = 22050
             fs = 22050
-            a = np.random.random_integers(-nb, nb, nbuff)
+            a = np.random.randint(-nb, nb, nbuff)
             a = a.astype(np.int32)
 
             # Open the file for writing
@@ -263,7 +263,7 @@ class test_pysndfile(TestCase):
             format = audio_format('wav', 'pcm16')
             a = sndfile(fd, 'rwrite', format, channels = 1, 
                     samplerate = 22050)
-            tmp = np.random.random_integers(-100, 100, 1000)
+            tmp = np.random.randint(-100, 100, 1000)
             tmp = tmp.astype(np.short)
             a.write_frames(tmp, tmp.size)
             a.seek(0)

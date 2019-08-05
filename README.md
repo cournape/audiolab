@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/palfrey/audiolab.svg?branch=master)](https://travis-ci.com/palfrey/audiolab) ![PyPI](https://img.shields.io/pypi/v/scikits.audiolab)
+
 Audiolab is a python package for audio file IO using numpy arrays. It supports
 many different audio formats, including wav, aiff, au, flac, ogg, htk. It can
 also be used for sound output to audio device (Mac OS X and Linux only).

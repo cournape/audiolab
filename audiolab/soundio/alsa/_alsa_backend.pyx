@@ -31,9 +31,10 @@
 
 import numpy as np
 cimport numpy as cnp
-cimport stdlib
-cimport python_exc
+cimport libc.stdlib as stdlib
+cimport cpython
 from alsa cimport *
+cimport libc.string as string
 
 cdef int BUFFER_TIME  = 500000
 cdef int PERIOD_TIME  = 0
@@ -41,8 +42,8 @@ cdef int PERIOD_TIME  = 0
 cdef extern from "alsa/asoundlib.h":
         # This is needed here because it is a macro and is not recognized by
         # gccxml it seems
-        int snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
-        int snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
+        void snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
+        void snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
 
 cdef extern from "Python.h":
         object PyString_FromStringAndSize(char *v, int len)
@@ -68,11 +69,11 @@ def enumerate_devices():
         card = 0
         while(hints[card] != NULL):
                 #name = snd_device_name_get_hint(hints[card], "NAME")
-                #names.append(PyString_FromStringAndSize(name, stdlib.strlen(name)))
+                #names.append(PyString_FromStringAndSize(name, string.strlen(name)))
                 #if name != NULL:
                 #        stdlib.free(name)
                 devices.append(PyString_FromStringAndSize(hints[card], 
-                        stdlib.strlen(hints[card])))
+                        string.strlen(hints[card])))
                 card += 1
         snd_device_name_free_hint(<void**>hints)
 
@@ -138,7 +139,7 @@ cdef class AlsaDevice:
                         raise AlsaException("Error while preparing the pcm device")
 
                 for i in range(nr):
-                        err = python_exc.PyErr_CheckSignals()
+                        err = cpython.PyErr_CheckSignals()
                         if err != 0:
                                 break
                         # We make sure the buffer is in fortran order to deal

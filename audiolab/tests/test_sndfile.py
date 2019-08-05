@@ -142,7 +142,7 @@ class TestSndfile(TestCase):
             nb = 2 ** (8 * np.dtype(dt).itemsize - 3)
             fs = 22050
             nbuff = fs
-            a = np.random.random_integers(-nb, nb, nbuff)
+            a = np.random.randint(-nb, nb, nbuff)
             a = a.astype(dt)
 
             # Open the file for writing
@@ -201,7 +201,7 @@ class TestSndfile(TestCase):
             # Open the file for writing
             format = Format('wav', 'pcm16')
             a = Sndfile(fd, 'rw', format, channels=1, samplerate=22050)
-            tmp = np.random.random_integers(-100, 100, 1000)
+            tmp = np.random.randint(-100, 100, 1000)
             tmp = tmp.astype(np.short)
             a.write_frames(tmp)
             a.seek(0)
