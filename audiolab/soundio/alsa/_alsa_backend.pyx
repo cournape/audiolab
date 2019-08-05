@@ -42,8 +42,8 @@ cdef int PERIOD_TIME  = 0
 cdef extern from "alsa/asoundlib.h":
         # This is needed here because it is a macro and is not recognized by
         # gccxml it seems
-        int snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
-        int snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
+        void snd_pcm_hw_params_alloca(snd_pcm_hw_params_t **)
+        void snd_pcm_sw_params_alloca(snd_pcm_sw_params_t **)
 
 cdef extern from "Python.h":
         object PyString_FromStringAndSize(char *v, int len)
